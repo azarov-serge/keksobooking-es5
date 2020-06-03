@@ -1,5 +1,4 @@
 'use strict';
-// TODO Удалить функции, которые не используются createElement, getNextIndex
 (function () {
   var ESK_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
@@ -27,26 +26,6 @@
 
     isEnterKeycode: function (evt) {
       return evt.keyCode === ENTER_KEYCODE;
-    },
-
-    /**
-     * @param {Object} elem Элемент массива <arr>
-     * @param {Object[]} arr Массив с элементами
-     * @param {number} startIndex С какого индекса начинать, в случае если конец массива или элемент не найден
-     * @return {number} Следующий индекс для перехода
-     */
-
-    getNextIndex: function (elem, arr, startIndex) {
-      startIndex = startIndex ? startIndex : 0;
-      var index = arr.indexOf(elem);
-      switch (index) {
-        case -1:
-          return startIndex;
-        case arr.length - 1:
-          return 0;
-        default:
-          return index++;
-      }
     },
 
     /**
@@ -105,6 +84,28 @@
       newElement.innerHTML = template;
 
       return newElement.firstChild;
+    },
+
+    /**
+     * @param {number} x Координата X
+     * @return {number} Координата в пределаха карты
+     */
+
+    setCoordX: function (x) {
+      var minX = window.inf.mapMinX;
+      var maxX = window.inf.mapMaxX - window.inf.pinWidth;
+      return Math.max(Math.min(x, maxX), minX);
+    },
+
+    /**
+     * @param {number} y Координата Y
+     * @return {number} Координата в пределаха карты
+     */
+
+    setCoordY: function (y) {
+      var minY = window.inf.mapMinY;
+      var maxY = window.inf.mapMaxY;
+      return Math.max(Math.min(y, maxY), minY);
     },
   };
 
