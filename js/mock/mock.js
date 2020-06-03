@@ -125,7 +125,7 @@
       return 'img/avatars/user0' + genAvatar + (++index) + '.png';
     });
     return getRandomArr(genAvatars);
-  };
+  }
 
   /**
    * @return {Object}
