@@ -2,10 +2,10 @@
 (function () {
   var DEACTIVATE_CLASS = 'map--faded';
 
-  var MainMap = function () {
+  function MainMap() {
     window.AbsctractComponent.call(this);
     this._isActivate = false;
-  };
+  }
 
   MainMap.prototype = Object.create(window.AbsctractComponent.prototype);
   MainMap.prototype.constructor = MainMap;

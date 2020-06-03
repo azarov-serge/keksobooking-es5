@@ -17,6 +17,10 @@
     pinY: 0,
   };
 
+  /**
+   * @description Отрисовывает список пинов на карте, если карта была неактивной
+   */
+
   function renderMainMap() {
     mainMap.activate();
     pins.getElement();
@@ -30,6 +34,7 @@
 
   function onMainPinMouseMove(evt) {
     evt.preventDefault();
+
     evtCoord.shiftX = evtCoord.x - evt.clientX;
     evtCoord.shiftY = evtCoord.y - evt.clientY;
     evtCoord.x = evt.clientX;

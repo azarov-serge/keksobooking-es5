@@ -1,20 +1,11 @@
 'use strict';
 (function () {
-  var MAP_INF = document.querySelector('.map').getBoundingClientRect();
-  var PIN_WIDTH = 65;
   var MIN_FEATURES = 2;
 
   var avatars = [];
 
   var timePeriods = ['12:00', '13:00', '14:00'];
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
-  var pin = {
-    minX: 0,
-    maxX: MAP_INF.width - PIN_WIDTH,
-    minY: 130,
-    maxY: 630
-  };
 
   var price = {
     min: 1000,
@@ -134,8 +125,8 @@
   function generateOrder() {
     var avatar = avatars[0];
     avatars.shift();
-    var locationX = getRandomInt(pin.minX, pin.maxX);
-    var locationY = getRandomInt(pin.minY, pin.maxY);
+    var locationX = window.Utils.setCoordX(getRandomInt(window.inf.mapMinX, window.inf.mapMaxX));
+    var locationY = window.Utils.setCoordY(getRandomInt(window.inf.mapMinY, window.inf.mapMaxY));
     var offerType = getRandomArrValue(Object.keys(bookingTypes));
 
     return (

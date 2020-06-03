@@ -1,8 +1,8 @@
 'use strict';
 (function () {
-  var AbsctractComponent = function () {
+  function AbsctractComponent() {
     this._element = null;
-  };
+  }
 
   AbsctractComponent.prototype.getElement = function () {
     throw new Error('Component can\'t have abstract method');
