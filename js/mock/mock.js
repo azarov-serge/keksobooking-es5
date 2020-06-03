@@ -63,9 +63,9 @@
    * @return {number}
    */
 
-  var getRandomInt = function (min, max) {
+  function getRandomInt(min, max) {
     return min + Math.floor(Math.random() * (max - min));
-  };
+  }
 
   /**
    *
@@ -73,9 +73,9 @@
    * @return {*} Рандомное значение
    */
 
-  var getRandomArrValue = function (arr) {
+  function getRandomArrValue(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
-  };
+  }
 
   /**
    *
@@ -84,14 +84,14 @@
    * @return {Object[]} Рандомный массив
    */
 
-  var getRandomArr = function (arr, length) {
+  function getRandomArr(arr, length) {
     length = length ? length : arr.length;
     var randomArr = arr.slice();
     randomArr.sort(function () {
       return Math.random() - 0.5;
     });
     return randomArr.slice(0, length);
-  };
+  }
 
   /**
    *
@@ -99,7 +99,7 @@
    * @return {string} Заголовок объекта бронирования
    */
 
-  var generateTitle = function (type) {
+  function generateTitle(type) {
     var REPLACE = 'object';
     var titles = [
       'object находится недалеко от метро',
@@ -112,7 +112,7 @@
     ];
 
     return getRandomArrValue(titles).replace(REPLACE, type);
-  };
+  }
 
   /**
    *
@@ -120,7 +120,7 @@
    * @return {string[]} Массив аваторов, строка типа img/avatars/user01.png'
    */
 
-  var generateAvatars = function (count) {
+  function generateAvatars(count) {
     var genAvatars = new Array(count).fill('').map(function (genAvatar, index) {
       return 'img/avatars/user0' + genAvatar + (++index) + '.png';
     });
@@ -131,7 +131,7 @@
    * @return {Object}
    */
 
-  var generateOrder = function () {
+  function generateOrder() {
     var avatar = avatars[0];
     avatars.shift();
     var locationX = getRandomInt(pin.minX, pin.maxX);
@@ -162,17 +162,17 @@
         }
       }
     );
-  };
+  }
 
   /**
    * @param {number} count Количество карточек букинга
    * @return {Object[]} Массив карточек букинга
    */
 
-  var generateOrders = function (count) {
+  function generateOrders(count) {
     avatars = generateAvatars(count);
     return new Array(count).fill('').map(generateOrder);
-  };
+  }
 
   window.generateOrders = generateOrders;
 })();
