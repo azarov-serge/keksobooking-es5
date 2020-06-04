@@ -92,8 +92,8 @@
      */
 
     setCoordX: function (x) {
-      var minX = window.inf.mapMinX;
-      var maxX = window.inf.mapMaxX - window.inf.pinWidth;
+      var minX = window.constants.mapMinX;
+      var maxX = window.constants.mapMaxX - window.constants.pinWidth;
       return Math.max(Math.min(x, maxX), minX);
     },
 
@@ -103,8 +103,8 @@
      */
 
     setCoordY: function (y) {
-      var minY = window.inf.mapMinY;
-      var maxY = window.inf.mapMaxY;
+      var minY = window.constants.mapMinY;
+      var maxY = window.constants.mapMaxY;
       return Math.max(Math.min(y, maxY), minY);
     },
 

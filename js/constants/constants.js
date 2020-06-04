@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 
-  var inf = {
+  var constants = {
     pinWidth: 65,
     pinHeight: 82,
     mapMinX: 0,
@@ -10,5 +10,5 @@
     mapMaxY: 630
   };
 
-  window.inf = inf;
+  window.constants = constants;
 })();

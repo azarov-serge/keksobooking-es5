@@ -95,8 +95,8 @@
    */
 
   function generateOrder() {
-    var locationX = window.Utils.setCoordX(window.Utils.getRandomInt(window.inf.mapMinX, window.inf.mapMaxX));
-    var locationY = window.Utils.setCoordY(window.Utils.getRandomInt(window.inf.mapMinY, window.inf.mapMaxY));
+    var locationX = window.Utils.setCoordX(window.Utils.getRandomInt(window.constants.mapMinX, window.constants.mapMaxX));
+    var locationY = window.Utils.setCoordY(window.Utils.getRandomInt(window.constants.mapMinY, window.constants.mapMaxY));
     var offerType = window.Utils.getRandomArrValue(Object.keys(bookingTypes));
 
     return (
