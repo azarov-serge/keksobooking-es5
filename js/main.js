@@ -2,28 +2,26 @@
 (function () {
   var ORDER_COUNT = 8;
 
-  var mainMap = new window.MainMap();
-  var pins = new window.Pins();
-
+  var mainMap = document.querySelector('.map');
+  var pinsContainer = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
   var orders = window.generateOrders(ORDER_COUNT);
-  var listPins = [];
+  var pins = orders.map(function (order) {
+    return window.createPin(order);
+  });
 
   /**
-   * @description Отрисовывает список пинов на карте, если карта была неактивной
+   * @description Отрисовывает список пинов на карте
    */
 
-  function renderMainMap() {
-    mainMap.activate();
-    pins.getElement();
-    orders.forEach(function (order) {
-      var pin = new window.Pin(order);
-      pin.getElement();
-      listPins.push(pin);
-      window.Utils.render(pins.getElement(), pin.getElement(), window.Utils.RenderPosition.BEFOREEND);
-    });
+  function activateMainMap() {
+    mainMap.classList.remove('map--faded');
+    window.Utils.render(pinsContainer, fragment, window.Utils.RenderPosition.BEFOREEND);
   }
 
-  mainMap.getElement();
-  window.inf.mapInf = document.querySelector('.map').getBoundingClientRect();
-  renderMainMap();
+  pins.forEach(function (pin) {
+    fragment.appendChild(pin);
+  });
+
+  activateMainMap();
 })();

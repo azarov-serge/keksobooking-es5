@@ -1,8 +1,10 @@
 'use strict';
 (function () {
   var MIN_FEATURES = 2;
+  var AVATARS_COUNT = 8;
+  var avatarIndex = 0;
 
-  var avatars = [];
+  var avatars = generateAvatars();
 
   var timePeriods = ['12:00', '13:00', '14:00'];
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -47,42 +49,16 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
   ];
 
-  /**
-   *
-   * @param {number} min
-   * @param {number} max
-   * @return {number}
-   */
+  var titles = [
+    'object находится недалеко от метро',
+    'object с самым красивым видом на центр года',
+    'object для требовательных и богатых',
+    'object для командировок',
+    'object для одиноких путешественников',
+    'object для компании друзей',
+    'object для влюбленной пары',
+  ];
 
-  function getRandomInt(min, max) {
-    return min + Math.floor(Math.random() * (max - min));
-  }
-
-  /**
-   *
-   * @param {Object[]} arr Массив значений
-   * @return {*} Рандомное значение
-   */
-
-  function getRandomArrValue(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  /**
-   *
-   * @param {Object[]} arr Исходный массив значений
-   * @param {number} length Длинна массива, который нужно получить
-   * @return {Object[]} Рандомный массив
-   */
-
-  function getRandomArr(arr, length) {
-    length = length ? length : arr.length;
-    var randomArr = arr.slice();
-    randomArr.sort(function () {
-      return Math.random() - 0.5;
-    });
-    return randomArr.slice(0, length);
-  }
 
   /**
    *
@@ -92,17 +68,8 @@
 
   function generateTitle(type) {
     var REPLACE = 'object';
-    var titles = [
-      'object находится недалеко от метро',
-      'object с самым красивым видом на центр года',
-      'object для требовательных и богатых',
-      'object для командировок',
-      'object для одиноких путешественников',
-      'object для компании друзей',
-      'object для влюбленной пары',
-    ];
 
-    return getRandomArrValue(titles).replace(REPLACE, type);
+    return window.Utils.getRandomArrValue(titles).replace(REPLACE, type);
   }
 
   /**
@@ -111,11 +78,16 @@
    * @return {string[]} Массив аваторов, строка типа img/avatars/user01.png'
    */
 
-  function generateAvatars(count) {
-    var genAvatars = new Array(count).fill('').map(function (genAvatar, index) {
+  function generateAvatars() {
+    var genAvatars = new Array(AVATARS_COUNT).fill('').map(function (genAvatar, index) {
       return 'img/avatars/user0' + genAvatar + (++index) + '.png';
     });
-    return getRandomArr(genAvatars);
+    return window.Utils.getRandomArr(genAvatars);
+  }
+
+  function getAvatar() {
+    avatarIndex = avatarIndex < avatars.length - 1 ? avatarIndex + 1 : 0;
+    return avatars[avatarIndex];
   }
 
   /**
@@ -123,29 +95,27 @@
    */
 
   function generateOrder() {
-    var avatar = avatars[0];
-    avatars.shift();
-    var locationX = window.Utils.setCoordX(getRandomInt(window.inf.mapMinX, window.inf.mapMaxX));
-    var locationY = window.Utils.setCoordY(getRandomInt(window.inf.mapMinY, window.inf.mapMaxY));
-    var offerType = getRandomArrValue(Object.keys(bookingTypes));
+    var locationX = window.Utils.setCoordX(window.Utils.getRandomInt(window.inf.mapMinX, window.inf.mapMaxX));
+    var locationY = window.Utils.setCoordY(window.Utils.getRandomInt(window.inf.mapMinY, window.inf.mapMaxY));
+    var offerType = window.Utils.getRandomArrValue(Object.keys(bookingTypes));
 
     return (
       {
         'author': {
-          'avatar': avatar
+          'avatar': getAvatar()
         },
         'offer': {
           'title': generateTitle(bookingTypes[offerType]),
           'address': locationX + ', ' + locationY,
-          'price': getRandomInt(price.min, price.max),
+          'price': window.Utils.getRandomInt(price.min, price.max),
           'type': offerType,
-          'rooms': getRandomInt(rooms.min, rooms.max),
-          'guests': getRandomInt(guests.min, guests.max),
-          'checkin': getRandomArrValue(timePeriods),
-          'checkout': getRandomArrValue(timePeriods),
-          'features': getRandomArr(features, getRandomInt(MIN_FEATURES, features.length)),
-          'description': getRandomArrValue(descriptions),
-          'photos': getRandomArr(photos)
+          'rooms': window.Utils.getRandomInt(rooms.min, rooms.max),
+          'guests': window.Utils.getRandomInt(guests.min, guests.max),
+          'checkin': window.Utils.getRandomArrValue(timePeriods),
+          'checkout': window.Utils.getRandomArrValue(timePeriods),
+          'features': window.Utils.getRandomArr(features, window.Utils.getRandomInt(MIN_FEATURES, features.length)),
+          'description': window.Utils.getRandomArrValue(descriptions),
+          'photos': window.Utils.getRandomArr(photos)
         },
         'location': {
           'x': locationX,
@@ -161,7 +131,6 @@
    */
 
   function generateOrders(count) {
-    avatars = generateAvatars(count);
     return new Array(count).fill('').map(generateOrder);
   }
 
