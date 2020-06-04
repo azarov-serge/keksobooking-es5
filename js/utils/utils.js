@@ -89,6 +89,8 @@
      */
 
     render: function (container, element, place) {
+      place = place ? place : window.Utils.RenderPosition.BEFOREEND;
+
       if (Array.isArray(element)) {
         window.Utils.renderElements(container, element, place);
       } else {
@@ -125,7 +127,7 @@
 
     setCoordX: function (x) {
       var minX = window.constants.MAP_MIN_X;
-      var maxX = window.constants.MAP_MAX_X - window.constants.PIN_WIDTH;
+      var maxX = window.constants.MAP_MAX_X - window.constants.MAIN_PIN_WIDTH;
       return Math.max(Math.min(x, maxX), minX);
     },
 
@@ -175,6 +177,24 @@
         return Math.random() - 0.5;
       });
       return randomArr.slice(0, length);
+    },
+
+    convertCoordsToAddress: function (coords) {
+      return (
+        {
+          x: coords.x + Math.floor(window.constants.MAIN_PIN_WIDTH / 2),
+          y: coords.y + window.constants.MAIN_PIN_HEIGHT,
+        }
+      );
+    },
+
+    convertAddressToCoords: function (coords) {
+      return (
+        {
+          x: coords.x - Math.floor(window.constants.PIN_WIDTH / 2),
+          y: coords.y - window.constants.PIN_HEIGHT,
+        }
+      );
     },
   };
 
