@@ -84,7 +84,7 @@
 
     order = {
       'author': {
-        'avatar': 'img/avatars/user0' + (index < AVATARS_COUNT ? index + 1 : 1) + '.png',
+        'avatar': 'img/avatars/' + (index < AVATARS_COUNT ? 'user0' + (index + 1) : 'default') + '.png',
       },
       'offer': {
         'title': generateTitle(bookingTypes[offerType]),
