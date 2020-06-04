@@ -1,27 +1,13 @@
 'use strict';
 (function () {
-  var ORDER_COUNT = 8;
-
   var mainMap = document.querySelector('.map');
-  var pinsContainer = document.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
-  var orders = window.generateOrders(ORDER_COUNT);
+  var pinsContainer = mainMap.querySelector('.map__pins');
+
+  var orders = window.generateOrders(window.constants.ORDER_COUNT);
   var pins = orders.map(function (order) {
     return window.createPin(order);
   });
 
-  /**
-   * @description Отрисовывает список пинов на карте
-   */
-
-  function activateMainMap() {
-    mainMap.classList.remove('map--faded');
-    window.Utils.render(pinsContainer, fragment, window.Utils.RenderPosition.BEFOREEND);
-  }
-
-  pins.forEach(function (pin) {
-    fragment.appendChild(pin);
-  });
-
-  activateMainMap();
+  mainMap.classList.toggle('map--faded');
+  window.Utils.renderElements(pinsContainer, pins, window.Utils.RenderPosition.BEFOREEND);
 })();

@@ -2,9 +2,6 @@
 (function () {
   var MIN_FEATURES = 2;
   var AVATARS_COUNT = 8;
-  var avatarIndex = 0;
-
-  var avatars = generateAvatars();
 
   var timePeriods = ['12:00', '13:00', '14:00'];
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -59,7 +56,6 @@
     'object для влюбленной пары',
   ];
 
-
   /**
    *
    * @param {string} type Тип объекта бронирования
@@ -73,56 +69,38 @@
   }
 
   /**
-   *
-   * @param {number} count Колочество аватаров для генерации
-   * @return {string[]} Массив аваторов, строка типа img/avatars/user01.png'
-   */
-
-  function generateAvatars() {
-    var genAvatars = new Array(AVATARS_COUNT).fill('').map(function (genAvatar, index) {
-      return 'img/avatars/user0' + genAvatar + (++index) + '.png';
-    });
-    return window.Utils.getRandomArr(genAvatars);
-  }
-
-  function getAvatar() {
-    avatarIndex = avatarIndex < avatars.length - 1 ? avatarIndex + 1 : 0;
-    return avatars[avatarIndex];
-  }
-
-  /**
    * @return {Object}
    */
 
-  function generateOrder() {
-    var locationX = window.Utils.setCoordX(window.Utils.getRandomInt(window.constants.mapMinX, window.constants.mapMaxX));
-    var locationY = window.Utils.setCoordY(window.Utils.getRandomInt(window.constants.mapMinY, window.constants.mapMaxY));
+  function generateOrder(order, index) {
+    var locationX = window.Utils.setCoordX(window.Utils.getRandomInt(window.constants.MAP_MIN_X, window.constants.MAP_MAX_X));
+    var locationY = window.Utils.setCoordY(window.Utils.getRandomInt(window.constants.MAP_MIN_Y, window.constants.MAP_MAX_Y));
     var offerType = window.Utils.getRandomArrValue(Object.keys(bookingTypes));
 
-    return (
-      {
-        'author': {
-          'avatar': getAvatar()
-        },
-        'offer': {
-          'title': generateTitle(bookingTypes[offerType]),
-          'address': locationX + ', ' + locationY,
-          'price': window.Utils.getRandomInt(price.min, price.max),
-          'type': offerType,
-          'rooms': window.Utils.getRandomInt(rooms.min, rooms.max),
-          'guests': window.Utils.getRandomInt(guests.min, guests.max),
-          'checkin': window.Utils.getRandomArrValue(timePeriods),
-          'checkout': window.Utils.getRandomArrValue(timePeriods),
-          'features': window.Utils.getRandomArr(features, window.Utils.getRandomInt(MIN_FEATURES, features.length)),
-          'description': window.Utils.getRandomArrValue(descriptions),
-          'photos': window.Utils.getRandomArr(photos)
-        },
-        'location': {
-          'x': locationX,
-          'y': locationY
-        }
+    order = {
+      'author': {
+        'avatar': 'img/avatars/user0' + (index < AVATARS_COUNT ? index + 1 : 1) + '.png',
+      },
+      'offer': {
+        'title': generateTitle(bookingTypes[offerType]),
+        'address': locationX + ', ' + locationY,
+        'price': window.Utils.getRandomInt(price.min, price.max),
+        'type': offerType,
+        'rooms': window.Utils.getRandomInt(rooms.min, rooms.max),
+        'guests': window.Utils.getRandomInt(guests.min, guests.max),
+        'checkin': window.Utils.getRandomArrValue(timePeriods),
+        'checkout': window.Utils.getRandomArrValue(timePeriods),
+        'features': window.Utils.getRandomArr(features, window.Utils.getRandomInt(MIN_FEATURES, features.length)),
+        'description': window.Utils.getRandomArrValue(descriptions),
+        'photos': window.Utils.getRandomArr(photos)
+      },
+      'location': {
+        'x': locationX,
+        'y': locationY
       }
-    );
+    };
+
+    return order;
   }
 
   /**

@@ -49,19 +49,36 @@
     /**
      * @description Вставляет <component> в <container> на место <place>
      * @param {Object} container DOM-элемент, куда необходимо вставить component
-     * @param {Object} component DOM-элемент, который необходимо вставить в container
+     * @param {Object} element DOM-элемент, который необходимо вставить в container
      * @param {string} place Место вставки в container значение afterbegin || beforeend
      */
 
-    render: function (container, component, place) {
+    render: function (container, element, place) {
       switch (place) {
         case window.Utils.RenderPosition.AFTERBEGIN:
-          container.prepend(component);
+          container.prepend(element);
           break;
         case window.Utils.RenderPosition.BEFOREEND:
-          container.append(component);
+          container.append(element);
           break;
       }
+    },
+
+    /**
+     * @description Вставляет <component> в <container> на место <place>
+     * @param {Object} container DOM-элемент, куда необходимо вставить component
+     * @param {Object[]} elements Массив DOM-элементов, который необходимо вставить в container
+     * @param {string} place Место вставки в container значение afterbegin || beforeend
+     */
+
+    renderElements: function (container, elements, place) {
+      var fragment = document.createDocumentFragment();
+
+      elements.forEach(function (element) {
+        fragment.appendChild(element);
+      });
+
+      window.Utils.render(container, fragment, place);
     },
 
     /**
@@ -92,8 +109,8 @@
      */
 
     setCoordX: function (x) {
-      var minX = window.constants.mapMinX;
-      var maxX = window.constants.mapMaxX - window.constants.pinWidth;
+      var minX = window.constants.MAP_MIN_X;
+      var maxX = window.constants.MAP_MAX_X - window.constants.PIN_WIDTH;
       return Math.max(Math.min(x, maxX), minX);
     },
 
@@ -103,8 +120,8 @@
      */
 
     setCoordY: function (y) {
-      var minY = window.constants.mapMinY;
-      var maxY = window.constants.mapMaxY;
+      var minY = window.constants.MAP_MIN_Y;
+      var maxY = window.constants.MAP_MAX_Y;
       return Math.max(Math.min(y, maxY), minY);
     },
 
