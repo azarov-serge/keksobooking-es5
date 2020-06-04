@@ -9,5 +9,5 @@
   });
 
   mainMap.classList.toggle('map--faded');
-  window.Utils.renderElements(pinsContainer, pins, window.Utils.RenderPosition.BEFOREEND);
+  window.Utils.render(pinsContainer, pins, window.Utils.RenderPosition.BEFOREEND);
 })();

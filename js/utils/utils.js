@@ -53,7 +53,7 @@
      * @param {string} place Место вставки в container значение afterbegin || beforeend
      */
 
-    render: function (container, element, place) {
+    renderElement: function (container, element, place) {
       switch (place) {
         case window.Utils.RenderPosition.AFTERBEGIN:
           container.prepend(element);
@@ -78,7 +78,22 @@
         fragment.appendChild(element);
       });
 
-      window.Utils.render(container, fragment, place);
+      window.Utils.renderElement(container, fragment, place);
+    },
+
+    /**
+     * @description Вставляет <component> в <container> на место <place>
+     * @param {Object} container DOM-элемент, куда необходимо вставить component
+     * @param {Object} element DOM-элемент, который необходимо вставить в container
+     * @param {string} place Место вставки в container значение afterbegin || beforeend
+     */
+
+    render: function (container, element, place) {
+      if (Array.isArray(element)) {
+        window.Utils.renderElements(container, element, place);
+      } else {
+        window.Utils.renderElement(container, element, place);
+      }
     },
 
     /**
