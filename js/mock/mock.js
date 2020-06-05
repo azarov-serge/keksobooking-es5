@@ -76,8 +76,8 @@
     var coordsOrder = window.coords.create();
     window.coords.set(
         coordsOrder,
-        window.utils.getRandomInt(window.constants.MAP_MIN_X, window.constants.MAP_MAX_X),
-        window.utils.getRandomInt(window.constants.MAP_MIN_Y, window.constants.MAP_MAX_Y)
+        window.utils.getRandomInt(window.Constants.MAP_MIN_X, window.Constants.MAP_MAX_X),
+        window.utils.getRandomInt(window.Constants.MAP_MIN_Y, window.Constants.MAP_MAX_Y)
     );
 
     window.coords.convertToLocation(coordsOrder);

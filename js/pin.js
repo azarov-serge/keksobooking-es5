@@ -2,7 +2,7 @@
 (function () {
   function createPin(data) {
     var coordsPin = Object.assign({}, data.location);
-    window.coords.convertFromgitLocation(coordsPin);
+    window.coords.convertFromLocation(coordsPin);
     var template = document.querySelector('#pin').content.querySelector('.map__pin');
     var pin = template.cloneNode(true);
     pin.style.left = coordsPin.x + 'px';
