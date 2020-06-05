@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 
-  var constants = {
+  var Constants = {
     ORDER_COUNT: 8,
     PIN_WIDTH: 50,
     PIN_HEIGHT: 70,
@@ -13,5 +13,5 @@
     MAP_MAX_Y: 630
   };
 
-  window.constants = constants;
+  window.Constants = Constants;
 })();
