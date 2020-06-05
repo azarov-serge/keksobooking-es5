@@ -7,7 +7,9 @@
   var pins = orders.map(function (order) {
     return window.createPin(order);
   });
+  var card = window.createCard(orders[0]);
 
   mainMap.classList.toggle('map--faded');
   window.utils.render(pinsContainer, pins);
+  window.utils.render(pinsContainer, card);
 })();
