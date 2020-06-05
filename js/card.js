@@ -39,7 +39,7 @@
           $photo.src = data.offer.photos[i];
           $photos.push($photo);
         }
-        window.utils.render($photosContainer, $photos);
+        window.utils.render($photosContainer, $photos, window.utils.RenderPosition.BEFOREEND);
       }
     } else {
       $photos.removeChild($templatePhoto);
