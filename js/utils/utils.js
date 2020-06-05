@@ -15,10 +15,10 @@
   };
 
   /**
-   * @description Вставляет <$element> в <$container> на место <$place>
+   * @description Вставляет <$element> в <$container> на место <place>
    * @param {Object} $container DOM-элемент, куда необходимо вставить component
    * @param {Object} $element DOM-элемент, который необходимо вставить в container
-   * @param {string} $place Место вставки в container значение afterbegin || beforeend
+   * @param {string} place Место вставки в container значение afterbegin || beforeend
    */
 
   function renderElement($container, $element, place) {
@@ -33,7 +33,7 @@
   }
 
   /**
-   * @description Вставляет <$component> в <$container> на место <$place>
+   * @description Вставляет <$component> в <$container> на место <place>
    * @param {Object} $container DOM-элемент, куда необходимо вставить component
    * @param {Object[]} $elements Массив DOM-элементов, который необходимо вставить в <$container>
    * @param {string} place Место вставки в container значение afterbegin || beforeend
@@ -50,10 +50,10 @@
   }
 
   /**
-    * @description Вставляет <$element> в <$container> на место <$place>
+    * @description Вставляет <$element> в <$container> на место <place>
     * @param {Object} $container DOM-элемент, куда необходимо вставить component
     * @param {Object} $element DOM-элемент, который необходимо вставить в container
-    * @param {string} $place Место вставки в container значение afterbegin || beforeend
+    * @param {string} place Место вставки в container значение afterbegin || beforeend
     */
 
   function render($container, $element, place) {
