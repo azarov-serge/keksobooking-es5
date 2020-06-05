@@ -53,7 +53,7 @@
     * @description Вставляет <$element> в <$container> на место <place>
     * @param {Object} $container DOM-элемент, куда необходимо вставить component
     * @param {Object} $element DOM-элемент, который необходимо вставить в container
-    * @param {string} place Место вставки в container значение afterbegin || beforeend
+    * @param {string} place Место вставки в container значение afterbegin || beforeend || DOMElement. По умолчанию beforeend
     */
 
   function render($container, $element, place) {
