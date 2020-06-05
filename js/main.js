@@ -10,6 +10,6 @@
   var $card = window.createCard(orders[0]);
 
   $mainMap.classList.toggle('map--faded');
-  window.utils.render($pinsContainer, $pins);
+  window.utils.render($pinsContainer, $pins, window.utils.RenderPosition.AFTERBEGIN);
   window.utils.render($mainMap, $card, $mainMap.querySelector('.map__filters-container'));
 })();
