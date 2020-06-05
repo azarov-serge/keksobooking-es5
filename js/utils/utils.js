@@ -1,12 +1,8 @@
 'use strict';
 (function () {
-  var RenderPosition = {
-    AFTERBEGIN: 'afterbegin',
-    BEFOREEND: 'beforeend',
-  };
+  var DEFAULT_RENDER_POSITION = 'beforeend';
 
   var utils = {
-    RenderPosition: RenderPosition,
     render: render,
     getRandomInt: getRandomInt,
     getRandomArrValue: getRandomArrValue,
@@ -23,10 +19,10 @@
 
   function renderElement($container, $element, place) {
     switch (place) {
-      case RenderPosition.AFTERBEGIN:
+      case 'afterbegin':
         $container.prepend($element);
         break;
-      case RenderPosition.BEFOREEND:
+      case 'beforeend':
         $container.append($element);
         break;
     }
@@ -58,7 +54,7 @@
   function render($container, $element, place) {
     var $renderElement = Array.isArray($element) ? createRenderFragment($element) : $element;
 
-    place = place || RenderPosition.BEFOREEND;
+    place = place || DEFAULT_RENDER_POSITION;
 
     if (place instanceof Object) {
       $container.insertBefore($renderElement, place);
