@@ -33,20 +33,18 @@
   }
 
   /**
-   * @description Вставляет <$component> в <$container> на место <place>
-   * @param {Object} $container DOM-элемент, куда необходимо вставить component
-   * @param {Object[]} $elements Массив DOM-элементов, который необходимо вставить в <$container>
-   * @param {string} place Место вставки в container значение afterbegin || beforeend
+   * @param {Object[]} $elements Массив DOM-элементов
+   * @return {Object}
    */
 
-  function renderElements($container, $elements, place) {
+  function createRenderFragment($elements) {
     var $fragment = document.createDocumentFragment();
 
     $elements.forEach(function ($element) {
       $fragment.appendChild($element);
     });
 
-    renderElement($container, $fragment, place);
+    return $fragment;
   }
 
   /**
@@ -57,16 +55,14 @@
     */
 
   function render($container, $element, place) {
+    var $renderElement = Array.isArray($element) ? createRenderFragment($element) : $element;
+
     place = place || RenderPosition.BEFOREEND;
 
     if (place instanceof Object) {
-      $container.insertBefore($element, place);
+      $container.insertBefore($renderElement, place);
     } else {
-      if (Array.isArray($element)) {
-        renderElements($container, $element, place);
-      } else {
-        renderElement($container, $element, place);
-      }
+      renderElement($container, $renderElement, place);
     }
   }
 
