@@ -5,7 +5,6 @@
     ENTER: 13,
   };
 
-
   var keyboard = {
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,

@@ -16,7 +16,7 @@
       + window.utils.getEndWord(data.offer.guests, window.Constants.GUEST_TEXTS)
     );
     $card.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
-
+    // Отрисовка всех доступных удобств в объявлении
     var $featuresContainer = $card.querySelector('.popup__features');
     var $features = $featuresContainer.querySelectorAll('.popup__feature');
     $features.forEach(function ($feature) {
@@ -27,10 +27,9 @@
     });
 
     $card.querySelector('.popup__description').textContent = data.offer.description;
-
+    // Отрисовка всех фотографий объявления
     var $photosContainer = $card.querySelector('.popup__photos');
     var $templatePhoto = $photosContainer.querySelector('img');
-
     if (data.offer.photos && data.offer.photos.length > 0) {
       $templatePhoto.src = data.offer.photos[0];
       var $photos = [$templatePhoto];
