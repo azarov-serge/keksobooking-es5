@@ -59,10 +59,14 @@
   function render($container, $element, place) {
     place = place || RenderPosition.BEFOREEND;
 
-    if (Array.isArray($element)) {
-      renderElements($container, $element, place);
+    if (place instanceof Object) {
+      $container.insertBefore($element, place);
     } else {
-      renderElement($container, $element, place);
+      if (Array.isArray($element)) {
+        renderElements($container, $element, place);
+      } else {
+        renderElement($container, $element, place);
+      }
     }
   }
 

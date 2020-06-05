@@ -11,5 +11,5 @@
 
   $mainMap.classList.toggle('map--faded');
   window.utils.render($pinsContainer, $pins);
-  window.utils.render($mainMap, $card);
+  window.utils.render($mainMap, $card, $mainMap.querySelector('.map__filters-container'));
 })();
