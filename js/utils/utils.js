@@ -8,7 +8,6 @@
   var utils = {
     RenderPosition: RenderPosition,
     render: render,
-    remove: remove,
     getRandomInt: getRandomInt,
     getRandomArrValue: getRandomArrValue,
     getRandomArr: getRandomArr,
@@ -16,65 +15,55 @@
   };
 
   /**
-   * @description Вставляет <element> в <container> на место <place>
-   * @param {Object} container DOM-элемент, куда необходимо вставить component
-   * @param {Object} element DOM-элемент, который необходимо вставить в container
-   * @param {string} place Место вставки в container значение afterbegin || beforeend
+   * @description Вставляет <$element> в <$container> на место <$place>
+   * @param {Object} $container DOM-элемент, куда необходимо вставить component
+   * @param {Object} $element DOM-элемент, который необходимо вставить в container
+   * @param {string} $place Место вставки в container значение afterbegin || beforeend
    */
 
-  function renderElement(container, element, place) {
+  function renderElement($container, $element, place) {
     switch (place) {
       case RenderPosition.AFTERBEGIN:
-        container.prepend(element);
+        $container.prepend($element);
         break;
       case RenderPosition.BEFOREEND:
-        container.append(element);
+        $container.append($element);
         break;
     }
   }
 
   /**
-   * @description Вставляет <component> в <container> на место <place>
-   * @param {Object} container DOM-элемент, куда необходимо вставить component
-   * @param {Object[]} elements Массив DOM-элементов, который необходимо вставить в container
+   * @description Вставляет <$component> в <$container> на место <$place>
+   * @param {Object} $container DOM-элемент, куда необходимо вставить component
+   * @param {Object[]} $elements Массив DOM-элементов, который необходимо вставить в <$container>
    * @param {string} place Место вставки в container значение afterbegin || beforeend
    */
 
-  function renderElements(container, elements, place) {
-    var fragment = document.createDocumentFragment();
+  function renderElements($container, $elements, place) {
+    var $fragment = document.createDocumentFragment();
 
-    elements.forEach(function (element) {
-      fragment.appendChild(element);
+    $elements.forEach(function ($element) {
+      $fragment.appendChild($element);
     });
 
-    renderElement(container, fragment, place);
+    renderElement($container, $fragment, place);
   }
 
   /**
-    * @description Вставляет <element> в <container> на место <place>
-    * @param {Object} container DOM-элемент, куда необходимо вставить component
-    * @param {Object} element DOM-элемент, который необходимо вставить в container
-    * @param {string} place Место вставки в container значение afterbegin || beforeend
+    * @description Вставляет <$element> в <$container> на место <$place>
+    * @param {Object} $container DOM-элемент, куда необходимо вставить component
+    * @param {Object} $element DOM-элемент, который необходимо вставить в container
+    * @param {string} $place Место вставки в container значение afterbegin || beforeend
     */
 
-  function render(container, element, place) {
+  function render($container, $element, place) {
     place = place ? place : RenderPosition.BEFOREEND;
 
-    if (Array.isArray(element)) {
-      renderElements(container, element, place);
+    if (Array.isArray($element)) {
+      renderElements($container, $element, place);
     } else {
-      renderElement(container, element, place);
+      renderElement($container, $element, place);
     }
-  }
-
-  /**
-   * Удаляет компонент component
-   * @param {Object} component
-   */
-
-  function remove(component) {
-    component.getElement().remove();
-    component.removeElement();
   }
 
   /**
