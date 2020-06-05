@@ -33,7 +33,7 @@
   }
 
   /**
-   * @description Создает фразмент с объектами для вставки
+   * @description Создает фрагмент с объектами для вставки
    * @param {Object[]} $elements Массив DOM-элементов
    * @return {Object}
    */
