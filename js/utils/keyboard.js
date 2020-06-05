@@ -1,10 +1,5 @@
 'use strict';
 (function () {
-  var Keycode = {
-    ESK: 27,
-    ENTER: 13,
-  };
-
   var keyboard = {
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,
@@ -17,7 +12,7 @@
    */
 
   function isEscPressed(evt) {
-    return evt.keyCode === Keycode.ESC;
+    return evt.keyCode === window.Constant.KeyCode.ESC;
   }
 
   /**
@@ -27,7 +22,7 @@
    */
 
   function isEnterPressed(evt) {
-    return evt.keyCode === Keycode.ENTER;
+    return evt.keyCode === window.Constant.KeyCode.ENTER;
   }
 
   window.keyboard = keyboard;

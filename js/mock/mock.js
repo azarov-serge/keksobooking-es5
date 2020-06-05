@@ -21,7 +21,7 @@
     max: 10,
   };
 
-  var bookingTypes = window.Constants.BOOKING_TYPES;
+  var bookingTypes = window.Constant.bookingTypes;
 
   var descriptions = [
     'Великолепный вариан в центре Токио. Подходит как туристам, так и бизнесменам. Дом полностью укомплектован и имеет свежий ремонт.',
@@ -71,8 +71,8 @@
     var coordsOrder = window.coords.create();
     window.coords.set(
         coordsOrder,
-        window.utils.getRandomInt(window.Constants.MAP_MIN_X, window.Constants.MAP_MAX_X),
-        window.utils.getRandomInt(window.Constants.MAP_MIN_Y, window.Constants.MAP_MAX_Y)
+        window.utils.getRandomInt(window.Constant.MAP_MIN_X, window.Constant.MAP_MAX_X),
+        window.utils.getRandomInt(window.Constant.MAP_MIN_Y, window.Constant.MAP_MAX_Y)
     );
 
     window.coords.convertToLocation(coordsOrder);
@@ -94,7 +94,7 @@
         'checkout': window.utils.getRandomArrValue(timePeriods),
         'features': window.utils.getRandomArr(features, window.utils.getRandomInt(MIN_FEATURES, features.length)),
         'description': window.utils.getRandomArrValue(descriptions),
-        'photos': window.utils.getRandomArr(photos)
+        'photos': window.utils.getRandomArr(photos, window.utils.getRandomInt(1, photos.length + 1)),
       },
       'location': {
         'x': coordsOrder.x,

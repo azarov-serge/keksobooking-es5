@@ -5,7 +5,7 @@
   var $pinsContainer = $mainMap.querySelector('.map__pins');
   var $filtersContainer = $mainMap.querySelector('.map__filters-container');
 
-  var orders = window.generateOrders(window.Constants.ORDER_COUNT);
+  var orders = window.generateOrders(window.Constant.ORDER_COUNT);
   var $pins = orders.map(function (order) {
     return window.createPin(order);
   });

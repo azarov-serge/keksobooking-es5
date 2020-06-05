@@ -1,7 +1,6 @@
 'use strict';
 (function () {
-
-  var Constants = {
+  var Constant = {
     ORDER_COUNT: 8,
     PIN_WIDTH: 50,
     PIN_HEIGHT: 70,
@@ -11,15 +10,23 @@
     MAP_MAX_X: 1200,
     MAP_MIN_Y: 130,
     MAP_MAX_Y: 630,
-    BOOKING_TYPES: {
+    bookingTypes: {
       palace: 'Дворец',
       flat: 'Квартира',
       house: 'Дом',
       bungalo: 'Бунгало',
     },
-    ROOM_TEXTS: ['комната', 'комнаты', 'комнат'],
-    GUEST_TEXTS: ['гостя', 'гостей', 'гостей'],
+    roomTexts: ['комната', 'комнаты', 'комнат'],
+    guestTexts: ['гостя', 'гостей', 'гостей'],
+    RenderPosition: {
+      AFTERBEGIN: 'afterbegin',
+      BEFOREEND: 'beforeend',
+    },
+    KeyСode: {
+      ESK: 27,
+      ENTER: 13,
+    },
   };
 
-  window.Constants = Constants;
+  window.Constant = Constant;
 })();

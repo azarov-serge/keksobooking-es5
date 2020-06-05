@@ -1,17 +1,11 @@
 'use strict';
 (function () {
-  var RenderPosition = {
-    AFTERBEGIN: 'afterbegin',
-    BEFOREEND: 'beforeend',
-  };
-
   var utils = {
-    RenderPosition: RenderPosition,
     render: render,
     getRandomInt: getRandomInt,
     getRandomArrValue: getRandomArrValue,
     getRandomArr: getRandomArr,
-    getEndWord: getEndWord,
+    getWordEnd: getWordEnd,
   };
 
   /**
@@ -23,10 +17,10 @@
 
   function renderElement($container, $element, place) {
     switch (place) {
-      case RenderPosition.AFTERBEGIN:
+      case window.Constant.RenderPosition.AFTERBEGIN:
         $container.prepend($element);
         break;
-      case RenderPosition.BEFOREEND:
+      case window.Constant.RenderPosition.BEFOREEND:
         $container.append($element);
         break;
     }
@@ -91,7 +85,7 @@
    */
 
   function getRandomArr(arr, length) {
-    length = length ? length : arr.length;
+    length = length || arr.length;
     var randomArr = arr.slice();
     randomArr.sort(function () {
       return Math.random() - 0.5;
@@ -106,7 +100,7 @@
     * @return {String} Слово или окончание для числа
     */
 
-  function getEndWord(number, txt) {
+  function getWordEnd(number, txt) {
     var cases = [2, 0, 1, 1, 1, 2];
     var index = 0;
     if (number % 100 > 4 && number % 100 < 20) {
