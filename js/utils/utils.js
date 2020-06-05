@@ -57,7 +57,7 @@
     */
 
   function render($container, $element, place) {
-    place = place ? place : RenderPosition.BEFOREEND;
+    place = place || RenderPosition.BEFOREEND;
 
     if (Array.isArray($element)) {
       renderElements($container, $element, place);
