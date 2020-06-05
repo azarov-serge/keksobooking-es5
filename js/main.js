@@ -11,5 +11,5 @@
 
   $mainMap.classList.toggle('map--faded');
   window.utils.render($pinsContainer, $pins);
-  window.utils.render($pinsContainer, $card);
+  window.utils.render($mainMap, $card);
 })();
