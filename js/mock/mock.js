@@ -21,12 +21,7 @@
     max: 10,
   };
 
-  var bookingTypes = {
-    palace: 'Дворец',
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало',
-  };
+  var bookingTypes = window.Constants.BOOKING_TYPES;
 
   var descriptions = [
     'Великолепный вариан в центре Токио. Подходит как туристам, так и бизнесменам. Дом полностью укомплектован и имеет свежий ремонт.',
