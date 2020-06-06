@@ -1,13 +1,17 @@
 'use strict';
 (function () {
-  var mainMap = document.querySelector('.map');
-  var pinsContainer = mainMap.querySelector('.map__pins');
+  var $mainMap = document.querySelector('.map');
+  var $mainPin = $mainMap.querySelector('.map__pin--main');
+  var $pinsContainer = $mainMap.querySelector('.map__pins');
+  var $filtersContainer = $mainMap.querySelector('.map__filters-container');
 
-  var orders = window.generateOrders(window.constants.ORDER_COUNT);
-  var pins = orders.map(function (order) {
+  var orders = window.generateOrders(window.Constant.ORDER_COUNT);
+  var $pins = orders.map(function (order) {
     return window.createPin(order);
   });
+  var $card = window.createCard(orders[0]);
 
-  mainMap.classList.toggle('map--faded');
-  window.Utils.render(pinsContainer, pins);
+  $mainMap.classList.toggle('map--faded');
+  window.utils.render($pinsContainer, $pins, $mainPin);
+  window.utils.render($mainMap, $card, $filtersContainer);
 })();

@@ -21,12 +21,7 @@
     max: 10,
   };
 
-  var bookingTypes = {
-    palace: 'Дворец',
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало',
-  };
+  var bookingTypes = window.Constant.bookingTypes;
 
   var descriptions = [
     'Великолепный вариан в центре Токио. Подходит как туристам, так и бизнесменам. Дом полностью укомплектован и имеет свежий ремонт.',
@@ -65,7 +60,7 @@
   function generateTitle(type) {
     var REPLACE = 'object';
 
-    return window.Utils.getRandomArrValue(titles).replace(REPLACE, type);
+    return window.utils.getRandomArrValue(titles).replace(REPLACE, type);
   }
 
   /**
@@ -73,14 +68,16 @@
    */
 
   function generateOrder(order, index) {
-    var coords = {
-      x: window.Utils.setCoordX(window.Utils.getRandomInt(window.constants.MAP_MIN_X, window.constants.MAP_MAX_X)),
-      y: window.Utils.setCoordY(window.Utils.getRandomInt(window.constants.MAP_MIN_Y, window.constants.MAP_MAX_Y))
-    };
+    var coordsOrder = window.coords.create();
+    window.coords.set(
+        coordsOrder,
+        window.utils.getRandomInt(window.Constant.MAP_MIN_X, window.Constant.MAP_MAX_X),
+        window.utils.getRandomInt(window.Constant.MAP_MIN_Y, window.Constant.MAP_MAX_Y)
+    );
 
-    coords = window.Utils.convertCoordsToAddress(coords);
+    window.coords.convertToLocation(coordsOrder);
 
-    var offerType = window.Utils.getRandomArrValue(Object.keys(bookingTypes));
+    var offerType = window.utils.getRandomArrValue(Object.keys(bookingTypes));
 
     order = {
       'author': {
@@ -88,20 +85,20 @@
       },
       'offer': {
         'title': generateTitle(bookingTypes[offerType]),
-        'address': coords.x + ', ' + coords.y,
-        'price': window.Utils.getRandomInt(price.min, price.max),
+        'address': coordsOrder.x + ', ' + coordsOrder.y,
+        'price': window.utils.getRandomInt(price.min, price.max),
         'type': offerType,
-        'rooms': window.Utils.getRandomInt(rooms.min, rooms.max),
-        'guests': window.Utils.getRandomInt(guests.min, guests.max),
-        'checkin': window.Utils.getRandomArrValue(timePeriods),
-        'checkout': window.Utils.getRandomArrValue(timePeriods),
-        'features': window.Utils.getRandomArr(features, window.Utils.getRandomInt(MIN_FEATURES, features.length)),
-        'description': window.Utils.getRandomArrValue(descriptions),
-        'photos': window.Utils.getRandomArr(photos)
+        'rooms': window.utils.getRandomInt(rooms.min, rooms.max),
+        'guests': window.utils.getRandomInt(guests.min, guests.max),
+        'checkin': window.utils.getRandomArrValue(timePeriods),
+        'checkout': window.utils.getRandomArrValue(timePeriods),
+        'features': window.utils.getRandomArr(features, window.utils.getRandomInt(MIN_FEATURES, features.length)),
+        'description': window.utils.getRandomArrValue(descriptions),
+        'photos': window.utils.getRandomArr(photos, window.utils.getRandomInt(1, photos.length + 1)),
       },
       'location': {
-        'x': coords.x,
-        'y': coords.y
+        'x': coordsOrder.x,
+        'y': coordsOrder.y
       }
     };
 
