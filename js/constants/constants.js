@@ -12,10 +12,11 @@
     MAP_MAX_Y: 630,
     DEFAULT_ROOMS: 1,
     NOT_GUESTS: 0,
+    MAX_ROOMS_COUNT: 100,
     LEFT_MOUSE_BUTTON: 0,
     Url: {
       LOAD: ' https://javascript.pages.academy/keksobooking/data',
-      SEND: 'https://javascript.pages.academy/keksobooking',
+      UPLOAD: 'https://javascript.pages.academy/keksobooking',
     },
     bookingTypes: {
       palace: 'Дворец',
