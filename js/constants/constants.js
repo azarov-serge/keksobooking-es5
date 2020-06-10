@@ -10,6 +10,7 @@
     MAP_MAX_X: 1200,
     MAP_MIN_Y: 130,
     MAP_MAX_Y: 630,
+    LEFT_MOUSE_BUTTON: 0,
     bookingTypes: {
       palace: 'Дворец',
       flat: 'Квартира',

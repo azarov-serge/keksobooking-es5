@@ -6,6 +6,7 @@
     getRandomArrValue: getRandomArrValue,
     getRandomArr: getRandomArr,
     getWordEnd: getWordEnd,
+    isLeftMouseButtonPress: isLeftMouseButtonPress,
   };
 
   /**
@@ -109,6 +110,10 @@
       index = cases[(number % 10 < 5) ? number % 10 : 5];
     }
     return txt[index];
+  }
+
+  function isLeftMouseButtonPress(evt) {
+    return evt.button === window.Constant.LEFT_MOUSE_BUTTON;
   }
 
   window.utils = utils;

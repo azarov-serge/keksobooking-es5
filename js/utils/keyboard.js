@@ -22,7 +22,7 @@
    */
 
   function isEnterPressed(evt) {
-    return evt.keyCode === window.Constant.KeyCode.ENTER;
+    return evt.keyCode === window.Constant.KeyСode.ENTER;
   }
 
   window.keyboard = keyboard;
