@@ -6,7 +6,8 @@
   var $filtersContainer = $mainMap.querySelector('.map__filters-container');
   var $adForm = document.querySelector('.ad-form');
   var $adFieldsets = $adForm.children;
-  var $asAddress = $adForm.querySelector('#address');
+  var $adAddress = $adForm.querySelector('#address');
+
 
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
   var $pins = orders.map(function (order) {
@@ -47,7 +48,7 @@
       y: getMainPinCoord(y)
     };
     window.coords.convertToLocation(coords);
-    $asAddress.value = coords.x + ', ' + coords.y;
+    $adAddress.value = coords.x + ', ' + coords.y;
   }
 
   toggleFieldSets();
@@ -64,5 +65,4 @@
       actiateMap();
     }
   });
-
 })();
