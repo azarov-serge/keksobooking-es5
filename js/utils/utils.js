@@ -7,6 +7,10 @@
     getRandomArr: getRandomArr,
     getWordEnd: getWordEnd,
     isLeftMouseButtonPress: isLeftMouseButtonPress,
+    setGuests: setGuests,
+    disabledGuestsValues: disabledGuestsValues,
+    validateRooms: validateRooms,
+    toggleFieldSets: toggleFieldSets,
   };
 
   /**
@@ -114,6 +118,57 @@
 
   function isLeftMouseButtonPress(evt) {
     return evt.button === window.Constant.LEFT_MOUSE_BUTTON;
+  }
+
+  /**
+   * @param {number} rooms Количество комнат
+   * @return {number} Количество гостей
+   */
+
+  function setGuests(rooms) {
+    if (rooms === 100) {
+      return window.Constant.NOT_GUESTS;
+    } else {
+      return rooms;
+    }
+  }
+
+  /**
+   * @param {Object} $filter
+   * @param {string} validValue
+   */
+
+  function disabledGuestsValues($filter, validValue) {
+    var NOT_GUESTS = window.Constant.NOT_GUESTS;
+    validValue = parseInt(validValue, 10);
+    Array.prototype.slice.call($filter.children).forEach(function (item) {
+      var itemValue = parseInt(item.value, 10);
+      if (validValue === NOT_GUESTS) {
+        if (itemValue === validValue) {
+          item.disabled = false;
+        } else {
+          item.disabled = true;
+        }
+      } else {
+        if ((itemValue <= validValue) && (itemValue !== NOT_GUESTS)) {
+          item.disabled = false;
+        } else {
+          item.disabled = true;
+        }
+      }
+    });
+  }
+
+  function validateRooms($rooms, $guests) {
+    var roomsCount = parseInt($rooms.value, 10);
+    $guests.value = setGuests(roomsCount);
+    disabledGuestsValues($guests, $guests.value);
+  }
+
+  function toggleFieldSets($form) {
+    $form.querySelectorAll('fieldset').forEach(function ($fieldset) {
+      $fieldset.disabled = !$fieldset.disabled;
+    });
   }
 
   window.utils = utils;

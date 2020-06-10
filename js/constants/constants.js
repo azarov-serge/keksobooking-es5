@@ -10,7 +10,13 @@
     MAP_MAX_X: 1200,
     MAP_MIN_Y: 130,
     MAP_MAX_Y: 630,
+    DEFAULT_ROOMS: 1,
+    NOT_GUESTS: 0,
     LEFT_MOUSE_BUTTON: 0,
+    Url: {
+      LOAD: ' https://javascript.pages.academy/keksobooking/data',
+      SEND: 'https://javascript.pages.academy/keksobooking',
+    },
     bookingTypes: {
       palace: 'Дворец',
       flat: 'Квартира',

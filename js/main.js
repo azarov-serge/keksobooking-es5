@@ -5,9 +5,9 @@
   var $pinsContainer = $mainMap.querySelector('.map__pins');
   var $filtersContainer = $mainMap.querySelector('.map__filters-container');
   var $adForm = document.querySelector('.ad-form');
-  var $adFieldsets = $adForm.children;
   var $adAddress = $adForm.querySelector('#address');
-
+  var $adRooms = $adForm.querySelector('#room_number');
+  var $adGuests = $adForm.querySelector('#capacity');
 
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
   var $pins = orders.map(function (order) {
@@ -15,15 +15,10 @@
   });
   var $card = window.createCard(orders[0]);
 
-  function toggleFieldSets() {
-    Array.prototype.slice.call($adFieldsets).forEach(function ($adFieldset) {
-      $adFieldset.disabled = !$adFieldset.disabled;
-    });
-  }
 
   function toggleAdForm() {
     $adForm.classList.toggle('ad-form--disabled');
-    toggleFieldSets();
+    window.utils.toggleFieldSets($adForm);
   }
 
 
@@ -51,8 +46,13 @@
     $adAddress.value = coords.x + ', ' + coords.y;
   }
 
-  toggleFieldSets();
+  $adRooms.value = window.Constant.DEFAULT_ROOMS;
+  $adGuests.value = window.utils.setGuests($adRooms.value);
+  window.utils.disabledGuestsValues($adGuests, $adRooms.value);
+
+  window.utils.toggleFieldSets($adForm);
   setAddress($mainPin.style.left, $mainPin.style.top);
+  $mainMap.classList.contains('map--faded');
 
   $mainPin.addEventListener('mousedown', function (evt) {
     if (window.utils.isLeftMouseButtonPress(evt)) {
@@ -63,6 +63,18 @@
   $mainPin.addEventListener('keydown', function (evt) {
     if (window.keyboard.isEnterPressed(evt)) {
       actiateMap();
+    }
+  });
+
+
+  $adRooms.addEventListener('change', function () {
+    window.utils.validateRooms($adRooms, $adGuests);
+  });
+
+  $adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    if (evt.target.checkValidity()) {
+      evt.target.action = window.Constant.Url.SEND;
     }
   });
 })();
