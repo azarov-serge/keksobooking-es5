@@ -8,7 +8,7 @@
     throw new Error('Component can\'t have abstract method');
   };
 
-  AbsctractComponent.prototype.create = function () {
+  AbsctractComponent.prototype.getElement = function () {
     if (!this._$element) {
       this._$element = this._getTemplate();
     }
@@ -16,11 +16,11 @@
     return this._$element;
   };
 
-  AbsctractComponent.prototype.render = function ($container, place) {
+  AbsctractComponent.prototype.renderElement = function ($container, place) {
     window.utils.render($container, this._$element, place);
   };
 
-  AbsctractComponent.prototype.remove = function () {
+  AbsctractComponent.prototype.removeElement = function () {
     this._$element.parentElement.removeChild(this._$element);
     this._$element = null;
   };

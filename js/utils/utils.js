@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var LEFT_MOUSE_BUTTON = 0;
+
   var utils = {
     render: render,
     getRandomInt: getRandomInt,
@@ -113,7 +115,7 @@
   }
 
   function isLeftMouseButtonPressed(evt) {
-    return evt.button === window.Constant.LEFT_MOUSE_BUTTON;
+    return evt.button === LEFT_MOUSE_BUTTON;
   }
 
   window.utils = utils;

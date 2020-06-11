@@ -1,83 +1,52 @@
 'use strict';
 (function () {
-  // Форма для размещения объявления
-  var $adForm = document.querySelector('.ad-form');
-  // Input с адрессом
-  var $adAddress = $adForm.querySelector('#address');
-  // Список вариантов количества комнат
-  var $adRooms = $adForm.querySelector('#room_number');
-  // Список вариантов количества гостей
-  var $adGuests = $adForm.querySelector('#capacity');
-
-  // "Объект-модуль" формы для работы в других модулях
-  var adForm = {
-    toggleAdForm: toggleAdForm,
-    setAddress: setAddress,
+  // Количество комнат по умолчанию для филтра
+  var DEFAULT_ROOMS = 1;
+  // Значения для валидации
+  var ValidateValue = {
+    NOT_GUESTS: 0,
+    MAX_ROOMS_COUNT: 100,
   };
 
-  /**
-   * @description Переключает fieldsets формы: enabled || diasabled
-   */
-  function toggleFieldSets() {
-    $adForm.querySelectorAll('fieldset').forEach(function ($fieldset) {
-      $fieldset.disabled = !$fieldset.disabled;
-    });
+  function AdFormController(adForm) {
+    this._adForm = adForm;
+    this._setDefaultValues();
   }
 
-  /**
-   * @description Переключает форму: enabled || diasabled
-   */
-  function toggleAdForm() {
-    $adForm.classList.toggle('ad-form--disabled');
-    toggleFieldSets();
-  }
-
-  /**
-   * @description Конвертирует координату в число, удаляет "px" если есть
-   * @param {*} coord Координата
-   */
-
-  function checkCoord(coord) {
-    return parseInt(String(coord).replace('px', ''), 10);
-  }
-  /**
-   * @description Устанавливает координаты mainPin в Input с адрессом
-   * @param {*} x Координата X
-   * @param {*} y Координата Y
-   */
-
-  function setAddress(x, y) {
-    // Координата mainPin
-    var coords = window.coords.create();
-    coords = {
-      x: checkCoord(x),
-      y: checkCoord(y)
-    };
-
-    window.coords.convertToLocation(coords);
-    $adAddress.value = coords.x + ', ' + coords.y;
-  }
+  AdFormController.prototype.activate = function () {
+    this._setEventListeners();
+    this._adForm.startEventListeners();
+  };
 
   /**
    * @param {number} rooms Количество комнат
    * @return {number} Количество гостей
    */
 
-  function setGuests(rooms) {
-    if (rooms === window.Constant.MAX_ROOMS_COUNT) {
-      return window.Constant.NOT_GUESTS;
+  AdFormController.prototype._getGuests = function (rooms) {
+    if (rooms === ValidateValue.MAX_ROOMS_COUNT) {
+      return ValidateValue.NOT_GUESTS;
     } else {
       return rooms;
     }
-  }
+  };
+
+  AdFormController.prototype._setDefaultValues = function () {
+    // Установка значений фильтра количество комнат по умолчанию
+    this._adForm.getAdRooms().value = DEFAULT_ROOMS;
+    // Установка значений количества филтров в соответствии с количеством комнат
+    this._adForm.getAdGuests().value = this._getGuests(DEFAULT_ROOMS);
+    this._disabledGuestsValues(DEFAULT_ROOMS);
+  };
+
 
   /**
    * @description Переключает элементы фильтра количества гостей: enabled || diasabled
    * @param {string} validValue
    */
 
-  function disabledGuestsValues(validValue) {
-    var NOT_GUESTS = window.Constant.NOT_GUESTS;
+  AdFormController.prototype._disabledGuestsValues = function (validValue) {
+    var NOT_GUESTS = ValidateValue.NOT_GUESTS;
     /**
      * @description Переключает элемент фильтра: enabled || diasabled
      * @param {Object} $item Элемент филтра (option у select)
@@ -93,37 +62,23 @@
     }
 
     validValue = parseInt(validValue, 10);
-    $adGuests.querySelectorAll('option').forEach(toggleItem);
-  }
+    this._adForm.getAdGuests().querySelectorAll('option').forEach(toggleItem);
+  };
 
   /**
    * @description Валидация количества комннат
    */
-  function validateRooms() {
+
+  AdFormController.prototype._validateRooms = function (evt) {
     // Значение количества комнат
-    var roomsCount = parseInt($adRooms.value, 10);
-    $adGuests.value = setGuests(roomsCount);
-    disabledGuestsValues($adGuests.value);
-  }
-  // Установка значений фильтра количество комнат по умолчанию
-  $adRooms.value = window.Constant.DEFAULT_ROOMS;
-  // Установка значений количества филтров в соответствии с количеством комнат
-  $adGuests.value = setGuests($adRooms.value);
-  // Отключение значений гостей, не подходящих по условию
-  disabledGuestsValues($adRooms.value);
-  // Деактивировать fieldsets формы
-  toggleFieldSets();
+    var roomsCount = parseInt(evt.target.value, 10);
+    this._adForm.getAdGuests().value = this._getGuests(roomsCount);
+    this._disabledGuestsValues(this._adForm.getAdGuests().value);
+  };
 
-  $adRooms.addEventListener('change', function () {
-    validateRooms();
-  });
+  AdFormController.prototype._setEventListeners = function () {
+    this._adForm.onChangeAdRooms = this._validateRooms.bind(this);
+  };
 
-  $adForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    if (evt.target.checkValidity()) {
-      evt.target.action = window.Constant.Url.UPLOAD;
-    }
-  });
-
-  window.adForm = adForm;
+  window.AdFormController = AdFormController;
 })();
