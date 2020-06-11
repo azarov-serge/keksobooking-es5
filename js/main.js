@@ -12,10 +12,11 @@
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
   // Массив пинов (DOM-элементы на основе массива объявлений)
   var $pins = orders.map(function (order) {
-    return window.createPin(order);
+    var pin = new window.Pin(order);
+    return pin.create();
   });
   // Карточка объявления
-  var $card = window.createCard(orders[0]);
+  var card = new window.Card(orders[0]);
 
   /**
    * @description Активация карты
@@ -26,7 +27,8 @@
       $mainMap.classList.toggle('map--faded');
       window.adForm.toggleAdForm();
       window.utils.render($pinsContainer, $pins, $mainPin);
-      window.utils.render($mainMap, $card, $filtersContainer);
+      card.create();
+      card.render($mainMap, $filtersContainer);
     }
   }
   // Установка адреса на форму объявлений
