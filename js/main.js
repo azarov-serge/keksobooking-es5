@@ -4,8 +4,6 @@
   var mainMap = new window.MainMap();
   // Главный пин (mainPin)
   var $mainPin = mainMap.getMainPin();
-  // Контейнер фильтров объявлений на карте
-  var $filtersContainer = mainMap.getElement().querySelector('.map__filters-container');
   // Форма для размещения объявления
   var adForm = new window.AdForm();
   var adFormController = new window.AdFormController(adForm);
@@ -31,7 +29,7 @@
       adForm.toggleState();
       adForm.toggleFieldsets();
       mainMap.renderPins($pins);
-      mainMap.renderToElement(card.getElement(), $filtersContainer);
+      mainMap.renderCard(card);
     }
   }
 

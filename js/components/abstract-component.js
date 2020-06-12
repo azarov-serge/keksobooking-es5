@@ -16,11 +16,11 @@
     return this._$element;
   };
 
-  AbsctractComponent.prototype.renderElement = function ($container, place) {
-    window.utils.render($container, this._$element, place);
+  AbsctractComponent.prototype.render = function ($container, $element, place) {
+    window.utils.render($container, $element, place);
   };
 
-  AbsctractComponent.prototype.removeElement = function () {
+  AbsctractComponent.prototype.remove = function () {
     this._$element.parentElement.removeChild(this._$element);
     this._$element = null;
   };

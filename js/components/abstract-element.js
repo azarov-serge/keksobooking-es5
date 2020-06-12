@@ -25,8 +25,8 @@
     this.isActivate = !this.isActivate;
   };
 
-  AbsctractElement.prototype.renderToElement = function ($element, place) {
-    window.utils.render(this.getElement(), $element, place);
+  AbsctractElement.prototype.render = function ($container, $element, place) {
+    window.utils.render($container, $element, place);
   };
 
 
