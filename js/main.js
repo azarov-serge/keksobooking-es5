@@ -7,39 +7,30 @@
   // Форма для размещения объявления
   var adForm = new window.AdForm();
   var adFormController = new window.AdFormController(adForm);
-  adFormController.activate();
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
-
-  // Массив пинов (DOM-элементы на основе массива объявлений)
-  var $pins = orders.map(function (order) {
-    var pin = new window.Pin(order);
-    return pin.getElement();
-  });
   // Карточка объявления
   var card = new window.Card(orders[0]);
+  var mainPinCoords = window.coords.create();
 
   /**
    * @description Активация карты
    */
   function activateMap() {
-    adForm.setAddress({x: $mainPin.style.left, y: $mainPin.style.top});
-    if (!mainMap.isActivate) {
+    adForm.setAddress(mainPinCoords);
+    if (!mainMap.isActivate()) {
       mainMap.toggleState();
       adForm.toggleState();
-      adForm.toggleFieldsets();
-      mainMap.renderPins($pins);
+      mainMap.renderPins(orders);
       mainMap.renderCard(card);
     }
   }
-
-  // Деактивация fieldsets
-  if (adForm.isActivate !== adForm.isActivateFieldsets) {
-    adForm.toggleFieldsets();
-  }
-
+  // Активируем контроллер формы объявлений
+  adFormController.activate();
+  // Удалит слово "px" у координат
+  window.coords.convertToCoords(mainPinCoords, $mainPin.style.left, $mainPin.style.top);
   // Установка адреса на форму объявлений
-  adForm.setAddress({x: $mainPin.style.left, y: $mainPin.style.top});
+  adForm.setAddress(mainPinCoords);
 
   $mainPin.addEventListener('mousedown', function (evt) {
     if (window.utils.isLeftMouseButtonPressed(evt)) {

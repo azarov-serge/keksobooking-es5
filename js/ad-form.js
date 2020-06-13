@@ -10,12 +10,16 @@
 
   function AdFormController(adForm) {
     this._adForm = adForm;
-    this._setDefaultValues();
   }
 
   AdFormController.prototype.activate = function () {
+    this.setDefaultValues();
     this._setEventListeners();
     this._adForm.startEventListeners();
+    // Синхронизация fieldsets и form
+    if (this._adForm.isActivate() !== this._adForm.isActivateFieldsets()) {
+      this._adForm.toggleStateFieldsets();
+    }
   };
 
   /**
@@ -31,7 +35,7 @@
     }
   };
 
-  AdFormController.prototype._setDefaultValues = function () {
+  AdFormController.prototype.setDefaultValues = function () {
     // Установка значений фильтра количество комнат по умолчанию
     this._adForm.getAdRooms().value = DEFAULT_ROOMS;
     // Установка значений количества филтров в соответствии с количеством комнат

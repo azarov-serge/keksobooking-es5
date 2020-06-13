@@ -15,7 +15,7 @@
     this._$mainPin = null;
     this._$pinsContainer = null;
     this._$filtersContainer = null;
-    this._$pins = null;
+    this._pins = null;
     this._card = null;
   }
 
@@ -34,14 +34,31 @@
     return this.getCustomElement(this._$filtersContainer, MainMapClass.FILTERS_CONTAINER, this.getElement());
   };
 
-  MainMap.prototype.renderPins = function ($pins) {
-    this._$pins = $pins;
-    window.utils.render(this.getPinsContainer(), this._$pins, this.getMainPin());
+  MainMap.prototype.renderPins = function (order) {
+    if (this._pins !== null) {
+      this.removePins();
+    }
+
+    var $pins = [];
+    this._pins = new Array(order.length).fill('').map(function (pin, index) {
+      pin = new window.Pin(order[index]);
+      $pins.push(pin.getElement());
+      return pin;
+    });
+
+    this.render(this.getPinsContainer(), $pins, this.getMainPin());
+  };
+
+  MainMap.prototype.removePins = function () {
+    this._pins.forEach(function (pin) {
+      pin.remove();
+    });
+    this._pins = null;
   };
 
   MainMap.prototype.renderCard = function (card) {
     if (this._card) {
-      this._card.removeElement();
+      this._card.remove();
     }
     this._card = card;
     this._card.render(this.getElement(), this._card.getElement(), this.getFiltersContainer());

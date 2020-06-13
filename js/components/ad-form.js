@@ -44,34 +44,21 @@
     return this._$fieldsets;
   };
 
-  AdForm.prototype.toggleFieldsets = function () {
+  AdForm.prototype.toggleStateFieldsets = function () {
     this._getFieldsets().forEach(function ($fieldset) {
       $fieldset.disabled = !$fieldset.disabled;
     });
+  };
+
+  AdForm.prototype.toggleStateCallback = function () {
+    this.toggleStateFieldsets();
   };
 
   AdForm.prototype.isActivateFieldsets = function () {
     return !this._getFieldsets()[0].disabled;
   };
 
-  AdForm.prototype.toggleState = function () {
-    this.getElement().classList.toggle(this._TOGGLE_CLASS);
-    this.isActivate = !this.isActivate;
-  };
-
-
   AdForm.prototype.setAddress = function (coords) {
-    /**
-     * @description Конвертирует координату в число, удаляет "px" если есть
-     * @param {*} coord Координата
-     */
-
-    function checkCoord(coord) {
-      return parseInt(String(coord).replace('px', ''), 10);
-    }
-
-    coords.x = checkCoord(coords.x);
-    coords.y = checkCoord(coords.y);
     window.coords.convertToLocation(coords);
     this.getAdAddress().value = coords.x + ', ' + coords.y;
   };
