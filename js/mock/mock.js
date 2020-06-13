@@ -84,7 +84,7 @@
         'avatar': 'img/avatars/' + (index < AVATARS_COUNT ? 'user0' + (index + 1) : 'default') + '.png',
       },
       'offer': {
-        'title': generateTitle(bookingTypes[offerType]),
+        'title': generateTitle(bookingTypes[offerType].title),
         'address': coordsOrder.x + ', ' + coordsOrder.y,
         'price': window.utils.getRandomInt(price.min, price.max),
         'type': offerType,
