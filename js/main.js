@@ -6,11 +6,13 @@
   var $mainPin = mainMap.getMainPin();
   // Форма для размещения объявления
   var adForm = new window.AdForm();
+  // Контроллер формы
   var adFormController = new window.AdFormController(adForm);
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
   // Карточка объявления
   var card = new window.Card(orders[0]);
+  // Координаты главного пина
   var mainPinCoords = window.coords.create();
 
   /**
@@ -26,6 +28,7 @@
       mainMap.renderCard(card);
     }
   }
+
   // Активируем контроллер формы объявлений
   adFormController.activate();
   // Удалит слово "px" у координат

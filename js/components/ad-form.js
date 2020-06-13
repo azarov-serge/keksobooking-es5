@@ -75,7 +75,6 @@
     this.getAdAddress().value = coords.x + ', ' + coords.y;
   };
 
-
   AdForm.prototype.setOnChangeAdRooms = function (onChangeAdRooms) {
     this.getAdRooms().addEventListener('change', onChangeAdRooms);
   };

@@ -26,18 +26,24 @@
   };
 
   AdFormController.prototype.startValidate = function () {
+    // Дизейблим для корректной валидации
     this._adForm.getAdAddress().disabled = true;
+    // Для валидации аватара, загрузка только JPEG и PNG
     this._adForm.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
+    // Для валидации изображений объявлений, загрузка только JPEG и PNG
     this._adForm.getAdImages().accept = ValidateValue.IMAGES_TYPE;
+    // Установка валидации заголовка объявления
     this._setValidityTitle();
+    // Установка валидации количества комнат
     this._adForm.setOnChangeAdRooms(this._onChangeAdRooms.bind(this));
+    // Установка функции для события submit у формы
     this._adForm.setOnSubmitAdForm(this._onSubmitAdForm.bind(this));
   };
 
   AdFormController.prototype.setDefaultValues = function () {
     // Установка значений фильтра количество комнат по умолчанию
     this._adForm.getAdRooms().value = DEFAULT_ROOMS;
-    // Установка значений количества филтров в соответствии с количеством комнат
+    // Установка значений количества фильтров в соответствии с количеством комнат
     this._adForm.getAdGuests().value = this._getGuests(DEFAULT_ROOMS);
     this._disabledGuestsValues(DEFAULT_ROOMS);
   };
@@ -53,7 +59,7 @@
   };
 
   /**
-   * @description Валидация количества комннат
+   * @description Валидация количества комнат
    */
 
   AdFormController.prototype._onChangeAdRooms = function (evt) {
@@ -63,6 +69,10 @@
     this._disabledGuestsValues(this._adForm.getAdGuests().value);
   };
 
+  /**
+   *
+   * @description Функции для события submit у формы
+   */
 
   AdFormController.prototype._onSubmitAdForm = function (evt) {
     evt.preventDefault();
@@ -84,7 +94,6 @@
     return rooms;
   };
 
-
   /**
    * @description Переключает элементы фильтра количества гостей: enabled || diasabled
    * @param {string} validValue
@@ -92,10 +101,12 @@
 
   AdFormController.prototype._disabledGuestsValues = function (validValue) {
     var NOT_GUESTS = ValidateValue.NOT_GUESTS;
+
     /**
      * @description Переключает элемент фильтра: enabled || diasabled
      * @param {Object} $item Элемент филтра (option у select)
      */
+
     function toggleItem($item) {
       // Значение фильтра количество гостей
       var itemValue = parseInt($item.value, 10);
