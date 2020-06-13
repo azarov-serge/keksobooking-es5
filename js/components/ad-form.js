@@ -11,6 +11,8 @@
     AD_IMAGE: '#images',
     AD_PRICE: '#price',
     AD_TYPE: '#type',
+    AD_CHECK_IN: '#timein',
+    AD_CHECK_OUT: '#timeout',
     FIELDSET: 'fieldset',
   };
 
@@ -26,6 +28,8 @@
     this._$adImage = null;
     this._$adPrice = null;
     this._$adType = null;
+    this._$adCheckIn = null;
+    this._$adCheckOut = null;
     this._$fieldsets = null;
   }
 
@@ -64,6 +68,14 @@
     return this.getCustomElement(this._$adType, AdFormClass.AD_TYPE, this.getElement());
   };
 
+  AdForm.prototype.getAdCheckIn = function () {
+    return this.getCustomElement(this._$adCheckIn, AdFormClass.AD_CHECK_IN, this.getElement());
+  };
+
+  AdForm.prototype.getAdCheckOut = function () {
+    return this.getCustomElement(this._$adCheckOut, AdFormClass.AD_CHECK_OUT, this.getElement());
+  };
+
   AdForm.prototype._getFieldsets = function () {
     return this.getCustomElements(this._$fieldsets, AdFormClass.FIELDSET, this.getElement());
   };
@@ -93,6 +105,14 @@
 
   AdForm.prototype.setOnChangeAdType = function (onChangeAdType) {
     this.getAdType().addEventListener('change', onChangeAdType);
+  };
+
+  AdForm.prototype.setOnChangeAdCheckIn = function (onChangeAdCheckIn) {
+    this.getAdCheckIn().addEventListener('change', onChangeAdCheckIn);
+  };
+
+  AdForm.prototype.setOnChangeAdCheckOut = function (onChangeAdCheckOut) {
+    this.getAdCheckOut().addEventListener('change', onChangeAdCheckOut);
   };
 
   AdForm.prototype.setOnSubmitAdForm = function (onSubmitAdForm) {
