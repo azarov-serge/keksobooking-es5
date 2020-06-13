@@ -21,6 +21,7 @@
     if (!mainMap.isActivate()) {
       mainMap.toggleState();
       adForm.toggleState();
+      adFormController.startValidate();
       mainMap.renderPins(orders);
       mainMap.renderCard(card);
     }

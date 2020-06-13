@@ -4,6 +4,8 @@
   var DEFAULT_ROOMS = 1;
   // Значения для валидации
   var ValidateValue = {
+    TITLE_MIN_LENGTH: 30,
+    TITLE_MAX_LENGTH: 100,
     NOT_GUESTS: 0,
     MAX_ROOMS_COUNT: 100,
   };
@@ -13,12 +15,56 @@
   }
 
   AdFormController.prototype.activate = function () {
-    this.setDefaultValues();
-    this._setEventListeners();
-    this._adForm.startEventListeners();
     // Синхронизация fieldsets и form
     if (this._adForm.isActivate() !== this._adForm.isActivateFieldsets()) {
       this._adForm.toggleStateFieldsets();
+    }
+
+    // Установка значений по умолчанию
+    this.setDefaultValues();
+  };
+
+  AdFormController.prototype.startValidate = function () {
+    this._adForm.getAdAddress.disabled = true;
+    this._setValidityTitle();
+    this._adForm.setOnChangeAdRooms(this._onChangeAdRooms.bind(this));
+    this._adForm.setOnSubmitAdForm(this._onSubmitAdForm.bind(this));
+  };
+
+  AdFormController.prototype.setDefaultValues = function () {
+    // Установка значений фильтра количество комнат по умолчанию
+    this._adForm.getAdRooms().value = DEFAULT_ROOMS;
+    // Установка значений количества филтров в соответствии с количеством комнат
+    this._adForm.getAdGuests().value = this._getGuests(DEFAULT_ROOMS);
+    this._disabledGuestsValues(DEFAULT_ROOMS);
+  };
+
+  /**
+   * @description Валидация заголовка
+   */
+
+  AdFormController.prototype._setValidityTitle = function () {
+    this._adForm.getAdTitle().required = true;
+    this._adForm.getAdTitle().minLength = ValidateValue.TITLE_MIN_LENGTH;
+    this._adForm.getAdTitle().maxLength = ValidateValue.TITLE_MAX_LENGTH;
+  };
+
+  /**
+   * @description Валидация количества комннат
+   */
+
+  AdFormController.prototype._onChangeAdRooms = function (evt) {
+    // Значение количества комнат
+    var roomsCount = parseInt(evt.target.value, 10);
+    this._adForm.getAdGuests().value = this._getGuests(roomsCount);
+    this._disabledGuestsValues(this._adForm.getAdGuests().value);
+  };
+
+
+  AdFormController.prototype._onSubmitAdForm = function (evt) {
+    evt.preventDefault();
+    if (evt.target.checkValidity()) {
+      evt.target.action = window.Constant.Url.UPLOAD;
     }
   };
 
@@ -30,17 +76,9 @@
   AdFormController.prototype._getGuests = function (rooms) {
     if (rooms === ValidateValue.MAX_ROOMS_COUNT) {
       return ValidateValue.NOT_GUESTS;
-    } else {
-      return rooms;
     }
-  };
 
-  AdFormController.prototype.setDefaultValues = function () {
-    // Установка значений фильтра количество комнат по умолчанию
-    this._adForm.getAdRooms().value = DEFAULT_ROOMS;
-    // Установка значений количества филтров в соответствии с количеством комнат
-    this._adForm.getAdGuests().value = this._getGuests(DEFAULT_ROOMS);
-    this._disabledGuestsValues(DEFAULT_ROOMS);
+    return rooms;
   };
 
 
@@ -67,21 +105,6 @@
 
     validValue = parseInt(validValue, 10);
     this._adForm.getAdGuests().querySelectorAll('option').forEach(toggleItem);
-  };
-
-  /**
-   * @description Валидация количества комннат
-   */
-
-  AdFormController.prototype._validateRooms = function (evt) {
-    // Значение количества комнат
-    var roomsCount = parseInt(evt.target.value, 10);
-    this._adForm.getAdGuests().value = this._getGuests(roomsCount);
-    this._disabledGuestsValues(this._adForm.getAdGuests().value);
-  };
-
-  AdFormController.prototype._setEventListeners = function () {
-    this._adForm.onChangeAdRooms = this._validateRooms.bind(this);
   };
 
   window.AdFormController = AdFormController;
