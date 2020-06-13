@@ -3,6 +3,9 @@
   function Card(data) {
     window.AbsctractComponent.call(this);
     this._data = data;
+    this._onCloseCard = null;
+    this._closeCard = this._closeCard.bind(this);
+    this._onKeyDownEsc = this._onKeyDownEsc.bind(this);
   }
 
   Card.prototype = Object.create(window.AbsctractComponent.prototype);
@@ -43,7 +46,7 @@
         }
         window.utils.render($photosContainer, $photos, window.Constant.RenderPosition.BEFOREEND);
       } else {
-        $photosContainer .removeChild($templatePhoto);
+        $photosContainer.removeChild($templatePhoto);
       }
     }
 
@@ -72,13 +75,22 @@
     return $card;
   };
 
+  Card.prototype._closeCard = function () {
+    this._onCloseCard();
+    document.removeEventListener('keydown', this._onKeyDownEsc);
+  };
+
+  Card.prototype._onKeyDownEsc = function (evt) {
+    var closeCard = this._closeCard;
+    if (window.keyboard.isEscPressed(evt)) {
+      closeCard();
+    }
+  };
+
   Card.prototype.setOnCloseCard = function (onCloseCard) {
-    this.getElement().querySelector('.popup__close').addEventListener('click', onCloseCard);
-    document.addEventListener('keydown', function (evt) {
-      if (window.keyboard.isEscPressed(evt)) {
-        onCloseCard();
-      }
-    });
+    this._onCloseCard = onCloseCard;
+    this.getElement().querySelector('.popup__close').addEventListener('click', this._closeCard);
+    document.addEventListener('keydown', this._onKeyDownEsc);
   };
 
   window.Card = Card;
