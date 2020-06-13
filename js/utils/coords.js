@@ -7,6 +7,7 @@
     set: set,
     convertToLocation: convertToLocation,
     convertFromLocation: convertFromLocation,
+    convertToCoords: convertToCoords,
   };
 
   /**
@@ -63,6 +64,26 @@
   function convertFromLocation(obj) {
     obj.x -= Math.floor(window.Constant.PIN_WIDTH / 2);
     obj.y -= window.Constant.PIN_HEIGHT;
+  }
+
+  /**
+   * @description Удалит слово "px" у координат
+   * @param {Object} obj Координаты {x: number, y:number}
+   * @param {string} x Координата X, которую нужно сконвертировать
+   * @param {string} y Координата Y, которую нужно сконвертировать
+   */
+  function convertToCoords(obj, x, y) {
+    obj.x = convertToCoord(x);
+    obj.y = convertToCoord(y);
+  }
+
+  /**
+   * @description Конвертирует координату в число, удаляет "px" если есть
+   * @param {Object} coord Координата
+   */
+
+  function convertToCoord(coord) {
+    return parseInt(String(coord).replace('px', ''), 10);
   }
 
   window.coords = coords;
