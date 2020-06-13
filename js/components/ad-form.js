@@ -9,6 +9,8 @@
     AD_ROOM: '#room_number',
     AD_GUEST: '#capacity',
     AD_IMAGE: '#images',
+    AD_PRICE: '#price',
+    AD_TYPE: '#type',
     FIELDSET: 'fieldset',
   };
 
@@ -22,6 +24,8 @@
     this._$adRoom = null;
     this._$adGuest = null;
     this._$adImage = null;
+    this._$adPrice = null;
+    this._$adType = null;
     this._$fieldsets = null;
   }
 
@@ -52,6 +56,14 @@
     return this.getCustomElement(this._$adImage, AdFormClass.AD_IMAGE, this.getElement());
   };
 
+  AdForm.prototype.getAdPrice = function () {
+    return this.getCustomElement(this._$adPrice, AdFormClass.AD_PRICE, this.getElement());
+  };
+
+  AdForm.prototype.getAdType = function () {
+    return this.getCustomElement(this._$adType, AdFormClass.AD_TYPE, this.getElement());
+  };
+
   AdForm.prototype._getFieldsets = function () {
     return this.getCustomElements(this._$fieldsets, AdFormClass.FIELDSET, this.getElement());
   };
@@ -77,6 +89,10 @@
 
   AdForm.prototype.setOnChangeAdRooms = function (onChangeAdRooms) {
     this.getAdRooms().addEventListener('change', onChangeAdRooms);
+  };
+
+  AdForm.prototype.setOnChangeAdType = function (onChangeAdType) {
+    this.getAdType().addEventListener('change', onChangeAdType);
   };
 
   AdForm.prototype.setOnSubmitAdForm = function (onSubmitAdForm) {

@@ -1,13 +1,18 @@
 'use strict';
 (function () {
-  // Количество комнат по умолчанию для филтра
-  var DEFAULT_ROOMS = 1;
+  // Значения по умолчанию
+  var Default = {
+    ROOMS: 1,
+    TYPE: 'flat',
+  };
+
   // Значения для валидации
   var ValidateValue = {
     TITLE_MIN_LENGTH: 30,
     TITLE_MAX_LENGTH: 100,
     NOT_GUESTS: 0,
     MAX_ROOMS_COUNT: 100,
+    MAX_PRICE: 1000000,
     IMAGES_TYPE: 'image/png, image/jpeg',
   };
 
@@ -32,20 +37,25 @@
     this._adForm.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
     // Для валидации изображений объявлений, загрузка только JPEG и PNG
     this._adForm.getAdImages().accept = ValidateValue.IMAGES_TYPE;
+    // Для валидации, установка максимальной цены
+    this._adForm.getAdPrice().maxValue = ValidateValue.MAX_PRICE;
     // Установка валидации заголовка объявления
     this._setValidityTitle();
     // Установка валидации количества комнат
     this._adForm.setOnChangeAdRooms(this._onChangeAdRooms.bind(this));
+    // Установка валидации цены от типа
+    this._adForm.setOnChangeAdType(this._onChangeAdType.bind(this));
     // Установка функции для события submit у формы
     this._adForm.setOnSubmitAdForm(this._onSubmitAdForm.bind(this));
   };
 
   AdFormController.prototype.setDefaultValues = function () {
     // Установка значений фильтра количество комнат по умолчанию
-    this._adForm.getAdRooms().value = DEFAULT_ROOMS;
+    this._adForm.getAdRooms().value = Default.ROOMS;
     // Установка значений количества фильтров в соответствии с количеством комнат
-    this._adForm.getAdGuests().value = this._getGuests(DEFAULT_ROOMS);
-    this._disabledGuestsValues(DEFAULT_ROOMS);
+    this._adForm.getAdGuests().value = this._getGuests(Default.ROOMS);
+    this._disabledGuestsValues(Default.ROOMS);
+    this._setMinPrice(window.Constant.bookingTypes[Default.TYPE].minPrice);
   };
 
   /**
@@ -67,6 +77,16 @@
     var roomsCount = parseInt(evt.target.value, 10);
     this._adForm.getAdGuests().value = this._getGuests(roomsCount);
     this._disabledGuestsValues(this._adForm.getAdGuests().value);
+  };
+
+  /**
+   * @description Валидация цен типа жилья
+   */
+
+  AdFormController.prototype._onChangeAdType = function (evt) {
+    // Значение количества комнат
+    var minPrice = window.Constant.bookingTypes[evt.target.value].minPrice;
+    this._setMinPrice(minPrice);
   };
 
   /**
@@ -119,6 +139,16 @@
 
     validValue = parseInt(validValue, 10);
     this._adForm.getAdGuests().querySelectorAll('option').forEach(toggleItem);
+  };
+
+  /**
+   * @description Валидация цен типа жилья
+   */
+
+  AdFormController.prototype._setMinPrice = function (minPrice) {
+    // Значение количества комнат
+    this._adForm.getAdPrice().placeholder = minPrice;
+    this._adForm.getAdPrice().minValue = minPrice;
   };
 
   window.AdFormController = AdFormController;
