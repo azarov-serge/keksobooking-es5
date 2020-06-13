@@ -15,6 +15,15 @@
     return $element;
   };
 
+  AbsctractElement.prototype.getCustomElements = function ($elements, selector, $container) {
+    $container = $container || document;
+    if (!$elements) {
+      $elements = $container.querySelectorAll(selector);
+    }
+
+    return $elements;
+  };
+
   AbsctractElement.prototype.getElement = function () {
     return this.getCustomElement(this._$element, this._SELECTOR);
   };

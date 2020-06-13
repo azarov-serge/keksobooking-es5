@@ -53,11 +53,7 @@
   };
 
   AdForm.prototype._getFieldsets = function () {
-    if (!this._$fieldsets) {
-      this._$fieldsets = this.getElement().querySelectorAll(AdFormClass.FIELDSET);
-    }
-
-    return this._$fieldsets;
+    return this.getCustomElements(this._$fieldsets, AdFormClass.FIELDSET, this.getElement());
   };
 
   AdForm.prototype.toggleStateFieldsets = function () {
