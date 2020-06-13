@@ -1,5 +1,10 @@
 'use strict';
 (function () {
+  var KeyСode = {
+    ESC: 27,
+    ENTER: 13,
+  };
+
   var keyboard = {
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,
@@ -12,7 +17,7 @@
    */
 
   function isEscPressed(evt) {
-    return evt.keyCode === window.Constant.KeyCode.ESC;
+    return evt.keyCode === KeyСode.ESC;
   }
 
   /**
@@ -22,7 +27,7 @@
    */
 
   function isEnterPressed(evt) {
-    return evt.keyCode === window.Constant.KeyCode.ENTER;
+    return evt.keyCode === KeyСode.ENTER;
   }
 
   window.keyboard = keyboard;

@@ -10,6 +10,10 @@
     MAP_MAX_X: 1200,
     MAP_MIN_Y: 130,
     MAP_MAX_Y: 630,
+    Url: {
+      LOAD: ' https://javascript.pages.academy/keksobooking/data',
+      UPLOAD: 'https://javascript.pages.academy/keksobooking',
+    },
     bookingTypes: {
       palace: 'Дворец',
       flat: 'Квартира',
@@ -21,10 +25,6 @@
     RenderPosition: {
       AFTERBEGIN: 'afterbegin',
       BEFOREEND: 'beforeend',
-    },
-    KeyСode: {
-      ESK: 27,
-      ENTER: 13,
     },
   };
 

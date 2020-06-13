@@ -1,11 +1,14 @@
 'use strict';
 (function () {
+  var LEFT_MOUSE_BUTTON = 0;
+
   var utils = {
     render: render,
     getRandomInt: getRandomInt,
     getRandomArrValue: getRandomArrValue,
     getRandomArr: getRandomArr,
     getWordEnd: getWordEnd,
+    isLeftMouseButtonPressed: isLeftMouseButtonPressed,
   };
 
   /**
@@ -109,6 +112,10 @@
       index = cases[(number % 10 < 5) ? number % 10 : 5];
     }
     return txt[index];
+  }
+
+  function isLeftMouseButtonPressed(evt) {
+    return evt.button === LEFT_MOUSE_BUTTON;
   }
 
   window.utils = utils;
