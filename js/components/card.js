@@ -72,5 +72,14 @@
     return $card;
   };
 
+  Card.prototype.setOnCloseCard = function (onCloseCard) {
+    this.getElement().querySelector('.popup__close').addEventListener('click', onCloseCard);
+    document.addEventListener('keydown', function (evt) {
+      if (window.keyboard.isEscPressed(evt)) {
+        onCloseCard();
+      }
+    });
+  };
+
   window.Card = Card;
 })();

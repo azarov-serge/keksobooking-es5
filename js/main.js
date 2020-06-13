@@ -10,10 +10,15 @@
   var adFormController = new window.AdFormController(adForm);
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
-  // Карточка объявления
-  var card = new window.Card(orders[0]);
   // Координаты главного пина
   var mainPinCoords = window.coords.create();
+
+  function activatePinController() {
+    mainMap.getPins().forEach(function (pin) {
+      var pinController = new window.PinController(pin, mainMap);
+      pinController.activate();
+    });
+  }
 
   /**
    * @description Активация карты
@@ -25,7 +30,7 @@
       adForm.toggleState();
       adFormController.startValidate();
       mainMap.renderPins(orders);
-      mainMap.renderCard(card);
+      activatePinController();
     }
   }
 
