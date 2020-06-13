@@ -4,9 +4,11 @@
     AD_FORM: '.ad-form',
     TOGGLE_CLASS: 'ad-form--disabled',
     AD_TITLE: '#title',
+    AD_AFATAR: '#avatar',
     AD_ADDRESS: '#address',
-    AD_ROOMS: '#room_number',
-    AD_GUESTS: '#capacity',
+    AD_ROOM: '#room_number',
+    AD_GUEST: '#capacity',
+    AD_IMAGE: '#images',
     FIELDSET: 'fieldset',
   };
 
@@ -15,9 +17,11 @@
     this._SELECTOR = AdFormClass.AD_FORM;
     this._TOGGLE_CLASS = AdFormClass.TOGGLE_CLASS;
     this._$adTitle = null;
+    this._$adAvatar = null;
     this._$adAddress = null;
-    this._$adRooms = null;
-    this._$adGuests = null;
+    this._$adRoom = null;
+    this._$adGuest = null;
+    this._$adImage = null;
     this._$fieldsets = null;
   }
 
@@ -28,16 +32,24 @@
     return this.getCustomElement(this._$adTitle, AdFormClass.AD_TITLE, this.getElement());
   };
 
+  AdForm.prototype.getAdAvatar = function () {
+    return this.getCustomElement(this._$adAvatar, AdFormClass.AD_AFATAR, this.getElement());
+  };
+
   AdForm.prototype.getAdAddress = function () {
     return this.getCustomElement(this._$adAddress, AdFormClass.AD_ADDRESS, this.getElement());
   };
 
   AdForm.prototype.getAdRooms = function () {
-    return this.getCustomElement(this._$adRooms, AdFormClass.AD_ROOMS, this.getElement());
+    return this.getCustomElement(this._$adRoom, AdFormClass.AD_ROOM, this.getElement());
   };
 
   AdForm.prototype.getAdGuests = function () {
-    return this.getCustomElement(this._$adGuests, AdFormClass.AD_GUESTS, this.getElement());
+    return this.getCustomElement(this._$adGuest, AdFormClass.AD_GUEST, this.getElement());
+  };
+
+  AdForm.prototype.getAdImages = function () {
+    return this.getCustomElement(this._$adImage, AdFormClass.AD_IMAGE, this.getElement());
   };
 
   AdForm.prototype._getFieldsets = function () {

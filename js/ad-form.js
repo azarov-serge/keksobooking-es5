@@ -8,6 +8,7 @@
     TITLE_MAX_LENGTH: 100,
     NOT_GUESTS: 0,
     MAX_ROOMS_COUNT: 100,
+    IMAGES_TYPE: 'image/png, image/jpeg',
   };
 
   function AdFormController(adForm) {
@@ -25,7 +26,9 @@
   };
 
   AdFormController.prototype.startValidate = function () {
-    this._adForm.getAdAddress.disabled = true;
+    this._adForm.getAdAddress().disabled = true;
+    this._adForm.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
+    this._adForm.getAdImages().accept = ValidateValue.IMAGES_TYPE;
     this._setValidityTitle();
     this._adForm.setOnChangeAdRooms(this._onChangeAdRooms.bind(this));
     this._adForm.setOnSubmitAdForm(this._onSubmitAdForm.bind(this));
