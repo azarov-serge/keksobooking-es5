@@ -36,7 +36,6 @@
 
   AbsctractElement.prototype.toggleState = function () {
     this.getElement().classList.toggle(this._TOGGLE_CLASS);
-    this.isActivate = !this.isActivate;
     this.toggleStateCallback();
   };
 
