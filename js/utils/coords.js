@@ -41,40 +41,52 @@
   }
 
   /**
-   * @param {Object} obj Координаты {x: number, y:number}
    * @param {number} x Координата X, которую нужно утановить
    * @param {number} y Координата Y, которую нужно утановить
+   * @return {Object} Координаты {x: number, y:number}
    */
-  function set(obj, x, y) {
-    obj.x = setX(x);
-    obj.y = setY(y);
+
+  function set(x, y) {
+    return {
+      x: setX(x),
+      y: setY(y),
+    };
   }
 
   /**
    * @param {Object} obj Координаты {x: number, y:number}
    */
+
   function convertToLocation(obj) {
-    obj.x += Math.floor(window.Constant.MAIN_PIN_WIDTH / 2);
-    obj.y += window.Constant.MAIN_PIN_HEIGHT;
+    return {
+      x: obj.x + Math.floor(window.Constant.MAIN_PIN_WIDTH / 2),
+      y: obj.y + window.Constant.MAIN_PIN_HEIGHT
+    };
   }
 
   /**
    * @param {Object} obj Координаты {x: number, y:number}
    */
+
   function convertFromLocation(obj) {
-    obj.x -= Math.floor(window.Constant.PIN_WIDTH / 2);
-    obj.y -= window.Constant.PIN_HEIGHT;
+    return {
+      x: obj.x - Math.floor(window.Constant.PIN_WIDTH / 2),
+      y: obj.y - window.Constant.PIN_HEIGHT,
+    };
   }
 
   /**
    * @description Удалит слово "px" у координат
-   * @param {Object} obj Координаты {x: number, y:number}
    * @param {string} x Координата X, которую нужно сконвертировать
    * @param {string} y Координата Y, которую нужно сконвертировать
+   * @return {Object} Координаты {x: number, y:number}
    */
-  function convertToCoords(obj, x, y) {
-    obj.x = convertToCoord(x);
-    obj.y = convertToCoord(y);
+
+  function convertToCoords(x, y) {
+    return {
+      x: convertToCoord(x),
+      y: convertToCoord(y),
+    };
   }
 
   /**
