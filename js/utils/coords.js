@@ -35,8 +35,8 @@
    */
 
   function setY(y) {
-    var minY = window.Constant.MAP_MIN_Y;
-    var maxY = window.Constant.MAP_MAX_Y;
+    var minY = window.Constant.MAP_MIN_Y - window.Constant.MAIN_PIN_HEIGHT;
+    var maxY = window.Constant.MAP_MAX_Y - window.Constant.MAIN_PIN_HEIGHT;
     return Math.max(Math.min(y, maxY), minY);
   }
 
