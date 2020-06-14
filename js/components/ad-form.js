@@ -95,7 +95,7 @@
   };
 
   AdForm.prototype.setAddress = function (coords) {
-    window.coords.convertToLocation(coords);
+    coords = window.coords.convertToLocation(coords);
     this.getAdAddress().value = coords.x + ', ' + coords.y;
   };
 
