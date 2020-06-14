@@ -10,8 +10,8 @@
   var adFormController = new window.AdFormController(adForm);
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
-  // Координаты главного пина
-  var mainPinCoords = window.coords.create();
+  // Координаты главного пина. Удалит слово "px" у координат
+  var mainPinCoords = window.coords.convertToCoords($mainPin.style.left, $mainPin.style.top);
 
   function activatePinController() {
     mainMap.getPins().forEach(function (pin) {
@@ -36,8 +36,6 @@
 
   // Активируем контроллер формы объявлений
   adFormController.activate();
-  // Удалит слово "px" у координат
-  window.coords.convertToCoords(mainPinCoords, $mainPin.style.left, $mainPin.style.top);
   // Установка адреса на форму объявлений
   adForm.setAddress(mainPinCoords);
 

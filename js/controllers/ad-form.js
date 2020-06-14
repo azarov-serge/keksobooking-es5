@@ -39,7 +39,7 @@
     // Для валидации изображений объявлений, загрузка только JPEG и PNG
     this._adForm.getAdImages().accept = ValidateValue.IMAGES_TYPE;
     // Для валидации, установка максимальной цены
-    this._adForm.getAdPrice().maxValue = ValidateValue.MAX_PRICE;
+    this._adForm.getAdPrice().max = ValidateValue.MAX_PRICE;
     // Установка валидации заголовка объявления
     this._setValidityTitle();
     // Установка валидации количества комнат
@@ -179,7 +179,7 @@
   AdFormController.prototype._setMinPrice = function (minPrice) {
     // Значение количества комнат
     this._adForm.getAdPrice().placeholder = minPrice;
-    this._adForm.getAdPrice().minValue = minPrice;
+    this._adForm.getAdPrice().min = minPrice;
   };
 
   window.AdFormController = AdFormController;

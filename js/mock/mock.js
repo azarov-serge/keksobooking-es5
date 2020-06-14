@@ -68,14 +68,12 @@
    */
 
   function generateOrder(order, index) {
-    var coordsOrder = window.coords.create();
-    window.coords.set(
-        coordsOrder,
+    var coordsOrder = window.coords.set(
         window.utils.getRandomInt(window.Constant.MAP_MIN_X, window.Constant.MAP_MAX_X),
         window.utils.getRandomInt(window.Constant.MAP_MIN_Y, window.Constant.MAP_MAX_Y)
     );
 
-    window.coords.convertToLocation(coordsOrder);
+    coordsOrder = window.coords.convertToLocation(coordsOrder);
 
     var offerType = window.utils.getRandomArrValue(Object.keys(bookingTypes));
 
