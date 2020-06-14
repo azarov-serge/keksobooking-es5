@@ -3,9 +3,9 @@
   function Card(data) {
     window.AbsctractComponent.call(this);
     this._data = data;
-    this._onCloseCard = null;
-    this._closeCard = this._closeCard.bind(this);
+    this._onCloseCard = this._onCloseCard.bind(this);
     this._onKeyDownEsc = this._onKeyDownEsc.bind(this);
+    this.closeCard = null;
   }
 
   Card.prototype = Object.create(window.AbsctractComponent.prototype);
@@ -75,21 +75,20 @@
     return $card;
   };
 
-  Card.prototype._closeCard = function () {
-    this._onCloseCard();
+  Card.prototype._onCloseCard = function () {
+    this.closeCard();
     document.removeEventListener('keydown', this._onKeyDownEsc);
   };
 
   Card.prototype._onKeyDownEsc = function (evt) {
-    var closeCard = this._closeCard;
     if (window.keyboard.isEscPressed(evt)) {
-      closeCard();
+      this._onCloseCard();
     }
   };
 
-  Card.prototype.setOnCloseCard = function (onCloseCard) {
-    this._onCloseCard = onCloseCard;
-    this.getElement().querySelector('.popup__close').addEventListener('click', this._closeCard);
+  Card.prototype.setOnCloseCard = function (closeCard) {
+    this.closeCard = closeCard;
+    this.getElement().querySelector('.popup__close').addEventListener('click', this._onCloseCard);
     document.addEventListener('keydown', this._onKeyDownEsc);
   };
 
