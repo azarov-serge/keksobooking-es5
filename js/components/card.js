@@ -56,7 +56,7 @@
     $card.querySelector('.popup__title').textContent = this._data.offer.title;
     $card.querySelector('.popup__text--address').textContent = this._data.offer.address;
     $card.querySelector('.popup__text--price').textContent = parseInt(this._data.offer.price, 10).toLocaleString() + '₽/ночь';
-    $card.querySelector('.popup__type').textContent = window.Constant.bookingTypes[this._data.offer.type];
+    $card.querySelector('.popup__type').textContent = window.Constant.bookingTypes[this._data.offer.type].title;
 
     $card.querySelector('.popup__text--capacity').textContent = (
       this._data.offer.rooms + ' '
