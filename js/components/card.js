@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  var Utils = window.Utils;
+  var Constant = window.Constant;
+  var HIDE_CLASS = 'hidden';
+
   function CardComponent(data) {
     window.AbsctractComponent.call(this);
     this._data = data;
@@ -11,21 +15,58 @@
   CardComponent.prototype = Object.create(window.AbsctractComponent.prototype);
   CardComponent.prototype.constructor = CardComponent;
 
+  CardComponent.prototype._hideDOMElement = function hideDOMElement($element) {
+    $element.classList.add(HIDE_CLASS);
+  };
+
   CardComponent.prototype._getTemplate = function () {
+
+    /**
+     * @param {*} data Данные объявления
+     * @param {string} className Название класса элемента в шаблоне
+     * @param {string} text Текст для вставки в элемент
+     */
+
+    function setText(data, className, text) {
+      text = text || data;
+      if (data) {
+        $card.querySelector(className).textContent = text;
+      } else {
+        $card.querySelector(className).classList.add(HIDE_CLASS);
+      }
+    }
+
+    /**
+     * @param {*} data Адресс изображения
+     * @param {string} className Название класса элемента в шаблоне
+     */
+
+    function setImage(data, className) {
+      if (data) {
+        $card.querySelector(className).src = data;
+      } else {
+        $card.querySelector(className).classList.add(HIDE_CLASS);
+      }
+    }
+
     /**
      * @description Функция по отрисовки удобств
      * @param {Object[]} features Массив строк удобств
      */
 
-    function renderFeatures(features) {
+    function renderFeatures(data) {
       var $featuresContainer = $card.querySelector('.popup__features');
-      var $features = $featuresContainer.querySelectorAll('.popup__feature');
-      $features.forEach(function ($feature) {
-        var findFeature = $feature.className.split('--');
-        if (features.indexOf(findFeature[1]) === -1) {
-          $featuresContainer.removeChild($feature);
-        }
-      });
+      if (data.length) {
+        var $features = $featuresContainer.querySelectorAll('.popup__feature');
+        $features.forEach(function ($feature) {
+          var findFeature = $feature.className.split('--');
+          if (data.indexOf(findFeature[1]) === -1) {
+            $feature.classList.add(HIDE_CLASS);
+          }
+        });
+      } else {
+        $featuresContainer.classList.add(HIDE_CLASS);
+      }
     }
 
     /**
@@ -33,43 +74,76 @@
      * @param {Object[]} features Массив строк с фото (путь к фото)
      */
 
-    function renderPhotos(photos) {
+    function renderPhotos(data) {
+      // Получить контейнер фотографий
       var $photosContainer = $card.querySelector('.popup__photos');
+      // Получить шаблон изображений
       var $templatePhoto = $photosContainer.querySelector('img');
-      $templatePhoto.src = photos[0];
-      if (photos.length) {
+      // Если изображения есть, отрисовать
+      if (data.length) {
+        // Установить первое фото в массиве
+        $templatePhoto.src = data[0];
+        // Добавить в массив для рендеринга
         var $photos = [$templatePhoto];
-        for (var i = 1; i < photos.length; i++) {
+        // Добавить фотографии, начиная со второй в массив для рендеринга
+        for (var i = 1; i < data.length; i++) {
+          // Склонировать шаблон
           var $photo = $templatePhoto.cloneNode(true);
-          $photo.src = photos[i];
+          // Установить данные по фото из элемента массива
+          $photo.src = data[i];
+          // Добавить в массив для рендеринга
           $photos.push($photo);
         }
-        window.utils.render($photosContainer, $photos, window.Constant.RenderPosition.BEFOREEND);
+        // Отрисовать все фотографии объявления
+        Utils.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
       } else {
-        $photosContainer.removeChild($templatePhoto);
+        // Если изображений нет, скрыть контейнер фотографий
+        $photosContainer.classList.add(HIDE_CLASS);
       }
     }
 
+    // Получить шаблона карточки
     var $template = document.querySelector('#card').content.querySelector('.map__card');
+    // Склонировать шаблон
     var $card = $template.cloneNode(true);
-    $card.querySelector('.popup__avatar').src = this._data.author.avatar;
-    $card.querySelector('.popup__title').textContent = this._data.offer.title;
-    $card.querySelector('.popup__text--address').textContent = this._data.offer.address;
-    $card.querySelector('.popup__text--price').textContent = parseInt(this._data.offer.price, 10).toLocaleString() + '₽/ночь';
-    $card.querySelector('.popup__type').textContent = window.Constant.bookingTypes[this._data.offer.type].title;
-
-    $card.querySelector('.popup__text--capacity').textContent = (
-      this._data.offer.rooms + ' '
-      + window.utils.getWordEnd(this._data.offer.rooms, window.Constant.roomTexts)
-      + ' для ' + this._data.offer.guests + ' '
-      + window.utils.getWordEnd(this._data.offer.guests, window.Constant.guestTexts)
+    // Установить аватар, если есть
+    setImage(this._data.author.avatar, '.popup__avatar');
+    // Установить текст заголовка, если есть
+    setText(this._data.offer.title, '.popup__title');
+    // Установить адресс, если есть
+    setText(this._data.offer.address, '.popup__text--address');
+    // Установить цену, если есть
+    setText(this._data.offer.price, '.popup__text--price', parseInt(this._data.offer.price, 10).toLocaleString() + '₽/ночь');
+    // Установить тип жилья, если есть
+    setText(
+        this._data.offer.type,
+        '.popup__type',
+        this._data.offer.type ? Constant.bookingTypes[this._data.offer.type].title : ''
     );
 
-    $card.querySelector('.popup__text--time').textContent = 'Заезд после ' + this._data.offer.checkin + ', выезд до ' + this._data.offer.checkout;
-    // Отрисовка всех доступных удобств в объявлении
+    // Установить количество гостей и комнат, если есть
+    setText(
+        this._data.offer.rooms && this._data.offer.guests,
+        '.popup__text--capacity',
+        (
+          this._data.offer.rooms + ' '
+          + Utils.getWordEnd(this._data.offer.rooms, Constant.roomTexts)
+          + ' для ' + this._data.offer.guests + ' '
+          + Utils.getWordEnd(this._data.offer.guests, Constant.guestTexts)
+        )
+    );
+    // Установить время заезда и время выезда, если есть
+    setText(
+        this._data.offer.checkin && this._data.offer.checkout,
+        '.popup__text--time',
+        'Заезд после ' + this._data.offer.checkin + ', выезд до ' + this._data.offer.checkout
+    );
+
+    // Отрисовать все доступные удобств в объявлении
     renderFeatures(this._data.offer.features);
-    $card.querySelector('.popup__description').textContent = this._data.offer.description;
-    // Отрисовка всех фотографий объявления
+    // Установить описание объявления, если есть
+    setText(this._data.offer.description, '.popup__description', this._data.offer.description);
+    // Отрисовать все фотографии объявления
     renderPhotos(this._data.offer.photos);
 
     return $card;
