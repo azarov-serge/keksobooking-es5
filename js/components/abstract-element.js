@@ -43,7 +43,7 @@
   };
 
   AbsctractElement.prototype.render = function ($container, place) {
-    Utils.render($container, this._$element, place);
+    Utils.render($container, this.getElement(), place);
   };
 
 
