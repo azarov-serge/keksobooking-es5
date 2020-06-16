@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var coords = {
+  var Coords = {
     create: create,
     setX: setX,
     setY: setY,
@@ -98,5 +98,5 @@
     return parseInt(String(coord).replace('px', ''), 10);
   }
 
-  window.coords = coords;
+  window.Coords = Coords;
 })();

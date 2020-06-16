@@ -1,6 +1,9 @@
 'use strict';
 (function () {
+  var Utils = window.Utils;
+
   function AbsctractElement() {
+    this._$container = null;
     this._$element = null;
     this._SELECTOR = null;
     this._TOGGLE_CLASS = null;
@@ -16,7 +19,6 @@
   };
 
   AbsctractElement.prototype.getCustomElements = function ($elements, selector, $container) {
-    $container = $container || document;
     if (!$elements) {
       $elements = $container.querySelectorAll(selector);
     }
@@ -25,7 +27,7 @@
   };
 
   AbsctractElement.prototype.getElement = function () {
-    return this.getCustomElement(this._$element, this._SELECTOR);
+    return this.getCustomElement(this._$element, this._SELECTOR, this._$container);
   };
 
   AbsctractElement.prototype.isActivate = function () {
@@ -39,8 +41,8 @@
     this.toggleStateCallback();
   };
 
-  AbsctractElement.prototype.render = function ($container, $element, place) {
-    window.utils.render($container, $element, place);
+  AbsctractElement.prototype.render = function ($container, place) {
+    Utils.render($container, this._$element, place);
   };
 
 

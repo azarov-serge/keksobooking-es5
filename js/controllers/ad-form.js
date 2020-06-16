@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var Coords = window.Coords;
   // Индекс значения по умолчанию
   var DefaultIndex = {
     ROOMS: 0,
@@ -52,6 +53,11 @@
     this._adForm.setOnChangeAdCheckOut(this._onChangeAdCheckOut.bind(this));
     // Установка функции для события submit у формы
     this._adForm.setOnSubmitAdForm(this._onSubmitAdForm.bind(this));
+  };
+
+  AdFormController.prototype.setAddress = function (coords) {
+    coords = Coords.convertToLocation(coords);
+    this._adForm.getAdAddress().value = coords.x + ', ' + coords.y;
   };
 
   AdFormController.prototype.setDefaultValues = function () {

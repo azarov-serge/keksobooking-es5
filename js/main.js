@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var Coords = window.Coords;
+  var Utils = window.Utils;
   // Карта страницы
   var mainMap = new window.MainMap();
   // Главный пин (mainPin)
@@ -11,7 +13,7 @@
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
   // Координаты главного пина. Удалит слово "px" у координат
-  var mainPinCoords = window.coords.convertToCoords($mainPin.style.left, $mainPin.style.top);
+  var mainPinCoords = Coords.convertToCoords($mainPin.style.left, $mainPin.style.top);
 
   function activatePinController() {
     mainMap.getPins().forEach(function (pin) {
@@ -40,7 +42,7 @@
   adForm.setAddress(mainPinCoords);
 
   $mainPin.addEventListener('mousedown', function (evt) {
-    if (window.utils.isLeftMouseButtonPressed(evt)) {
+    if (Utils.isLeftMouseButtonPressed(evt)) {
       activateMap();
     }
   });

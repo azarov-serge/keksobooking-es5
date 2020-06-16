@@ -94,11 +94,6 @@
     return !this._getFieldsets()[0].disabled;
   };
 
-  AdForm.prototype.setAddress = function (coords) {
-    coords = window.coords.convertToLocation(coords);
-    this.getAdAddress().value = coords.x + ', ' + coords.y;
-  };
-
   AdForm.prototype.setOnChangeAdRooms = function (onChangeAdRooms) {
     this.getAdRooms().addEventListener('change', onChangeAdRooms);
   };
