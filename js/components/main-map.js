@@ -15,7 +15,8 @@
     this._$mainPin = null;
     this._$pinsContainer = null;
     this._$filtersContainer = null;
-    this._$pins = null;
+    this._orders = null;
+    this._pins = null;
     this._card = null;
   }
 
@@ -34,17 +35,51 @@
     return this.getCustomElement(this._$filtersContainer, MainMapClass.FILTERS_CONTAINER, this.getElement());
   };
 
-  MainMap.prototype.renderPins = function ($pins) {
-    this._$pins = $pins;
-    window.utils.render(this.getPinsContainer(), this._$pins, this.getMainPin());
+  MainMap.prototype.createPins = function (orders) {
+    this._pins = new Array(orders.length).fill('').map(function (pin, index) {
+      pin = new window.Pin(orders[index]);
+      return pin;
+    });
+  };
+
+  MainMap.prototype.renderPins = function (orders) {
+    if (this._pins) {
+      this.removePins();
+    }
+
+    var $pins = [];
+    // Создаст массив пин компонентов
+    this.createPins(orders);
+    // Создаст массив пин элементов для рендеринга
+    this._pins.forEach(function (pin) {
+      $pins.push(pin.getElement());
+    });
+
+    this.render(this.getPinsContainer(), $pins, this.getMainPin());
+  };
+
+  MainMap.prototype.removePins = function () {
+    this._pins.forEach(function (pin) {
+      pin.remove();
+    });
+    this._pins = null;
+  };
+
+  MainMap.prototype.getPins = function () {
+    return this._pins;
   };
 
   MainMap.prototype.renderCard = function (card) {
-    if (this._card) {
-      this._card.removeElement();
-    }
+    this.removeCard();
     this._card = card;
     this._card.render(this.getElement(), this._card.getElement(), this.getFiltersContainer());
+  };
+
+  MainMap.prototype.removeCard = function () {
+    if (this._card) {
+      this._card.remove();
+      this._card = null;
+    }
   };
 
   window.MainMap = MainMap;

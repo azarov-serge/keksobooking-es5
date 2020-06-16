@@ -68,14 +68,12 @@
    */
 
   function generateOrder(order, index) {
-    var coordsOrder = window.coords.create();
-    window.coords.set(
-        coordsOrder,
+    var coordsOrder = window.coords.set(
         window.utils.getRandomInt(window.Constant.MAP_MIN_X, window.Constant.MAP_MAX_X),
         window.utils.getRandomInt(window.Constant.MAP_MIN_Y, window.Constant.MAP_MAX_Y)
     );
 
-    window.coords.convertToLocation(coordsOrder);
+    coordsOrder = window.coords.convertToLocation(coordsOrder);
 
     var offerType = window.utils.getRandomArrValue(Object.keys(bookingTypes));
 
@@ -84,7 +82,7 @@
         'avatar': 'img/avatars/' + (index < AVATARS_COUNT ? 'user0' + (index + 1) : 'default') + '.png',
       },
       'offer': {
-        'title': generateTitle(bookingTypes[offerType]),
+        'title': generateTitle(bookingTypes[offerType].title),
         'address': coordsOrder.x + ', ' + coordsOrder.y,
         'price': window.utils.getRandomInt(price.min, price.max),
         'type': offerType,

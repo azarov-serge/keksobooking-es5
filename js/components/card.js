@@ -3,6 +3,9 @@
   function Card(data) {
     window.AbsctractComponent.call(this);
     this._data = data;
+    this._onCloseCard = this._onCloseCard.bind(this);
+    this._onKeyDownEsc = this._onKeyDownEsc.bind(this);
+    this.closeCard = null;
   }
 
   Card.prototype = Object.create(window.AbsctractComponent.prototype);
@@ -43,7 +46,7 @@
         }
         window.utils.render($photosContainer, $photos, window.Constant.RenderPosition.BEFOREEND);
       } else {
-        $photosContainer .removeChild($templatePhoto);
+        $photosContainer.removeChild($templatePhoto);
       }
     }
 
@@ -53,7 +56,7 @@
     $card.querySelector('.popup__title').textContent = this._data.offer.title;
     $card.querySelector('.popup__text--address').textContent = this._data.offer.address;
     $card.querySelector('.popup__text--price').textContent = parseInt(this._data.offer.price, 10).toLocaleString() + '₽/ночь';
-    $card.querySelector('.popup__type').textContent = window.Constant.bookingTypes[this._data.offer.type];
+    $card.querySelector('.popup__type').textContent = window.Constant.bookingTypes[this._data.offer.type].title;
 
     $card.querySelector('.popup__text--capacity').textContent = (
       this._data.offer.rooms + ' '
@@ -70,6 +73,23 @@
     renderPhotos(this._data.offer.photos);
 
     return $card;
+  };
+
+  Card.prototype._onCloseCard = function () {
+    this.closeCard();
+    document.removeEventListener('keydown', this._onKeyDownEsc);
+  };
+
+  Card.prototype._onKeyDownEsc = function (evt) {
+    if (window.keyboard.isEscPressed(evt)) {
+      this._onCloseCard();
+    }
+  };
+
+  Card.prototype.setOnCloseCard = function (closeCard) {
+    this.closeCard = closeCard;
+    this.getElement().querySelector('.popup__close').addEventListener('click', this._onCloseCard);
+    document.addEventListener('keydown', this._onKeyDownEsc);
   };
 
   window.Card = Card;

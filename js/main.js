@@ -6,40 +6,38 @@
   var $mainPin = mainMap.getMainPin();
   // Форма для размещения объявления
   var adForm = new window.AdForm();
+  // Контроллер формы
   var adFormController = new window.AdFormController(adForm);
-  adFormController.activate();
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
+  // Координаты главного пина. Удалит слово "px" у координат
+  var mainPinCoords = window.coords.convertToCoords($mainPin.style.left, $mainPin.style.top);
 
-  // Массив пинов (DOM-элементы на основе массива объявлений)
-  var $pins = orders.map(function (order) {
-    var pin = new window.Pin(order);
-    return pin.getElement();
-  });
-  // Карточка объявления
-  var card = new window.Card(orders[0]);
+  function activatePinController() {
+    mainMap.getPins().forEach(function (pin) {
+      var pinController = new window.PinController(pin, mainMap);
+      pinController.activate();
+    });
+  }
 
   /**
    * @description Активация карты
    */
   function activateMap() {
-    adForm.setAddress({x: $mainPin.style.left, y: $mainPin.style.top});
-    if (!mainMap.isActivate) {
+    adForm.setAddress(mainPinCoords);
+    if (!mainMap.isActivate()) {
       mainMap.toggleState();
       adForm.toggleState();
-      adForm.toggleFieldsets();
-      mainMap.renderPins($pins);
-      mainMap.renderCard(card);
+      adFormController.startValidate();
+      mainMap.renderPins(orders);
+      activatePinController();
     }
   }
 
-  // Деактивация fieldsets
-  if (adForm.isActivate !== adForm.isActivateFieldsets) {
-    adForm.toggleFieldsets();
-  }
-
+  // Активируем контроллер формы объявлений
+  adFormController.activate();
   // Установка адреса на форму объявлений
-  adForm.setAddress({x: $mainPin.style.left, y: $mainPin.style.top});
+  adForm.setAddress(mainPinCoords);
 
   $mainPin.addEventListener('mousedown', function (evt) {
     if (window.utils.isLeftMouseButtonPressed(evt)) {
