@@ -4,6 +4,7 @@
 
   function AbsctractComponent() {
     this._$element = null;
+    this._TOGGLE_CLASS = null;
   }
 
   AbsctractComponent.prototype._getTemplate = function () {
@@ -16,6 +17,17 @@
     }
 
     return this._$element;
+  };
+
+  AbsctractComponent.prototype.isActivate = function () {
+    return !this.getElement().classList.contains(this._TOGGLE_CLASS);
+  };
+
+  AbsctractComponent.prototype.toggleStateCallback = function () {};
+
+  AbsctractComponent.prototype.toggleState = function () {
+    this.getElement().classList.toggle(this._TOGGLE_CLASS);
+    this.toggleStateCallback();
   };
 
   AbsctractComponent.prototype.render = function ($container, place) {

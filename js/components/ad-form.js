@@ -16,7 +16,7 @@
     FIELDSET: 'fieldset',
   };
 
-  function AdForm() {
+  function AdFormComponent() {
     window.AbsctractElement.call(this);
     this._SELECTOR = AdFormClass.AD_FORM;
     this._TOGGLE_CLASS = AdFormClass.TOGGLE_CLASS;
@@ -33,86 +33,86 @@
     this._$fieldsets = null;
   }
 
-  AdForm.prototype = Object.create(window.AbsctractElement.prototype);
-  AdForm.prototype.constructor = AdForm;
+  AdFormComponent.prototype = Object.create(window.AbsctractElement.prototype);
+  AdFormComponent.prototype.constructor = AdFormComponent;
 
-  AdForm.prototype.getAdTitle = function () {
+  AdFormComponent.prototype.getAdTitle = function () {
     return this.getCustomElement(this._$adTitle, AdFormClass.AD_TITLE, this.getElement());
   };
 
-  AdForm.prototype.getAdAvatar = function () {
+  AdFormComponent.prototype.getAdAvatar = function () {
     return this.getCustomElement(this._$adAvatar, AdFormClass.AD_AFATAR, this.getElement());
   };
 
-  AdForm.prototype.getAdAddress = function () {
+  AdFormComponent.prototype.getAdAddress = function () {
     return this.getCustomElement(this._$adAddress, AdFormClass.AD_ADDRESS, this.getElement());
   };
 
-  AdForm.prototype.getAdRooms = function () {
+  AdFormComponent.prototype.getAdRooms = function () {
     return this.getCustomElement(this._$adRoom, AdFormClass.AD_ROOM, this.getElement());
   };
 
-  AdForm.prototype.getAdGuests = function () {
+  AdFormComponent.prototype.getAdGuests = function () {
     return this.getCustomElement(this._$adGuest, AdFormClass.AD_GUEST, this.getElement());
   };
 
-  AdForm.prototype.getAdImages = function () {
+  AdFormComponent.prototype.getAdImages = function () {
     return this.getCustomElement(this._$adImage, AdFormClass.AD_IMAGE, this.getElement());
   };
 
-  AdForm.prototype.getAdPrice = function () {
+  AdFormComponent.prototype.getAdPrice = function () {
     return this.getCustomElement(this._$adPrice, AdFormClass.AD_PRICE, this.getElement());
   };
 
-  AdForm.prototype.getAdType = function () {
+  AdFormComponent.prototype.getAdType = function () {
     return this.getCustomElement(this._$adType, AdFormClass.AD_TYPE, this.getElement());
   };
 
-  AdForm.prototype.getAdCheckIn = function () {
+  AdFormComponent.prototype.getAdCheckIn = function () {
     return this.getCustomElement(this._$adCheckIn, AdFormClass.AD_CHECK_IN, this.getElement());
   };
 
-  AdForm.prototype.getAdCheckOut = function () {
+  AdFormComponent.prototype.getAdCheckOut = function () {
     return this.getCustomElement(this._$adCheckOut, AdFormClass.AD_CHECK_OUT, this.getElement());
   };
 
-  AdForm.prototype._getFieldsets = function () {
+  AdFormComponent.prototype._getFieldsets = function () {
     return this.getCustomElements(this._$fieldsets, AdFormClass.FIELDSET, this.getElement());
   };
 
-  AdForm.prototype.toggleStateFieldsets = function () {
+  AdFormComponent.prototype.toggleStateFieldsets = function () {
     this._getFieldsets().forEach(function ($fieldset) {
       $fieldset.disabled = !$fieldset.disabled;
     });
   };
 
-  AdForm.prototype.toggleStateCallback = function () {
+  AdFormComponent.prototype.toggleStateCallback = function () {
     this.toggleStateFieldsets();
   };
 
-  AdForm.prototype.isActivateFieldsets = function () {
+  AdFormComponent.prototype.isActivateFieldsets = function () {
     return !this._getFieldsets()[0].disabled;
   };
 
-  AdForm.prototype.setOnChangeAdRooms = function (onChangeAdRooms) {
+  AdFormComponent.prototype.setOnChangeAdRooms = function (onChangeAdRooms) {
     this.getAdRooms().addEventListener('change', onChangeAdRooms);
   };
 
-  AdForm.prototype.setOnChangeAdType = function (onChangeAdType) {
+  AdFormComponent.prototype.setOnChangeAdType = function (onChangeAdType) {
     this.getAdType().addEventListener('change', onChangeAdType);
   };
 
-  AdForm.prototype.setOnChangeAdCheckIn = function (onChangeAdCheckIn) {
+  AdFormComponent.prototype.setOnChangeAdCheckIn = function (onChangeAdCheckIn) {
     this.getAdCheckIn().addEventListener('change', onChangeAdCheckIn);
   };
 
-  AdForm.prototype.setOnChangeAdCheckOut = function (onChangeAdCheckOut) {
+  AdFormComponent.prototype.setOnChangeAdCheckOut = function (onChangeAdCheckOut) {
     this.getAdCheckOut().addEventListener('change', onChangeAdCheckOut);
   };
 
-  AdForm.prototype.setOnSubmitAdForm = function (onSubmitAdForm) {
+  AdFormComponent.prototype.setOnSubmitAdForm = function (onSubmitAdForm) {
     this.getElement().addEventListener('submit', onSubmitAdForm);
   };
 
-  window.AdForm = AdForm;
+  window.AdFormComponent = AdFormComponent;
 })();

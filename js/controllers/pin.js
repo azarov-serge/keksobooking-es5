@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   function PinController(pin, mainMap) {
+    this._container = mainMap.getElement();
     this._pin = pin;
     this._mainMap = mainMap;
   }

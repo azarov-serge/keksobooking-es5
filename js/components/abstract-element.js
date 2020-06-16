@@ -19,6 +19,7 @@
   };
 
   AbsctractElement.prototype.getCustomElements = function ($elements, selector, $container) {
+    $container = $container || document;
     if (!$elements) {
       $elements = $container.querySelectorAll(selector);
     }
@@ -47,7 +48,6 @@
 
 
   AbsctractElement.prototype.remove = function () {
-    this.isActivate = false;
     this._$element = null;
   };
 

@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  function Card(data) {
+  function CardComponent(data) {
     window.AbsctractComponent.call(this);
     this._data = data;
     this._onCloseCard = this._onCloseCard.bind(this);
@@ -8,10 +8,10 @@
     this.closeCard = null;
   }
 
-  Card.prototype = Object.create(window.AbsctractComponent.prototype);
-  Card.prototype.constructor = Card;
+  CardComponent.prototype = Object.create(window.AbsctractComponent.prototype);
+  CardComponent.prototype.constructor = CardComponent;
 
-  Card.prototype._getTemplate = function () {
+  CardComponent.prototype._getTemplate = function () {
     /**
      * @description Функция по отрисовки удобств
      * @param {Object[]} features Массив строк удобств
@@ -75,22 +75,22 @@
     return $card;
   };
 
-  Card.prototype._onCloseCard = function () {
+  CardComponent.prototype._onCloseCard = function () {
     this.closeCard();
     document.removeEventListener('keydown', this._onKeyDownEsc);
   };
 
-  Card.prototype._onKeyDownEsc = function (evt) {
+  CardComponent.prototype._onKeyDownEsc = function (evt) {
     if (window.keyboard.isEscPressed(evt)) {
       this._onCloseCard();
     }
   };
 
-  Card.prototype.setOnCloseCard = function (closeCard) {
+  CardComponent.prototype.setOnCloseCard = function (closeCard) {
     this.closeCard = closeCard;
     this.getElement().querySelector('.popup__close').addEventListener('click', this._onCloseCard);
     document.addEventListener('keydown', this._onKeyDownEsc);
   };
 
-  window.Card = Card;
+  window.CardComponent = CardComponent;
 })();
