@@ -22,19 +22,26 @@
    * @description Активация карты
    */
   function activateMap() {
+    // Получить координаты главного пина
     mainPinCoords = mapPinsController.getMainPinCoords();
+    // Установить координаты в форму
     adFormController.setAddress(mainPinCoords);
+    // Если карта не активирована, активировать
     if (!mainMapComponent.isActivate()) {
+      // Переключить состояние карты на активное
       mainMapComponent.toggleState();
+      // Переключить форму в активное состояние
       adFormConponent.toggleState();
+      // Запустить слушателей по валидации формы
       adFormController.startValidate();
+      // Положить данные в модель данных
       ordersModel.setOrders(orders);
     }
   }
 
-  // Активируем контроллер формы объявлений
+  // Активировать контроллер формы объявлений
   adFormController.activate();
-  // Установка адреса на форму объявлений
+  // Установить адрес на форму объявлений
   adFormController.setAddress(mainPinCoords);
 
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
