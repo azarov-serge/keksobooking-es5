@@ -78,6 +78,11 @@
     return txt[index];
   }
 
+  /**
+   *
+   * @param {Object} evt Событие клика мышки
+   */
+
   function isLeftMouseButtonPressed(evt) {
     return evt.button === LEFT_MOUSE_BUTTON;
   }
