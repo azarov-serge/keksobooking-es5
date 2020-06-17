@@ -1,6 +1,8 @@
 'use strict';
 (function () {
+  var Constant = window.Constant;
   var Coords = window.Coords;
+
   // Индекс значения по умолчанию
   var DefaultIndex = {
     ROOMS: 0,
@@ -18,14 +20,14 @@
     IMAGES_TYPE: 'image/png, image/jpeg',
   };
 
-  function AdFormController(adForm) {
-    this._adForm = adForm;
+  function AdFormController(adFormComponent) {
+    this._adFormComponent = adFormComponent;
   }
 
   AdFormController.prototype.activate = function () {
     // Синхронизация fieldsets и form
-    if (this._adForm.isActivate() !== this._adForm.isActivateFieldsets()) {
-      this._adForm.toggleStateFieldsets();
+    if (this._adFormComponent.isActivate() !== this._adFormComponent.isActivateFieldsets()) {
+      this._adFormComponent.toggleStateFieldsets();
     }
 
     // Установка значений по умолчанию
@@ -34,49 +36,60 @@
 
   AdFormController.prototype.startValidate = function () {
     // Дизейблим для корректной валидации
-    this._adForm.getAdAddress().disabled = true;
+    this._adFormComponent.getAdAddress().disabled = true;
     // Для валидации аватара, загрузка только JPEG и PNG
-    this._adForm.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
+    this._adFormComponent.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
     // Для валидации изображений объявлений, загрузка только JPEG и PNG
-    this._adForm.getAdImages().accept = ValidateValue.IMAGES_TYPE;
+    this._adFormComponent.getAdImages().accept = ValidateValue.IMAGES_TYPE;
     // Для валидации, установка максимальной цены
-    this._adForm.getAdPrice().max = ValidateValue.MAX_PRICE;
+    this._adFormComponent.getAdPrice().max = ValidateValue.MAX_PRICE;
     // Установка валидации заголовка объявления
     this._setValidityTitle();
     // Установка валидации количества комнат
-    this._adForm.setOnChangeAdRooms(this._onChangeAdRooms.bind(this));
+    this._adFormComponent.setAdRoomsChangeHandler(this._adRoomsChangeHandler.bind(this));
     // Установка валидации цены от типа
-    this._adForm.setOnChangeAdType(this._onChangeAdType.bind(this));
+    this._adFormComponent.setAdTypeChangeHandler(this._adTypeChangeHandler.bind(this));
     // Установка валидации времени заезда
-    this._adForm.setOnChangeAdCheckIn(this._onChangeAdCheckIn.bind(this));
+    this._adFormComponent.setAdCheckInChangeHandler(this._adCheckInChangeHandler.bind(this));
     // Установка валидации времени заезда
-    this._adForm.setOnChangeAdCheckOut(this._onChangeAdCheckOut.bind(this));
+    this._adFormComponent.setAdCheckOutChangeHandler(this._adCheckOutChangeHandler.bind(this));
     // Установка функции для события submit у формы
-    this._adForm.setOnSubmitAdForm(this._onSubmitAdForm.bind(this));
+    this._adFormComponent.setAdFormSubmitHandler(this._adFormSubmitHandler.bind(this));
   };
 
   AdFormController.prototype.setAddress = function (coords) {
     coords = Coords.convertToLocation(coords);
-    this._adForm.getAdAddress().value = coords.x + ', ' + coords.y;
+    this._adFormComponent.getAdAddress().value = coords.x + ', ' + coords.y;
   };
 
   AdFormController.prototype.setDefaultValues = function () {
     // Значения по умолчанию
     var Default = {
-      ROOMS: this._adForm.getAdRooms()[DefaultIndex.ROOMS].value,
-      TYPE: this._adForm.getAdType()[DefaultIndex.TYPE].value,
-      CHECK_IN: this._adForm.getAdCheckIn()[DefaultIndex.CHECK_IN].value,
+      TITLE: '',
+      ROOMS: this._adFormComponent.getAdRooms()[DefaultIndex.ROOMS].value,
+      TYPE: this._adFormComponent.getAdType()[DefaultIndex.TYPE].value,
+      CHECK_IN: this._adFormComponent.getAdCheckIn()[DefaultIndex.CHECK_IN].value,
+      DESCRIPTION: '',
     };
 
+    // Установить заголовок объявления по умолчанию
+    this._adFormComponent.getAdTitle().textContent = Default.TITLE;
     // Установка значений фильтра количество комнат по умолчанию
-    this._adForm.getAdRooms().value = Default.ROOMS;
+    this._adFormComponent.getAdRooms().value = Default.ROOMS;
     // Установка значений количества фильтров в соответствии с количеством комнат
-    this._adForm.getAdGuests().value = this._getGuests(Default.ROOMS);
+    this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
+    // Отключить количетсво гостей, которые не прошли валидацию
     this._disabledGuestsValues(Default.ROOMS);
-    this._adForm.getAdType().value = Default.TYPE;
+    // Установить тип жилья по умолчанию
+    this._adFormComponent.getAdType().value = Default.TYPE;
+    // Установить минимальную стоимость для данного типа
     this._setMinPrice(window.Constant.bookingTypes[Default.TYPE].minPrice);
-    this._adForm.getAdCheckIn().value = Default.CHECK_IN;
-    this._adForm.getAdCheckOut().value = this._adForm.getAdCheckIn().value;
+    // Установить время заезда
+    this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
+    // Установить время выезда, в зависимости от времени заезда
+    this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
+    // Установить текст объявления по умолчанию
+    this._adFormComponent.getAdDescription().textContent = Default.TITLE;
   };
 
   /**
@@ -84,29 +97,29 @@
    */
 
   AdFormController.prototype._setValidityTitle = function () {
-    this._adForm.getAdTitle().required = true;
-    this._adForm.getAdTitle().minLength = ValidateValue.TITLE_MIN_LENGTH;
-    this._adForm.getAdTitle().maxLength = ValidateValue.TITLE_MAX_LENGTH;
+    this._adFormComponent.getAdTitle().required = true;
+    this._adFormComponent.getAdTitle().minLength = ValidateValue.TITLE_MIN_LENGTH;
+    this._adFormComponent.getAdTitle().maxLength = ValidateValue.TITLE_MAX_LENGTH;
   };
 
   /**
    * @description Валидация количества комнат
    */
 
-  AdFormController.prototype._onChangeAdRooms = function (evt) {
+  AdFormController.prototype._adRoomsChangeHandler = function (evt) {
     // Значение количества комнат
     var roomsCount = parseInt(evt.target.value, 10);
-    this._adForm.getAdGuests().value = this._getGuests(roomsCount);
-    this._disabledGuestsValues(this._adForm.getAdGuests().value);
+    this._adFormComponent.getAdGuests().value = this._getGuests(roomsCount);
+    this._disabledGuestsValues(this._adFormComponent.getAdGuests().value);
   };
 
   /**
    * @description Валидация цен типа жилья
    */
 
-  AdFormController.prototype._onChangeAdType = function (evt) {
+  AdFormController.prototype._adTypeChangeHandler = function (evt) {
     // Значение количества комнат
-    var minPrice = window.Constant.bookingTypes[evt.target.value].minPrice;
+    var minPrice = Constant.bookingTypes[evt.target.value].minPrice;
     this._setMinPrice(minPrice);
   };
 
@@ -114,16 +127,16 @@
    * @description Валидация времени заезада
    */
 
-  AdFormController.prototype._onChangeAdCheckIn = function (evt) {
-    this._adForm.getAdCheckOut().value = evt.target.value;
+  AdFormController.prototype._adCheckInChangeHandler = function (evt) {
+    this._adFormComponent.getAdCheckOut().value = evt.target.value;
   };
 
   /**
    * @description Валидация времени выезда
    */
 
-  AdFormController.prototype._onChangeAdCheckOut = function (evt) {
-    this._adForm.getAdCheckIn().value = evt.target.value;
+  AdFormController.prototype._adCheckOutChangeHandler = function (evt) {
+    this._adFormComponent.getAdCheckIn().value = evt.target.value;
   };
 
   /**
@@ -131,7 +144,7 @@
    * @description Функции для события submit у формы
    */
 
-  AdFormController.prototype._onSubmitAdForm = function (evt) {
+  AdFormController.prototype._adFormSubmitHandler = function (evt) {
     evt.preventDefault();
     if (evt.target.checkValidity()) {
       evt.target.action = window.Constant.Url.UPLOAD;
@@ -175,7 +188,7 @@
     }
 
     validValue = parseInt(validValue, 10);
-    this._adForm.getAdGuests().querySelectorAll('option').forEach(toggleItem);
+    this._adFormComponent.getAdGuests().querySelectorAll('option').forEach(toggleItem);
   };
 
   /**
@@ -184,8 +197,8 @@
 
   AdFormController.prototype._setMinPrice = function (minPrice) {
     // Значение количества комнат
-    this._adForm.getAdPrice().placeholder = minPrice;
-    this._adForm.getAdPrice().min = minPrice;
+    this._adFormComponent.getAdPrice().placeholder = minPrice;
+    this._adFormComponent.getAdPrice().min = minPrice;
   };
 
   window.AdFormController = AdFormController;

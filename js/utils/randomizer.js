@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-
   var Randomazier = {
     getRandomInt: getRandomInt,
     getRandomArrValue: getRandomArrValue,

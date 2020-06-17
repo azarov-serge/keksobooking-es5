@@ -13,6 +13,7 @@
     AD_TYPE: '#type',
     AD_CHECK_IN: '#timein',
     AD_CHECK_OUT: '#timeout',
+    AD_DESCRIPTION: '#description',
     FIELDSET: 'fieldset',
   };
 
@@ -76,6 +77,10 @@
     return this.getCustomElement(this._$adCheckOut, AdFormClass.AD_CHECK_OUT, this.getElement());
   };
 
+  AdFormComponent.prototype.getAdDescription = function () {
+    return this.getCustomElement(this._$adCheckOut, AdFormClass.AD_DESCRIPTION, this.getElement());
+  };
+
   AdFormComponent.prototype._getFieldsets = function () {
     return this.getCustomElements(this._$fieldsets, AdFormClass.FIELDSET, this.getElement());
   };
@@ -94,24 +99,24 @@
     return !this._getFieldsets()[0].disabled;
   };
 
-  AdFormComponent.prototype.setOnChangeAdRooms = function (onChangeAdRooms) {
-    this.getAdRooms().addEventListener('change', onChangeAdRooms);
+  AdFormComponent.prototype.setAdRoomsChangeHandler = function (adRoomsChangeHandler) {
+    this.getAdRooms().addEventListener('change', adRoomsChangeHandler);
   };
 
-  AdFormComponent.prototype.setOnChangeAdType = function (onChangeAdType) {
-    this.getAdType().addEventListener('change', onChangeAdType);
+  AdFormComponent.prototype.setAdTypeChangeHandler = function (adTypeChangeHandler) {
+    this.getAdType().addEventListener('change', adTypeChangeHandler);
   };
 
-  AdFormComponent.prototype.setOnChangeAdCheckIn = function (onChangeAdCheckIn) {
-    this.getAdCheckIn().addEventListener('change', onChangeAdCheckIn);
+  AdFormComponent.prototype.setAdCheckInChangeHandler = function (adCheckInChangeHandler) {
+    this.getAdCheckIn().addEventListener('change', adCheckInChangeHandler);
   };
 
-  AdFormComponent.prototype.setOnChangeAdCheckOut = function (onChangeAdCheckOut) {
-    this.getAdCheckOut().addEventListener('change', onChangeAdCheckOut);
+  AdFormComponent.prototype.setAdCheckOutChangeHandler = function (adCheckOutChangeHandler) {
+    this.getAdCheckOut().addEventListener('change', adCheckOutChangeHandler);
   };
 
-  AdFormComponent.prototype.setOnSubmitAdForm = function (onSubmitAdForm) {
-    this.getElement().addEventListener('submit', onSubmitAdForm);
+  AdFormComponent.prototype.setAdFormSubmitHandler = function (adFormSubmitHandler) {
+    this.getElement().addEventListener('submit', adFormSubmitHandler);
   };
 
   window.AdFormComponent = AdFormComponent;

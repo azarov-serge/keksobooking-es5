@@ -12,5 +12,9 @@
     return this._orders;
   };
 
+  OrdersModel.prototype.getOrderByIndex = function (index) {
+    return this._orders[index];
+  };
+
   window.OrdersModel = OrdersModel;
 })();

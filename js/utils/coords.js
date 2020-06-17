@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var Constant = window.Constant;
+
   var Coords = {
     create: create,
     setX: setX,
@@ -24,8 +26,9 @@
    */
 
   function setX(x) {
-    var minX = window.Constant.MAP_MIN_X;
-    var maxX = window.Constant.MAP_MAX_X - window.Constant.MAIN_PIN_WIDTH;
+    var GAP = Constant.MAIN_PIN_WIDTH / 2;
+    var minX = Constant.MAP_MIN_X - GAP;
+    var maxX = Constant.MAP_MAX_X - GAP;
     return Math.max(Math.min(x, maxX), minX);
   }
 
@@ -35,8 +38,8 @@
    */
 
   function setY(y) {
-    var minY = window.Constant.MAP_MIN_Y - window.Constant.MAIN_PIN_HEIGHT;
-    var maxY = window.Constant.MAP_MAX_Y - window.Constant.MAIN_PIN_HEIGHT;
+    var minY = Constant.MAP_MIN_Y - Constant.MAIN_PIN_HEIGHT;
+    var maxY = Constant.MAP_MAX_Y - Constant.MAIN_PIN_HEIGHT;
     return Math.max(Math.min(y, maxY), minY);
   }
 
@@ -59,8 +62,8 @@
 
   function convertToLocation(obj) {
     return {
-      x: obj.x + Math.floor(window.Constant.MAIN_PIN_WIDTH / 2),
-      y: obj.y + window.Constant.MAIN_PIN_HEIGHT
+      x: obj.x + Math.floor(Constant.MAIN_PIN_WIDTH / 2),
+      y: obj.y + Constant.MAIN_PIN_HEIGHT
     };
   }
 
@@ -70,8 +73,8 @@
 
   function convertFromLocation(obj) {
     return {
-      x: obj.x - Math.floor(window.Constant.PIN_WIDTH / 2),
-      y: obj.y - window.Constant.PIN_HEIGHT,
+      x: obj.x - Math.floor(Constant.PIN_WIDTH / 2),
+      y: obj.y - Constant.PIN_HEIGHT,
     };
   }
 

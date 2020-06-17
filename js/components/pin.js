@@ -2,10 +2,10 @@
 (function () {
   var Coords = window.Coords;
 
-  function PinComponent(data) {
+  function PinComponent(data, index) {
     window.AbsctractComponent.call(this);
     this._data = data;
-    this._card = null;
+    this._index = index;
     this._TOGGLE_CLASS = 'map__pin--active';
     this.onClickPin = null;
   }
@@ -23,15 +23,8 @@
     $pin.querySelector('img').alt = this._data.offer.title;
     $pin.querySelector('img').src = this._data.author.avatar;
     $pin.tabindex = '0';
+    $pin.dataset.orderIndex = this._index;
     return $pin;
-  };
-
-  PinComponent.prototype.getCard = function () {
-    if (!this._card) {
-      this._card = new window.CardComponent(this._data);
-    }
-
-    return this._card;
   };
 
   PinComponent.prototype.setOnClickPin = function (onClickPin) {

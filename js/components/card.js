@@ -1,23 +1,20 @@
 'use strict';
 (function () {
-  var Utils = window.Utils;
   var Constant = window.Constant;
+  var Utils = window.Utils;
+
   var HIDE_CLASS = 'hidden';
 
   function CardComponent(data) {
     window.AbsctractComponent.call(this);
     this._data = data;
-    this._onCloseCard = this._onCloseCard.bind(this);
-    this._onKeyDownEsc = this._onKeyDownEsc.bind(this);
-    this.closeCard = null;
+    this._closeCardClickHandler = this.__closeCardClickHandler.bind(this);
+    this._documentKeyDownEscHandler = this.__documentKeyDownEscHandler.bind(this);
+    this._closeCard = null;
   }
 
   CardComponent.prototype = Object.create(window.AbsctractComponent.prototype);
   CardComponent.prototype.constructor = CardComponent;
-
-  CardComponent.prototype._hideDOMElement = function hideDOMElement($element) {
-    $element.classList.add(HIDE_CLASS);
-  };
 
   CardComponent.prototype._getTemplate = function () {
 
@@ -149,21 +146,21 @@
     return $card;
   };
 
-  CardComponent.prototype._onCloseCard = function () {
-    this.closeCard();
-    document.removeEventListener('keydown', this._onKeyDownEsc);
+  CardComponent.prototype.setCloseCardHandler = function (closeCardHandler) {
+    this._closeCard = closeCardHandler;
+    this.getElement().querySelector('.popup__close').addEventListener('click', this._closeCardClickHandler);
+    document.addEventListener('keydown', this._documentKeyDownEscHandler);
   };
 
-  CardComponent.prototype._onKeyDownEsc = function (evt) {
-    if (window.keyboard.isEscPressed(evt)) {
-      this._onCloseCard();
+  CardComponent.prototype.__closeCardClickHandler = function () {
+    this._closeCard();
+    document.removeEventListener('keydown', this._documentKeyDownEscHandler);
+  };
+
+  CardComponent.prototype.__documentKeyDownEscHandler = function (evt) {
+    if (Utils.isEscPressed(evt)) {
+      this.__closeCardClickHandler();
     }
-  };
-
-  CardComponent.prototype.setOnCloseCard = function (closeCard) {
-    this.closeCard = closeCard;
-    this.getElement().querySelector('.popup__close').addEventListener('click', this._onCloseCard);
-    document.addEventListener('keydown', this._onKeyDownEsc);
   };
 
   window.CardComponent = CardComponent;
