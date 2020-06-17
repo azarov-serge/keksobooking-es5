@@ -97,7 +97,7 @@
 
   MapPinsController.prototype.__mainPinClickHandler = function (evt) {
     if (this._isPinClicked(evt.target)) {
-      this._renderActiveCard(evt.target.dataset.orderIndex || evt.target.parentElement.dataset.orderIndex);
+      this._renderActiveCardAndActivatePin(evt.target.dataset.orderIndex || evt.target.parentElement.dataset.orderIndex);
     }
   };
 
@@ -119,6 +119,19 @@
     );
   };
 
+  MapPinsController.prototype._deactivatePin = function () {
+    if (this._activePinComponent) {
+      this._activePinComponent.toggleState();
+      this._activePinComponent = null;
+    }
+  };
+
+  MapPinsController.prototype._activatePin = function (index) {
+    this._deactivatePin();
+    this._activePinComponent = this._pinComponents[index];
+    this._activePinComponent.toggleState();
+  };
+
   MapPinsController.prototype._removeActiveCard = function () {
     if (this._activeCardComponent) {
       this._activeCardComponent.remove();
@@ -132,6 +145,17 @@
     this._activeCardComponent = new window.CardComponent(this._ordersModel.getOrderByIndex(index));
     this._activeCardComponent.render(this._$cardContainer, this._$cardPlace);
     this._activeCardComponent.setCloseCardHandler(this._removeActiveCard.bind(this));
+  };
+
+  MapPinsController.prototype._renderActiveCardAndActivatePin = function (index) {
+    this._activatePin(index);
+    this._renderActiveCard(index);
+    this._activeCardComponent.setCloseCardHandler(this._removeActiveCardAndActivatePin.bind(this));
+  };
+
+  MapPinsController.prototype._removeActiveCardAndActivatePin = function () {
+    this._removeActiveCard();
+    this._deactivatePin();
   };
 
   window.MapPinsController = MapPinsController;
