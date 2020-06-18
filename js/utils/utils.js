@@ -1,14 +1,19 @@
 'use strict';
 (function () {
-  var LEFT_MOUSE_BUTTON = 0;
+  var Constant = window.Constant;
 
-  var utils = {
+  var LEFT_MOUSE_BUTTON = 0;
+  var KeyСode = {
+    ESC: 27,
+    ENTER: 13,
+  };
+
+  var Utils = {
     render: render,
-    getRandomInt: getRandomInt,
-    getRandomArrValue: getRandomArrValue,
-    getRandomArr: getRandomArr,
     getWordEnd: getWordEnd,
     isLeftMouseButtonPressed: isLeftMouseButtonPressed,
+    isEscPressed: isEscPressed,
+    isEnterPressed: isEnterPressed,
   };
 
   /**
@@ -20,10 +25,10 @@
 
   function renderElement($container, $element, place) {
     switch (place) {
-      case window.Constant.RenderPosition.AFTERBEGIN:
+      case Constant.RenderPosition.AFTERBEGIN:
         $container.prepend($element);
         break;
-      case window.Constant.RenderPosition.BEFOREEND:
+      case Constant.RenderPosition.BEFOREEND:
         $container.append($element);
         break;
     }
@@ -63,40 +68,6 @@
   }
 
   /**
-   * @param {number} min
-   * @param {number} max
-   * @return {number}
-   */
-
-  function getRandomInt(min, max) {
-    return min + Math.floor(Math.random() * (max - min));
-  }
-
-  /**
-   * @param {Object[]} arr Массив значений
-   * @return {*} Рандомное значение
-   */
-
-  function getRandomArrValue(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  /**
-   * @param {Object[]} arr Исходный массив значений
-   * @param {number} length Длинна массива, который нужно получить
-   * @return {Object[]} Рандомный массив
-   */
-
-  function getRandomArr(arr, length) {
-    length = length || arr.length;
-    var randomArr = arr.slice();
-    randomArr.sort(function () {
-      return Math.random() - 0.5;
-    });
-    return randomArr.slice(0, length);
-  }
-
-  /**
     * @description Возвращет склоненние слова или окончание для числа
     * @param {number} number Число, дя которого нужно найти склонение слов или окончания числа
     * @param {Object[]} txt Массив склонений слов или окончания числа
@@ -114,9 +85,33 @@
     return txt[index];
   }
 
+  /**
+   *
+   * @param {Object} evt Событие клика мышки
+   */
+
   function isLeftMouseButtonPressed(evt) {
     return evt.button === LEFT_MOUSE_BUTTON;
   }
 
-  window.utils = utils;
+  /**
+   * @description Проверяет нажата клавиша Esc
+   * @param {number} evt Код клавиши
+   * @return Возвращает true || false
+   */
+
+  function isEscPressed(evt) {
+    return evt.keyCode === KeyСode.ESC;
+  }
+
+  /**
+   * @description Проверяет нажата клавиша Enter
+   * @param {number} evt Код клавиши
+   * @return Возвращает true || false
+   */
+
+  function isEnterPressed(evt) {
+    return evt.keyCode === KeyСode.ENTER;
+  }
+  window.Utils = Utils;
 })();

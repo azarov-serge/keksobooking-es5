@@ -1,7 +1,10 @@
 'use strict';
 (function () {
+  var Utils = window.Utils;
+
   function AbsctractComponent() {
     this._$element = null;
+    this._TOGGLE_CLASS = null;
   }
 
   AbsctractComponent.prototype._getTemplate = function () {
@@ -16,8 +19,19 @@
     return this._$element;
   };
 
-  AbsctractComponent.prototype.render = function ($container, $element, place) {
-    window.utils.render($container, $element, place);
+  AbsctractComponent.prototype.isActivate = function () {
+    return !this.getElement().classList.contains(this._TOGGLE_CLASS);
+  };
+
+  AbsctractComponent.prototype.toggleStateCallback = function () {};
+
+  AbsctractComponent.prototype.toggleState = function () {
+    this.getElement().classList.toggle(this._TOGGLE_CLASS);
+    this.toggleStateCallback();
+  };
+
+  AbsctractComponent.prototype.render = function ($container, place) {
+    Utils.render($container, this.getElement(), place);
   };
 
   AbsctractComponent.prototype.remove = function () {

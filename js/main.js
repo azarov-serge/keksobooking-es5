@@ -1,52 +1,70 @@
 'use strict';
 (function () {
-  // Карта страницы
-  var mainMap = new window.MainMap();
-  // Главный пин (mainPin)
-  var $mainPin = mainMap.getMainPin();
-  // Форма для размещения объявления
-  var adForm = new window.AdForm();
-  // Контроллер формы
-  var adFormController = new window.AdFormController(adForm);
+  var Utils = window.Utils;
+
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
-  // Координаты главного пина. Удалит слово "px" у координат
-  var mainPinCoords = window.coords.convertToCoords($mainPin.style.left, $mainPin.style.top);
-
-  function activatePinController() {
-    mainMap.getPins().forEach(function (pin) {
-      var pinController = new window.PinController(pin, mainMap);
-      pinController.activate();
-    });
-  }
+  // Модель с объявлениями
+  var ordersModel = new window.OrdersModel();
+  // Карта страницы
+  var mainMapComponent = new window.MainMapComponent();
+  // Контейнер с пинами
+  var mapPinsComponent = new window.MapPinsComponent(mainMapComponent.getElement());
+  // Форма для размещения объявления
+  var adFormConponent = new window.AdFormComponent();
+  // Контроллер контейнера с пинами
+  var mapPinsController = new window.MapPinsController(mapPinsComponent, ordersModel);
+  // Контроллер формы
+  var adFormController = new window.AdFormController(adFormConponent);
+  // Координаты главного пина
+  var mainPinCoords = null;
 
   /**
    * @description Активация карты
    */
   function activateMap() {
-    adForm.setAddress(mainPinCoords);
-    if (!mainMap.isActivate()) {
-      mainMap.toggleState();
-      adForm.toggleState();
+    // Получить координаты главного пина
+    mainPinCoords = mapPinsController.getMainPinCoords();
+    // Установить координаты в форму
+    adFormController.setAddress(mainPinCoords);
+    // Если карта не активирована, активировать
+    if (!mainMapComponent.isActivate()) {
+      // Переключить состояние карты на активное
+      mainMapComponent.toggleState();
+      // Переключить форму в активное состояние
+      adFormConponent.toggleState();
+      // Запустить слушателей по валидации формы
       adFormController.startValidate();
-      mainMap.renderPins(orders);
-      activatePinController();
+      // Положить данные в модель данных
+      ordersModel.setOrders(orders);
+      // Отрисовать пины на карте
+      mapPinsController.renderPins();
+      // Установить контейнер, куда отрисовывать карточку
+      mapPinsController.setCardContainer(mainMapComponent.getElement());
+      // Установить место, куда отрисовывать карточку
+      mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
     }
   }
 
-  // Активируем контроллер формы объявлений
+  // Активировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
+  mapPinsController.activate();
+  // Получить координаты главного пина утсановленные по умолчанию
+  mainPinCoords = mapPinsController.getMainPinDefaultCoords();
+  // Активировать контроллер формы объявлений
   adFormController.activate();
-  // Установка адреса на форму объявлений
-  adForm.setAddress(mainPinCoords);
+  // Установить адрес на форму объявлений
+  adFormController.setAddress(mainPinCoords);
 
-  $mainPin.addEventListener('mousedown', function (evt) {
-    if (window.utils.isLeftMouseButtonPressed(evt)) {
+  // Установить обработчик клика мыши у главного пина
+  mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
+    if (Utils.isLeftMouseButtonPressed(evt)) {
       activateMap();
     }
   });
 
-  $mainPin.addEventListener('keydown', function (evt) {
-    if (window.keyboard.isEnterPressed(evt)) {
+  // Установить обработчик клика клавиши у главного пина
+  mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
+    if (Utils.isEnterPressed(evt)) {
       activateMap();
     }
   });

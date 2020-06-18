@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  var Constant = window.Constant;
+  var Coords = window.Coords;
+  var Randomazier = window.Randomazier;
+
   var MIN_FEATURES = 2;
   var AVATARS_COUNT = 8;
 
@@ -20,8 +24,6 @@
     min: 1,
     max: 10,
   };
-
-  var bookingTypes = window.Constant.bookingTypes;
 
   var descriptions = [
     'Великолепный вариан в центре Токио. Подходит как туристам, так и бизнесменам. Дом полностью укомплектован и имеет свежий ремонт.',
@@ -60,7 +62,7 @@
   function generateTitle(type) {
     var REPLACE = 'object';
 
-    return window.utils.getRandomArrValue(titles).replace(REPLACE, type);
+    return Randomazier.getRandomArrValue(titles).replace(REPLACE, type);
   }
 
   /**
@@ -68,31 +70,31 @@
    */
 
   function generateOrder(order, index) {
-    var coordsOrder = window.coords.set(
-        window.utils.getRandomInt(window.Constant.MAP_MIN_X, window.Constant.MAP_MAX_X),
-        window.utils.getRandomInt(window.Constant.MAP_MIN_Y, window.Constant.MAP_MAX_Y)
+    var coordsOrder = Coords.set(
+        Randomazier.getRandomInt(Constant.MAP_MIN_X, Constant.MAP_MAX_X),
+        Randomazier.getRandomInt(Constant.MAP_MIN_Y, Constant.MAP_MAX_Y)
     );
 
-    coordsOrder = window.coords.convertToLocation(coordsOrder);
+    coordsOrder = Coords.convertToLocation(coordsOrder);
 
-    var offerType = window.utils.getRandomArrValue(Object.keys(bookingTypes));
+    var offerType = Randomazier.getRandomArrValue(Object.keys(Constant.bookingTypes));
 
     order = {
       'author': {
         'avatar': 'img/avatars/' + (index < AVATARS_COUNT ? 'user0' + (index + 1) : 'default') + '.png',
       },
       'offer': {
-        'title': generateTitle(bookingTypes[offerType].title),
+        'title': generateTitle(Constant.bookingTypes[offerType].title),
         'address': coordsOrder.x + ', ' + coordsOrder.y,
-        'price': window.utils.getRandomInt(price.min, price.max),
+        'price': Randomazier.getRandomInt(price.min, price.max),
         'type': offerType,
-        'rooms': window.utils.getRandomInt(rooms.min, rooms.max),
-        'guests': window.utils.getRandomInt(guests.min, guests.max),
-        'checkin': window.utils.getRandomArrValue(timePeriods),
-        'checkout': window.utils.getRandomArrValue(timePeriods),
-        'features': window.utils.getRandomArr(features, window.utils.getRandomInt(MIN_FEATURES, features.length)),
-        'description': window.utils.getRandomArrValue(descriptions),
-        'photos': window.utils.getRandomArr(photos, window.utils.getRandomInt(1, photos.length + 1)),
+        'rooms': Randomazier.getRandomInt(rooms.min, rooms.max),
+        'guests': Randomazier.getRandomInt(guests.min, guests.max),
+        'checkin': Randomazier.getRandomArrValue(timePeriods),
+        'checkout': Randomazier.getRandomArrValue(timePeriods),
+        'features': Randomazier.getRandomArr(features, Randomazier.getRandomInt(MIN_FEATURES, features.length)),
+        'description': Randomazier.getRandomArrValue(descriptions),
+        'photos': Randomazier.getRandomArr(photos, Randomazier.getRandomInt(1, photos.length + 1)),
       },
       'location': {
         'x': coordsOrder.x,
