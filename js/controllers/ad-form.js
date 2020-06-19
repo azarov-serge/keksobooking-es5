@@ -145,8 +145,8 @@
    */
 
   AdFormController.prototype._adFormSubmitHandler = function (evt) {
-    evt.preventDefault();
     if (evt.target.checkValidity()) {
+      evt.preventDefault();
       evt.target.action = window.Constant.Url.UPLOAD;
     }
   };

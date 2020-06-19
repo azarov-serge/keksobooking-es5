@@ -97,12 +97,14 @@
 
   MapPinsController.prototype.__mainPinClickHandler = function (evt) {
     if (this._isPinClicked(evt.target)) {
+      evt.preventDefault();
       this._renderActiveCardAndActivatePin(evt.target.dataset.orderIndex || evt.target.parentElement.dataset.orderIndex);
     }
   };
 
   MapPinsController.prototype.__mainPinKeyDownHandler = function (evt) {
     if (Util.isEnterPressed(evt)) {
+      evt.preventDefault();
       this._mainPinClickHandler(evt);
     }
   };

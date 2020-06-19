@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var Util = window.Util;
+  var CoordsUtil = window.CoordsUtil;
 
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
@@ -17,18 +18,21 @@
   // Контроллер формы
   var adFormController = new window.AdFormController(adFormConponent);
   // Координаты главного пина
-  var mainPinCoords = null;
+  var coordsMainPin = null;
+  var coordsEvt = {x: 0, y: 0};
+  var coordsShift = {x: 0, y: 0};
+
 
   /**
    * @description Активация карты
    */
   function activateMap() {
-    // Получить координаты главного пина
-    mainPinCoords = mapPinsController.getMainPinCoords();
-    // Установить координаты в форму
-    adFormController.setAddress(mainPinCoords);
     // Если карта не активирована, активировать
     if (!mainMapComponent.isActivate()) {
+      // Получить координаты главного пина
+      coordsMainPin = mapPinsController.getMainPinCoords();
+      // Установить адресс в форму
+      adFormController.setAddress(coordsMainPin);
       // Переключить состояние карты на активное
       mainMapComponent.toggleState();
       // Переключить форму в активное состояние
@@ -46,25 +50,62 @@
     }
   }
 
+  function mapPinsMouseDownHandler(evt) {
+    activateMap();
+    // Зафиксировать текущие координаты главного пина
+    coordsEvt.x = evt.clientX;
+    coordsEvt.y = evt.clientY;
+    // Активировать обработчик события на перемещение мыши у главного пина
+    document.addEventListener('mousemove', mainPinMouseMoveHandler);
+    // Активировать обработчик события на отпускание клавиши мыши у главного пина
+    document.addEventListener('mouseup', mainPinMouseUpHandler);
+  }
+
+  function mainPinMouseMoveHandler(evt) {
+    evt.preventDefault();
+    // Расчитать смещение главного пина
+    coordsShift.x = coordsEvt.x - evt.clientX;
+    coordsShift.y = coordsEvt.y - evt.clientY;
+    // Зафиксировать текущие координаты главного пина
+    coordsEvt.x = evt.clientX;
+    coordsEvt.y = evt.clientY;
+    // Вычислить координаты главного пина в допустимых пределах карты
+    coordsMainPin.x = CoordsUtil.setX(mapPinsComponent.getMainPin().offsetLeft - coordsShift.x);
+    coordsMainPin.y = CoordsUtil.setY(mapPinsComponent.getMainPin().offsetTop - coordsShift.y);
+    // Установить координаты главного пина в допустимых пределах карты
+    mapPinsComponent.getMainPin().style.left = coordsMainPin.x + 'px';
+    mapPinsComponent.getMainPin().style.top = coordsMainPin.y + 'px';
+    // Установить адресс в форму
+    adFormController.setAddress(coordsMainPin);
+  }
+
+  function mainPinMouseUpHandler(evt) {
+    evt.preventDefault();
+    document.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    document.removeEventListener('mouseup', mainPinMouseUpHandler);
+  }
+
   // Активировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
   mapPinsController.activate();
   // Получить координаты главного пина утсановленные по умолчанию
-  mainPinCoords = mapPinsController.getMainPinDefaultCoords();
+  coordsMainPin = mapPinsController.getMainPinDefaultCoords();
   // Активировать контроллер формы объявлений
   adFormController.activate();
   // Установить адрес на форму объявлений
-  adFormController.setAddress(mainPinCoords);
+  adFormController.setAddress(coordsMainPin);
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
     if (Util.isLeftMouseButtonPressed(evt)) {
-      activateMap();
+      evt.preventDefault();
+      mapPinsMouseDownHandler(evt);
     }
   });
 
   // Установить обработчик клика клавиши у главного пина
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
     if (Util.isEnterPressed(evt)) {
+      evt.preventDefault();
       activateMap();
     }
   });

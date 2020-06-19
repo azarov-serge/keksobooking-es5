@@ -159,6 +159,7 @@
 
   CardComponent.prototype.__documentKeyDownEscHandler = function (evt) {
     if (Util.isEscPressed(evt)) {
+      evt.preventDefault();
       this.__closeCardClickHandler();
     }
   };
