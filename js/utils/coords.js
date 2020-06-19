@@ -62,8 +62,8 @@
 
   function convertToLocation(obj) {
     return {
-      x: obj.x + Math.floor(Constant.MAIN_PIN_WIDTH / 2),
-      y: obj.y + Constant.MAIN_PIN_HEIGHT
+      x: Math.floor(obj.x + Constant.MAIN_PIN_WIDTH / 2),
+      y: Math.floor(obj.y + Constant.MAIN_PIN_HEIGHT),
     };
   }
 
@@ -73,8 +73,8 @@
 
   function convertFromLocation(obj) {
     return {
-      x: obj.x - Math.floor(Constant.PIN_WIDTH / 2),
-      y: obj.y - Constant.PIN_HEIGHT,
+      x: Math.floor(obj.x - Constant.PIN_WIDTH / 2),
+      y: Math.floor(obj.y - Constant.PIN_HEIGHT),
     };
   }
 
