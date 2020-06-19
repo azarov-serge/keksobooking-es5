@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var AbsctractElement = window.AbsctractElement;
+
   var MainMapClass = {
     MAIN_MAP: '.map',
     TOGGLE_CLASS: 'map--faded',
@@ -8,7 +10,7 @@
   };
 
   function MainMapComponent() {
-    window.AbsctractElement.call(this);
+    AbsctractElement.call(this);
     this._SELECTOR = MainMapClass.MAIN_MAP;
     this._TOGGLE_CLASS = MainMapClass.TOGGLE_CLASS;
     this._$container = document;
@@ -16,7 +18,7 @@
     this._$mapFilter = null;
   }
 
-  MainMapComponent.prototype = Object.create(window.AbsctractElement.prototype);
+  MainMapComponent.prototype = Object.create(AbsctractElement.prototype);
   MainMapComponent.prototype.constructor = MainMapComponent;
 
   MainMapComponent.prototype.getMapFilterContainer = function () {

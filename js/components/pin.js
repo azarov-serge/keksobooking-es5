@@ -1,16 +1,17 @@
 'use strict';
 (function () {
+  var AbsctractComponent = window.AbsctractComponent;
   var CoordsUtil = window.CoordsUtil;
 
   function PinComponent(data, index) {
-    window.AbsctractComponent.call(this);
+    AbsctractComponent.call(this);
     this._data = data;
     this._index = index;
     this._TOGGLE_CLASS = 'map__pin--active';
     this.onClickPin = null;
   }
 
-  PinComponent.prototype = Object.create(window.AbsctractComponent.prototype);
+  PinComponent.prototype = Object.create(AbsctractComponent.prototype);
   PinComponent.prototype.constructor = PinComponent;
 
   PinComponent.prototype._getTemplate = function () {

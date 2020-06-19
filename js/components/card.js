@@ -1,19 +1,20 @@
 'use strict';
 (function () {
+  var AbsctractComponent = window.AbsctractComponent;
   var Constant = window.Constant;
   var Util = window.Util;
 
   var HIDE_CLASS = 'hidden';
 
   function CardComponent(data) {
-    window.AbsctractComponent.call(this);
+    AbsctractComponent.call(this);
     this._data = data;
     this._closeCardClickHandler = this.__closeCardClickHandler.bind(this);
     this._documentKeyDownEscHandler = this.__documentKeyDownEscHandler.bind(this);
     this._closeCard = null;
   }
 
-  CardComponent.prototype = Object.create(window.AbsctractComponent.prototype);
+  CardComponent.prototype = Object.create(AbsctractComponent.prototype);
   CardComponent.prototype.constructor = CardComponent;
 
   CardComponent.prototype._getTemplate = function () {

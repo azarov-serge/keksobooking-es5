@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var AbsctractElement = window.AbsctractElement;
+
   var AdFormClass = {
     AD_FORM: '.ad-form',
     TOGGLE_CLASS: 'ad-form--disabled',
@@ -18,7 +20,7 @@
   };
 
   function AdFormComponent() {
-    window.AbsctractElement.call(this);
+    AbsctractElement.call(this);
     this._SELECTOR = AdFormClass.AD_FORM;
     this._TOGGLE_CLASS = AdFormClass.TOGGLE_CLASS;
     this._$adTitle = null;
@@ -34,7 +36,7 @@
     this._$fieldsets = null;
   }
 
-  AdFormComponent.prototype = Object.create(window.AbsctractElement.prototype);
+  AdFormComponent.prototype = Object.create(AbsctractElement.prototype);
   AdFormComponent.prototype.constructor = AdFormComponent;
 
   AdFormComponent.prototype.getAdTitle = function () {
