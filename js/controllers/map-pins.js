@@ -17,14 +17,20 @@
     this._pinComponents = [];
     this._activePinComponent = null;
     this._activeCardComponent = null;
-    this._mainPinClickHandler = this.__mainPinClickHandler.bind(this);
-    this._mainPinKeyDownHandler = this.__mainPinKeyDownHandler.bind(this);
     this._$cardContainer = null;
     this._$cardPlace = null;
   }
 
   MapPinsController.prototype.activate = function () {
     this.setDefaultMainPin();
+    this._setMapPinsClickHandler();
+  };
+
+  MapPinsController.prototype.deactivate = function () {
+    this.setDefaultMainPin();
+    this.removePins();
+    this._removeActiveCard();
+    this._mapPinsComponent.removeMainMapListeners();
   };
 
   MapPinsController.prototype.setDefaultMainPin = function () {
@@ -78,11 +84,6 @@
     this._$cardPlace = $cardPlace;
   };
 
-  MapPinsController.prototype.deactivate = function () {
-    this._mapPinsComponent.getElement().removeEventListener('click', this._mainPinClickHandler);
-    this._mapPinsComponent.getElement().removeEventListener('keydown', this._mainPinKeyDownHandler);
-  };
-
   MapPinsController.prototype._createPinsComponents = function () {
     this._pinComponents = this._ordersModel.getOrders().map(function (order, index) {
       var pinComponent = new window.PinComponent(order, index);
@@ -91,18 +92,18 @@
   };
 
   MapPinsController.prototype._setMapPinsClickHandler = function () {
-    this._mapPinsComponent.getElement().addEventListener('click', this._mainPinClickHandler);
-    this._mapPinsComponent.getElement().addEventListener('keydown', this._mainPinKeyDownHandler);
+    this._mapPinsComponent.mainPinClickHandler = this._mainPinClickHandler.bind(this);
+    this._mapPinsComponent.mainPinKeyDownHandler = this._mainPinKeyDownHandler.bind(this);
   };
 
-  MapPinsController.prototype.__mainPinClickHandler = function (evt) {
+  MapPinsController.prototype._mainPinClickHandler = function (evt) {
     if (this._isPinClicked(evt.target)) {
       evt.preventDefault();
       this._renderActiveCardAndActivatePin(evt.target.dataset.orderIndex || evt.target.parentElement.dataset.orderIndex);
     }
   };
 
-  MapPinsController.prototype.__mainPinKeyDownHandler = function (evt) {
+  MapPinsController.prototype._mainPinKeyDownHandler = function (evt) {
     if (Util.isEnterPressed(evt)) {
       evt.preventDefault();
       this._mainPinClickHandler(evt);

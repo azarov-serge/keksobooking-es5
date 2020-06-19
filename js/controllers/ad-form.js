@@ -1,7 +1,6 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
-  var CoordsUtil = window.CoordsUtil;
 
   // Индекс значения по умолчанию
   var DefaultIndex = {
@@ -34,7 +33,18 @@
     this.setDefaultValues();
   };
 
-  AdFormController.prototype.run = function () {
+  AdFormController.prototype.deactivate = function () {
+    this._adFormComponent.toggleState();
+    // Установить значение по умолчанию
+    this.setDefaultValues();
+    // Удалить обработчики событий валидации
+    this.stopValidity();
+    // Удалить обработчик отправки формы
+    this._adFormComponent.removeAdFormSubmitListener();
+    // this._adFormConponent.removeAdFormResetListener(); // Почему не удаляется? Говорит нет такого метода
+  };
+
+  AdFormController.prototype.runValidity = function () {
     // Сделать поле адреес недоступным ("валидация" подя по ТЗ)
     this._adFormComponent.getAdAddress().disabled = true;
     // Установить валидацию аватара, загрузка только JPEG и PNG
@@ -49,15 +59,13 @@
     this._setValidityHandlers();
     // Запустить обработчики событий для валидации формы
     this._adFormComponent.addAdFormValidityListeners();
-    // Установить функцию для события submit у формы
+    // Установить функцию для события отправки формы
     this._adFormComponent.adFormSubmitHandler = this._adFormSubmitHandler.bind(this);
-    // Запустить обработчики событий для отправки формы
+    // Запустить обработчики события для отправки формы
     this._adFormComponent.addAdFormSubmitListener();
   };
 
-  AdFormController.prototype.stop = function () {
-    // Установить значение по умолчанию
-    this.setDefaultValues();
+  AdFormController.prototype.stopValidity = function () {
     // Удалить обработчики событий для валидации формы
     this._adFormComponent.removeAdFormValidityListeners();
     // Удалить обработчик событий для отправки формы
@@ -65,22 +73,28 @@
   };
 
   AdFormController.prototype.setAddress = function (coords) {
-    coords = CoordsUtil.convertToLocation(coords);
     this._adFormComponent.getAdAddress().value = coords.x + ', ' + coords.y;
   };
 
   AdFormController.prototype.setDefaultValues = function () {
     // Значения по умолчанию
     var Default = {
-      TITLE: '',
+      EMPTY_STRING: '',
       ROOMS: this._adFormComponent.getAdRooms()[DefaultIndex.ROOMS].value,
       TYPE: this._adFormComponent.getAdType()[DefaultIndex.TYPE].value,
       CHECK_IN: this._adFormComponent.getAdCheckIn()[DefaultIndex.CHECK_IN].value,
-      DESCRIPTION: '',
     };
 
+    function toggleDefaultFeature($feature) {
+      $feature.checked = false;
+    }
+
+    // Установить значение аватара по умолчанию
+    this._adFormComponent.getAdAvatar().value = Default.EMPTY_STRING;
+    // Установить значения изображений по умолчанию
+    this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
     // Установить заголовок объявления по умолчанию
-    this._adFormComponent.getAdTitle().textContent = Default.TITLE;
+    this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
     // Установить значение фильтра количество комнат по умолчанию
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
     // Установить значение количества фильтров в соответствии с количеством комнат
@@ -96,7 +110,9 @@
     // Установить время выезда, в зависимости от времени заезда
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
     // Установить текст объявления по умолчанию
-    this._adFormComponent.getAdDescription().textContent = Default.TITLE;
+    this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
+    // Установить по умолчанию удобства
+    this._adFormComponent._getFeatures().forEach(toggleDefaultFeature);
   };
 
   AdFormController.prototype._setValidityHandlers = function () {

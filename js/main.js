@@ -22,6 +22,16 @@
   var coordsEvt = CoordsUtil.create();
   var coordsShift = CoordsUtil.create();
 
+  /**
+   * @description Устанавливает значение пина по умолчанию в поле адресс формы
+   */
+
+  function setDefaultCoordsToForm() {
+    // Получить координаты главного пина утсановленные по умолчанию
+    coordsMainPin = mapPinsController.getMainPinDefaultCoords();
+    // Установить адрес на форму объявлений
+    adFormController.setAddress(coordsMainPin);
+  }
 
   /**
    * @description Активация карты
@@ -37,8 +47,8 @@
       mainMapComponent.toggleState();
       // Переключить форму в активное состояние
       adFormConponent.toggleState();
-      // Запустить слушателей по валидации формы
-      adFormController.run();
+      // Запустить валидацию формы
+      adFormController.runValidity();
       // Положить данные в модель данных
       ordersModel.setOrders(orders);
       // Отрисовать пины на карте
@@ -47,7 +57,29 @@
       mapPinsController.setCardContainer(mainMapComponent.getElement());
       // Установить место, куда отрисовывать карточку
       mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
+      // Запустить обработчики событий контейнера с пинами
+      mapPinsComponent.addMainMapListeners();
+      // Установить callbak для обработчика события кнопки reset
+      adFormConponent.adFormResetHandler = deactivateMap;
+      // Запустить обработчики события кнопки reset
+      adFormConponent.addAdFormResetListener();
     }
+  }
+
+  /**
+   * @description Деактивация карты
+   */
+
+  function deactivateMap(evt) {
+    evt.preventDefault();
+    // Переключить состояние карты на неактивное
+    mainMapComponent.toggleState();
+    // Установить значение пина по умолчанию в поле адресс формы
+    setDefaultCoordsToForm();
+    // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
+    mapPinsController.deactivate();
+    // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
+    adFormController.deactivate();
   }
 
   function mapPinsMouseDownHandler(evt) {
@@ -75,6 +107,8 @@
     // Установить координаты главного пина в допустимых пределах карты
     mapPinsComponent.getMainPin().style.left = coordsMainPin.x + 'px';
     mapPinsComponent.getMainPin().style.top = coordsMainPin.y + 'px';
+    // Сконвертировать координаты в адресс
+    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
     // Установить адресс в форму
     adFormController.setAddress(coordsMainPin);
   }
@@ -87,12 +121,10 @@
 
   // Активировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
   mapPinsController.activate();
-  // Получить координаты главного пина утсановленные по умолчанию
-  coordsMainPin = mapPinsController.getMainPinDefaultCoords();
   // Активировать контроллер формы объявлений
   adFormController.activate();
-  // Установить адрес на форму объявлений
-  adFormController.setAddress(coordsMainPin);
+  // Установить значение пина по умолчанию в поле адресс формы
+  setDefaultCoordsToForm();
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {

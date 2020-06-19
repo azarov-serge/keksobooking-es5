@@ -2,7 +2,7 @@
 (function () {
   var AbsctractElement = window.AbsctractElement;
 
-  var AdFormClass = {
+  var AdFormSelector = {
     AD_FORM: '.ad-form',
     TOGGLE_CLASS: 'ad-form--disabled',
     AD_TITLE: '#title',
@@ -16,13 +16,15 @@
     AD_CHECK_IN: '#timein',
     AD_CHECK_OUT: '#timeout',
     AD_DESCRIPTION: '#description',
+    AD_RESET_BTN: '.ad-form__reset',
+    AD_FEATURE: '.feature__checkbox',
     FIELDSET: 'fieldset',
   };
 
   function AdFormComponent() {
     AbsctractElement.call(this);
-    this._SELECTOR = AdFormClass.AD_FORM;
-    this._TOGGLE_CLASS = AdFormClass.TOGGLE_CLASS;
+    this._SELECTOR = AdFormSelector.AD_FORM;
+    this._TOGGLE_CLASS = AdFormSelector.TOGGLE_CLASS;
     this._$adTitle = null;
     this._$adAvatar = null;
     this._$adAddress = null;
@@ -33,6 +35,8 @@
     this._$adType = null;
     this._$adCheckIn = null;
     this._$adCheckOut = null;
+    this._$adResetBtn = null;
+    this._$features = null;
     this._$fieldsets = null;
     this.adRoomsChangeHandler = null;
     this.adTypeChangeHandler = null;
@@ -46,51 +50,59 @@
   AdFormComponent.prototype.constructor = AdFormComponent;
 
   AdFormComponent.prototype.getAdTitle = function () {
-    return this.getCustomElement(this._$adTitle, AdFormClass.AD_TITLE, this.getElement());
+    return this.getCustomElement(this._$adTitle, AdFormSelector.AD_TITLE, this.getElement());
   };
 
   AdFormComponent.prototype.getAdAvatar = function () {
-    return this.getCustomElement(this._$adAvatar, AdFormClass.AD_AFATAR, this.getElement());
+    return this.getCustomElement(this._$adAvatar, AdFormSelector.AD_AFATAR, this.getElement());
   };
 
   AdFormComponent.prototype.getAdAddress = function () {
-    return this.getCustomElement(this._$adAddress, AdFormClass.AD_ADDRESS, this.getElement());
+    return this.getCustomElement(this._$adAddress, AdFormSelector.AD_ADDRESS, this.getElement());
   };
 
   AdFormComponent.prototype.getAdRooms = function () {
-    return this.getCustomElement(this._$adRoom, AdFormClass.AD_ROOM, this.getElement());
+    return this.getCustomElement(this._$adRoom, AdFormSelector.AD_ROOM, this.getElement());
   };
 
   AdFormComponent.prototype.getAdGuests = function () {
-    return this.getCustomElement(this._$adGuest, AdFormClass.AD_GUEST, this.getElement());
+    return this.getCustomElement(this._$adGuest, AdFormSelector.AD_GUEST, this.getElement());
   };
 
   AdFormComponent.prototype.getAdImages = function () {
-    return this.getCustomElement(this._$adImage, AdFormClass.AD_IMAGE, this.getElement());
+    return this.getCustomElement(this._$adImage, AdFormSelector.AD_IMAGE, this.getElement());
   };
 
   AdFormComponent.prototype.getAdPrice = function () {
-    return this.getCustomElement(this._$adPrice, AdFormClass.AD_PRICE, this.getElement());
+    return this.getCustomElement(this._$adPrice, AdFormSelector.AD_PRICE, this.getElement());
   };
 
   AdFormComponent.prototype.getAdType = function () {
-    return this.getCustomElement(this._$adType, AdFormClass.AD_TYPE, this.getElement());
+    return this.getCustomElement(this._$adType, AdFormSelector.AD_TYPE, this.getElement());
   };
 
   AdFormComponent.prototype.getAdCheckIn = function () {
-    return this.getCustomElement(this._$adCheckIn, AdFormClass.AD_CHECK_IN, this.getElement());
+    return this.getCustomElement(this._$adCheckIn, AdFormSelector.AD_CHECK_IN, this.getElement());
   };
 
   AdFormComponent.prototype.getAdCheckOut = function () {
-    return this.getCustomElement(this._$adCheckOut, AdFormClass.AD_CHECK_OUT, this.getElement());
+    return this.getCustomElement(this._$adCheckOut, AdFormSelector.AD_CHECK_OUT, this.getElement());
   };
 
   AdFormComponent.prototype.getAdDescription = function () {
-    return this.getCustomElement(this._$adCheckOut, AdFormClass.AD_DESCRIPTION, this.getElement());
+    return this.getCustomElement(this._$adCheckOut, AdFormSelector.AD_DESCRIPTION, this.getElement());
+  };
+
+  AdFormComponent.prototype.getAdResetBtn = function () {
+    return this.getCustomElement(this._$adResetBtn, AdFormSelector.AD_RESET_BTN, this.getElement());
+  };
+
+  AdFormComponent.prototype._getFeatures = function () {
+    return this.getCustomElements(this._$features, AdFormSelector.AD_FEATURE, this.getElement());
   };
 
   AdFormComponent.prototype._getFieldsets = function () {
-    return this.getCustomElements(this._$fieldsets, AdFormClass.FIELDSET, this.getElement());
+    return this.getCustomElements(this._$fieldsets, AdFormSelector.FIELDSET, this.getElement());
   };
 
   AdFormComponent.prototype.toggleStateFieldsets = function () {
@@ -131,11 +143,11 @@
 
 
   AdFormComponent.prototype.addAdFormResetListener = function () {
-    this.getElement().addEventListener('reset', this.adFormResetHandler);
+    this.getAdResetBtn().addEventListener('click', this.adFormResetHandler);
   };
 
   AdFormComponent.prototype.removeAdFormResetListener = function () {
-    this.getElement().removeEventListener('reset', this.adFormResetHandler);
+    this.getAdResetBtn().removeEventListener('click', this.adFormResetHandler);
   };
 
   window.AdFormComponent = AdFormComponent;
