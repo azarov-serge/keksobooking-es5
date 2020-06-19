@@ -77,14 +77,14 @@
 
     coordsOrder = CoordsUtil.convertToLocation(coordsOrder);
 
-    var offerType = Randomazier.getRandomArrValue(Object.keys(Constant.bookingTypes));
+    var offerType = Randomazier.getRandomArrValue(Object.keys(Constant.bookingType));
 
     order = {
       'author': {
         'avatar': 'img/avatars/' + (index < AVATARS_COUNT ? 'user0' + (index + 1) : 'default') + '.png',
       },
       'offer': {
-        'title': generateTitle(Constant.bookingTypes[offerType].title),
+        'title': generateTitle(Constant.bookingType[offerType].title),
         'address': coordsOrder.x + ', ' + coordsOrder.y,
         'price': Randomazier.getRandomInt(price.min, price.max),
         'type': offerType,

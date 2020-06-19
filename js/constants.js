@@ -14,7 +14,7 @@
       LOAD: ' https://javascript.pages.academy/keksobooking/data',
       UPLOAD: 'https://javascript.pages.academy/keksobooking',
     },
-    bookingTypes: {
+    bookingType: {
       palace: {
         title: 'Дворец',
         minPrice: 10000,

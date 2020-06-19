@@ -115,7 +115,7 @@
     setText(
         this._data.offer.type,
         '.popup__type',
-        this._data.offer.type ? Constant.bookingTypes[this._data.offer.type].title : ''
+        this._data.offer.type ? Constant.bookingType[this._data.offer.type].title : ''
     );
 
     // Установить количество гостей и комнат, если есть
