@@ -19,8 +19,8 @@
   var adFormController = new window.AdFormController(adFormConponent);
   // Координаты главного пина
   var coordsMainPin = null;
-  var coordsEvt = {x: 0, y: 0};
-  var coordsShift = {x: 0, y: 0};
+  var coordsEvt = CoordsUtil.create();
+  var coordsShift = CoordsUtil.create();
 
 
   /**
