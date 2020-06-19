@@ -9,9 +9,8 @@
   function CardComponent(data) {
     AbsctractComponent.call(this);
     this._data = data;
-    this._closeCardClickHandler = this.__closeCardClickHandler.bind(this);
-    this._documentKeyDownEscHandler = this.__documentKeyDownEscHandler.bind(this);
-    this._closeCard = null;
+    this.closeCardClickHandler = null;
+    this.documentKeyDownHandler = null;
   }
 
   CardComponent.prototype = Object.create(AbsctractComponent.prototype);
@@ -147,22 +146,13 @@
     return $card;
   };
 
-  CardComponent.prototype.setCloseCardHandler = function (closeCardHandler) {
-    this._closeCard = closeCardHandler;
-    this.getElement().querySelector('.popup__close').addEventListener('click', this._closeCardClickHandler);
-    document.addEventListener('keydown', this._documentKeyDownEscHandler);
+  CardComponent.prototype.addCardListeners = function () {
+    this.getElement().addEventListener('click', this.closeCardClickHandler);
+    document.addEventListener('keydown', this.documentKeyDownHandler);
   };
 
-  CardComponent.prototype.__closeCardClickHandler = function () {
-    this._closeCard();
-    document.removeEventListener('keydown', this._documentKeyDownEscHandler);
-  };
-
-  CardComponent.prototype.__documentKeyDownEscHandler = function (evt) {
-    if (Util.isEscPressed(evt)) {
-      evt.preventDefault();
-      this.__closeCardClickHandler();
-    }
+  CardComponent.prototype.removeCardListeners = function () {
+    document.removeEventListener('keydown', this.documentKeyDownHandler);
   };
 
   window.CardComponent = CardComponent;

@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var Constant = {
-    ORDER_COUNT: 8,
+    ORDERS_COUNT: 5,
     PIN_WIDTH: 50,
     PIN_HEIGHT: 70,
     MAIN_PIN_WIDTH: 65,

@@ -2,9 +2,10 @@
 (function () {
   var Util = window.Util;
   var CoordsUtil = window.CoordsUtil;
+  var ORDERS_COUNT = 8;
 
   // Массив объявлений
-  var orders = window.generateOrders(window.Constant.ORDER_COUNT);
+  var orders = window.generateOrders(ORDERS_COUNT);
   // Модель с объявлениями
   var ordersModel = new window.OrdersModel();
   // Карта страницы
@@ -19,7 +20,9 @@
   var adFormController = new window.AdFormController(adFormConponent);
   // Координаты главного пина
   var coordsMainPin = null;
+  // Координаты события
   var coordsEvt = CoordsUtil.create();
+  // Сдвиг координат главного пина
   var coordsShift = CoordsUtil.create();
 
   /**
@@ -36,6 +39,7 @@
   /**
    * @description Активация карты
    */
+
   function activateMap() {
     // Если карта не активирована, активировать
     if (!mainMapComponent.isActivate()) {
@@ -67,6 +71,7 @@
   }
 
   /**
+   * @param {Object} evt Событие
    * @description Деактивация карты
    */
 

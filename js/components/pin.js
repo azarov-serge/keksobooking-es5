@@ -8,7 +8,6 @@
     this._data = data;
     this._index = index;
     this._TOGGLE_CLASS = 'map__pin--active';
-    this.onClickPin = null;
   }
 
   PinComponent.prototype = Object.create(AbsctractComponent.prototype);
