@@ -38,7 +38,7 @@
       // Переключить форму в активное состояние
       adFormConponent.toggleState();
       // Запустить слушателей по валидации формы
-      adFormController.startValidate();
+      adFormController.run();
       // Положить данные в модель данных
       ordersModel.setOrders(orders);
       // Отрисовать пины на карте

@@ -34,6 +34,12 @@
     this._$adCheckIn = null;
     this._$adCheckOut = null;
     this._$fieldsets = null;
+    this.adRoomsChangeHandler = null;
+    this.adTypeChangeHandler = null;
+    this.adCheckInChangeHandler = null;
+    this.adCheckOutChangeHandler = null;
+    this.adFormSubmitHandler = null;
+    this.adFormResetHandler = null;
   }
 
   AdFormComponent.prototype = Object.create(AbsctractElement.prototype);
@@ -101,24 +107,35 @@
     return !this._getFieldsets()[0].disabled;
   };
 
-  AdFormComponent.prototype.setAdRoomsChangeHandler = function (adRoomsChangeHandler) {
-    this.getAdRooms().addEventListener('change', adRoomsChangeHandler);
+  AdFormComponent.prototype.addAdFormValidityListeners = function () {
+    this.getAdRooms().addEventListener('change', this.adRoomsChangeHandler);
+    this.getAdType().addEventListener('change', this.adTypeChangeHandler);
+    this.getAdCheckIn().addEventListener('change', this.adCheckInChangeHandler);
+    this.getAdCheckOut().addEventListener('change', this.adCheckOutChangeHandler);
   };
 
-  AdFormComponent.prototype.setAdTypeChangeHandler = function (adTypeChangeHandler) {
-    this.getAdType().addEventListener('change', adTypeChangeHandler);
+  AdFormComponent.prototype.removeAdFormValidityListeners = function () {
+    this.getAdRooms().removeEventListener('change', this.adRoomsChangeHandler);
+    this.getAdType().removeEventListener('change', this.adTypeChangeHandler);
+    this.getAdCheckIn().removeEventListener('change', this.adCheckInChangeHandler);
+    this.getAdCheckOut().removeEventListener('change', this.adCheckOutChangeHandler);
   };
 
-  AdFormComponent.prototype.setAdCheckInChangeHandler = function (adCheckInChangeHandler) {
-    this.getAdCheckIn().addEventListener('change', adCheckInChangeHandler);
+  AdFormComponent.prototype.addAdFormSubmitListener = function () {
+    this.getElement().addEventListener('submit', this.adFormSubmitHandler);
   };
 
-  AdFormComponent.prototype.setAdCheckOutChangeHandler = function (adCheckOutChangeHandler) {
-    this.getAdCheckOut().addEventListener('change', adCheckOutChangeHandler);
+  AdFormComponent.prototype.removeAdFormSubmitListener = function () {
+    this.getElement().removeEventListener('submit', this.adFormSubmitHandler);
   };
 
-  AdFormComponent.prototype.setAdFormSubmitHandler = function (adFormSubmitHandler) {
-    this.getElement().addEventListener('submit', adFormSubmitHandler);
+
+  AdFormComponent.prototype.addAdFormResetListener = function () {
+    this.getElement().addEventListener('reset', this.adFormResetHandler);
+  };
+
+  AdFormComponent.prototype.removeAdFormResetListener = function () {
+    this.getElement().removeEventListener('reset', this.adFormResetHandler);
   };
 
   window.AdFormComponent = AdFormComponent;

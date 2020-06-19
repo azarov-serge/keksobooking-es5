@@ -25,36 +25,43 @@
   }
 
   AdFormController.prototype.activate = function () {
-    // Синхронизация fieldsets и form
+    // Синхронизировать fieldsets и form
     if (this._adFormComponent.isActivate() !== this._adFormComponent.isActivateFieldsets()) {
       this._adFormComponent.toggleStateFieldsets();
     }
 
-    // Установка значений по умолчанию
+    // Установить значение по умолчанию
     this.setDefaultValues();
   };
 
-  AdFormController.prototype.startValidate = function () {
-    // Дизейблим для корректной валидации
+  AdFormController.prototype.run = function () {
+    // Сделать поле адреес недоступным ("валидация" подя по ТЗ)
     this._adFormComponent.getAdAddress().disabled = true;
-    // Для валидации аватара, загрузка только JPEG и PNG
+    // Установить валидацию аватара, загрузка только JPEG и PNG
     this._adFormComponent.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
-    // Для валидации изображений объявлений, загрузка только JPEG и PNG
+    // Установить валидацию изображений объявлений, загрузка только JPEG и PNG
     this._adFormComponent.getAdImages().accept = ValidateValue.IMAGES_TYPE;
-    // Для валидации, установка максимальной цены
+    // Установить валидацию, установка максимальной цены
     this._adFormComponent.getAdPrice().max = ValidateValue.MAX_PRICE;
-    // Установка валидации заголовка объявления
+    // Установить валидацию заголовка объявления
     this._setValidityTitle();
-    // Установка валидации количества комнат
-    this._adFormComponent.setAdRoomsChangeHandler(this._adRoomsChangeHandler.bind(this));
-    // Установка валидации цены от типа
-    this._adFormComponent.setAdTypeChangeHandler(this._adTypeChangeHandler.bind(this));
-    // Установка валидации времени заезда
-    this._adFormComponent.setAdCheckInChangeHandler(this._adCheckInChangeHandler.bind(this));
-    // Установка валидации времени заезда
-    this._adFormComponent.setAdCheckOutChangeHandler(this._adCheckOutChangeHandler.bind(this));
-    // Установка функции для события submit у формы
-    this._adFormComponent.setAdFormSubmitHandler(this._adFormSubmitHandler.bind(this));
+    // Установить функцию для обработчиков событий валидации
+    this._setValidityHandlers();
+    // Запустить обработчики событий для валидации формы
+    this._adFormComponent.addAdFormValidityListeners();
+    // Установить функцию для события submit у формы
+    this._adFormComponent.adFormSubmitHandler = this._adFormSubmitHandler.bind(this);
+    // Запустить обработчики событий для отправки формы
+    this._adFormComponent.addAdFormSubmitListener();
+  };
+
+  AdFormController.prototype.stop = function () {
+    // Установить значение по умолчанию
+    this.setDefaultValues();
+    // Удалить обработчики событий для валидации формы
+    this._adFormComponent.removeAdFormValidityListeners();
+    // Удалить обработчик событий для отправки формы
+    this._adFormComponent.removeAdFormSubmitListener();
   };
 
   AdFormController.prototype.setAddress = function (coords) {
@@ -74,9 +81,9 @@
 
     // Установить заголовок объявления по умолчанию
     this._adFormComponent.getAdTitle().textContent = Default.TITLE;
-    // Установка значений фильтра количество комнат по умолчанию
+    // Установить значение фильтра количество комнат по умолчанию
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
-    // Установка значений количества фильтров в соответствии с количеством комнат
+    // Установить значение количества фильтров в соответствии с количеством комнат
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
     // Отключить количетсво гостей, которые не прошли валидацию
     this._disabledGuestsValues(Default.ROOMS);
@@ -90,6 +97,17 @@
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
     // Установить текст объявления по умолчанию
     this._adFormComponent.getAdDescription().textContent = Default.TITLE;
+  };
+
+  AdFormController.prototype._setValidityHandlers = function () {
+    // Установить валидацию количества комнат
+    this._adFormComponent.adRoomsChangeHandler = this._adRoomsChangeHandler.bind(this);
+    // Установить валидацию цены от типа
+    this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
+    // Установить валидацию времени заезда
+    this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
+    // Установить валидацию времени заезда
+    this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
   };
 
   /**
