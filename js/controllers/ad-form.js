@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
-  var Coords = window.Coords;
+  var CoordsUtil = window.CoordsUtil;
 
   // Индекс значения по умолчанию
   var DefaultIndex = {
@@ -58,7 +58,7 @@
   };
 
   AdFormController.prototype.setAddress = function (coords) {
-    coords = Coords.convertToLocation(coords);
+    coords = CoordsUtil.convertToLocation(coords);
     this._adFormComponent.getAdAddress().value = coords.x + ', ' + coords.y;
   };
 

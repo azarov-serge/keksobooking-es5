@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
-  var Utils = window.Utils;
+  var Util = window.Util;
 
   var HIDE_CLASS = 'hidden';
 
@@ -92,7 +92,7 @@
           $photos.push($photo);
         }
         // Отрисовать все фотографии объявления
-        Utils.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
+        Util.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
       } else {
         // Если изображений нет, скрыть контейнер фотографий
         $photosContainer.classList.add(HIDE_CLASS);
@@ -124,9 +124,9 @@
         '.popup__text--capacity',
         (
           this._data.offer.rooms + ' '
-          + Utils.getWordEnd(this._data.offer.rooms, Constant.roomTexts)
+          + Util.getWordEnd(this._data.offer.rooms, Constant.roomTexts)
           + ' для ' + this._data.offer.guests + ' '
-          + Utils.getWordEnd(this._data.offer.guests, Constant.guestTexts)
+          + Util.getWordEnd(this._data.offer.guests, Constant.guestTexts)
         )
     );
     // Установить время заезда и время выезда, если есть
@@ -158,7 +158,7 @@
   };
 
   CardComponent.prototype.__documentKeyDownEscHandler = function (evt) {
-    if (Utils.isEscPressed(evt)) {
+    if (Util.isEscPressed(evt)) {
       this.__closeCardClickHandler();
     }
   };

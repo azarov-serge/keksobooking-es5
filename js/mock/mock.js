@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
-  var Coords = window.Coords;
+  var CoordsUtil = window.CoordsUtil;
   var Randomazier = window.Randomazier;
 
   var MIN_FEATURES = 2;
@@ -70,12 +70,12 @@
    */
 
   function generateOrder(order, index) {
-    var coordsOrder = Coords.set(
+    var coordsOrder = CoordsUtil.set(
         Randomazier.getRandomInt(Constant.MAP_MIN_X, Constant.MAP_MAX_X),
         Randomazier.getRandomInt(Constant.MAP_MIN_Y, Constant.MAP_MAX_Y)
     );
 
-    coordsOrder = Coords.convertToLocation(coordsOrder);
+    coordsOrder = CoordsUtil.convertToLocation(coordsOrder);
 
     var offerType = Randomazier.getRandomArrValue(Object.keys(Constant.bookingTypes));
 

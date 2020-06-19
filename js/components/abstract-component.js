@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var Utils = window.Utils;
+  var Util = window.Util;
 
   function AbsctractComponent() {
     this._$element = null;
@@ -31,7 +31,7 @@
   };
 
   AbsctractComponent.prototype.render = function ($container, place) {
-    Utils.render($container, this.getElement(), place);
+    Util.render($container, this.getElement(), place);
   };
 
   AbsctractComponent.prototype.remove = function () {

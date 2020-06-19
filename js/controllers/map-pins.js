@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var Coords = window.Coords;
-  var Utils = window.Utils;
+  var CoordsUtil = window.CoordsUtil;
+  var Util = window.Util;
 
   var Default = {
     MAIN_PIN_LEFT: 570,
@@ -40,7 +40,7 @@
   };
 
   MapPinsController.prototype.getMainPinCoords = function () {
-    return Coords.convertToCoords(
+    return CoordsUtil.convertToCoords(
         this._mapPinsComponent.getMainPin().style.left,
         this._mapPinsComponent.getMainPin().style.top
     );
@@ -59,7 +59,7 @@
       $pins.push(pinComponent.getElement());
     });
     // Отрисовать пины на карте
-    Utils.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
+    Util.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
     this._setMapPinsClickHandler();
   };
 
@@ -102,7 +102,7 @@
   };
 
   MapPinsController.prototype.__mainPinKeyDownHandler = function (evt) {
-    if (Utils.isEnterPressed(evt)) {
+    if (Util.isEnterPressed(evt)) {
       this._mainPinClickHandler(evt);
     }
   };

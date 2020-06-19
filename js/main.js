@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var Utils = window.Utils;
+  var Util = window.Util;
 
   // Массив объявлений
   var orders = window.generateOrders(window.Constant.ORDER_COUNT);
@@ -57,14 +57,14 @@
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
-    if (Utils.isLeftMouseButtonPressed(evt)) {
+    if (Util.isLeftMouseButtonPressed(evt)) {
       activateMap();
     }
   });
 
   // Установить обработчик клика клавиши у главного пина
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
-    if (Utils.isEnterPressed(evt)) {
+    if (Util.isEnterPressed(evt)) {
       activateMap();
     }
   });

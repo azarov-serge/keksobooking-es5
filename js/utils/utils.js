@@ -8,7 +8,7 @@
     ENTER: 13,
   };
 
-  var Utils = {
+  var Util = {
     render: render,
     getWordEnd: getWordEnd,
     isLeftMouseButtonPressed: isLeftMouseButtonPressed,
@@ -113,5 +113,5 @@
   function isEnterPressed(evt) {
     return evt.keyCode === KeyСode.ENTER;
   }
-  window.Utils = Utils;
+  window.Util = Util;
 })();

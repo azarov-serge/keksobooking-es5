@@ -2,7 +2,7 @@
 (function () {
   var Constant = window.Constant;
 
-  var Coords = {
+  var CoordsUtil = {
     create: create,
     setX: setX,
     setY: setY,
@@ -101,5 +101,5 @@
     return parseInt(String(coord).replace('px', ''), 10);
   }
 
-  window.Coords = Coords;
+  window.CoordsUtil = CoordsUtil;
 })();
