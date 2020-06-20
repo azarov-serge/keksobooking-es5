@@ -23,6 +23,10 @@
     this._adFormComponent = adFormComponent;
   }
 
+  /**
+   * @description Активирует контроллер
+   */
+
   AdFormController.prototype.activate = function () {
     // Синхронизировать fieldsets и form
     if (this._adFormComponent.isActivate() !== this._adFormComponent.isActivateFieldsets()) {
@@ -33,8 +37,13 @@
     this.setDefaultValues();
   };
 
+  /**
+   * @description Деактивирует контроллер
+   */
+
   AdFormController.prototype.deactivate = function () {
-    this._adFormComponent.toggleState();
+    // Переключить форму в неактивное состояние
+    this.toggleState();
     // Установить значение по умолчанию
     this.setDefaultValues();
     // Удалить обработчики событий валидации
@@ -43,6 +52,19 @@
     this._adFormComponent.removeAdFormSubmitListener();
     // this._adFormConponent.removeAdFormResetListener(); // Почему не удаляется? Говорит нет такого метода
   };
+
+  /**
+   * @description Переключает состояние формы и поля
+   */
+
+  AdFormController.prototype.toggleState = function () {
+    this._adFormComponent.toggleState();
+    this._adFormComponent.toggleStateFieldsets();
+  };
+
+  /**
+   * @description Запустить валидацию
+   */
 
   AdFormController.prototype.runValidity = function () {
     // Сделать поле адреес недоступным ("валидация" подя по ТЗ)
@@ -65,6 +87,10 @@
     this._adFormComponent.addAdFormSubmitListener();
   };
 
+  /**
+   * @description Остановливает валидацию формы
+   */
+
   AdFormController.prototype.stopValidity = function () {
     // Удалить обработчики событий для валидации формы
     this._adFormComponent.removeAdFormValidityListeners();
@@ -72,9 +98,17 @@
     this._adFormComponent.removeAdFormSubmitListener();
   };
 
+  /**
+   * @description Установлмвает адресс в поле адресса
+   */
+
   AdFormController.prototype.setAddress = function (coords) {
     this._adFormComponent.getAdAddress().value = coords.x + ', ' + coords.y;
   };
+
+  /**
+   * @description Установливает значения по умолчанию
+   */
 
   AdFormController.prototype.setDefaultValues = function () {
     // Значения по умолчанию
@@ -114,6 +148,10 @@
     // Установить по умолчанию удобства
     this._adFormComponent._getFeatures().forEach(toggleDefaultFeature);
   };
+
+  /**
+   * @description Устанавливает callbacks для валидации
+   */
 
   AdFormController.prototype._setValidityHandlers = function () {
     // Установить валидацию количества комнат

@@ -35,11 +35,8 @@
     return !this.getElement().classList.contains(this._TOGGLE_CLASS);
   };
 
-  AbsctractElement.prototype.toggleStateCallback = function () {};
-
   AbsctractElement.prototype.toggleState = function () {
     this.getElement().classList.toggle(this._TOGGLE_CLASS);
-    this.toggleStateCallback();
   };
 
   AbsctractElement.prototype.render = function ($container, place) {

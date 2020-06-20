@@ -50,7 +50,7 @@
       // Переключить состояние карты на активное
       mainMapComponent.toggleState();
       // Переключить форму в активное состояние
-      adFormConponent.toggleState();
+      adFormController.toggleState();
       // Запустить валидацию формы
       adFormController.runValidity();
       // Положить данные в модель данных
