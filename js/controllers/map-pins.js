@@ -1,8 +1,9 @@
 'use strict';
 (function () {
-  var Constant = window.Constant;
   var CoordsUtil = window.CoordsUtil;
   var Util = window.Util;
+
+  var ORDERS_COUNT = 5;
 
   var Default = {
     MAIN_PIN_LEFT: 570,
@@ -133,7 +134,7 @@
    */
 
   MapPinsController.prototype._createPinsComponents = function () {
-    this._pinComponents = this._ordersModel.getOrders().slice(0, Constant.ORDERS_COUNT).map(function (order, index) {
+    this._pinComponents = this._ordersModel.getOrders().slice(0, ORDERS_COUNT).map(function (order, index) {
       // Создать новый копонент пина
       var pinComponent = new window.PinComponent(order, index);
       return pinComponent;
