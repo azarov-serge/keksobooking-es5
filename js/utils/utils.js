@@ -19,6 +19,7 @@
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,
     loadImage: loadImage,
+    askServer: askServer,
   };
 
   /**
@@ -139,6 +140,37 @@
       });
 
       reader.readAsDataURL(file);
+    }
+  }
+
+  function askServer(ConfigXHR, successHandler, errorHandler, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = ConfigXHR.RESPONSE_TYPE;
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === 200) {
+        successHandler(xhr.response);
+      } else {
+        errorHandler();
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      errorHandler();
+    });
+
+    xhr.addEventListener('timeout', function () {
+      errorHandler();
+    });
+
+    xhr.timeout = ConfigXHR.TIMEOUT;
+
+    xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
+
+    if (data) {
+      xhr.send(data);
+    } else {
+      xhr.send();
     }
   }
 
