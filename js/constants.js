@@ -38,6 +38,12 @@
       AFTERBEGIN: 'afterbegin',
       BEFOREEND: 'beforeend',
     },
+    ConfigLoad: {
+      RESPONSE_TYPE: 'json',
+      METHOD: 'GET',
+      URL: 'https://javascript.pages.academy/keksobooking/data',
+      TIMEOUT: 500,
+    },
   };
 
   window.Constant = Constant;

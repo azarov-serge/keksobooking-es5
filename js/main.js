@@ -1,11 +1,9 @@
 'use strict';
 (function () {
-  var Util = window.Util;
+  var Constant = window.Constant;
   var CoordsUtil = window.CoordsUtil;
-  var ORDERS_COUNT = 8;
+  var Util = window.Util;
 
-  // Массив объявлений
-  var orders = window.generateOrders(ORDERS_COUNT);
   // Модель с объявлениями
   var ordersModel = new window.OrdersModel();
   // Карта страницы
@@ -40,7 +38,7 @@
    * @description Активация карты
    */
 
-  function activateMap() {
+  function activateMap(orders) {
     // Если карта не активирована, активировать
     if (!mainMapComponent.isActivate()) {
       // Получить координаты главного пина
@@ -83,8 +81,25 @@
     adFormController.deactivate();
   }
 
+  function getOrdersFromServer() {
+    // Получить список объявлений с сервера
+    Util.askServer(Constant.ConfigLoad, activateMap, errorLoadHandler);
+  }
+
+  function errorLoadHandler() {
+    function errorButtonClickHandler() {
+      errorMesage.remove();
+      getOrdersFromServer();
+    }
+
+    var errorMesage = new window.ErrorComponent();
+    errorMesage.errorButtonClickHandler = errorButtonClickHandler;
+    errorMesage.addErrorButtonListener();
+    errorMesage.render(document.querySelector('main'), Constant.RenderPosition.BEFOREEND);
+  }
+
   function mapPinsMouseDownHandler(evt) {
-    activateMap();
+    getOrdersFromServer();
     // Зафиксировать текущие координаты главного пина
     coordsEvt.x = evt.clientX;
     coordsEvt.y = evt.clientY;
@@ -139,7 +154,7 @@
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
     if (Util.isEnterPressed(evt)) {
       evt.preventDefault();
-      activateMap();
+      getOrdersFromServer();
     }
   });
 })();
