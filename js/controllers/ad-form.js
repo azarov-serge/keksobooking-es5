@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
+  var Util = window.Util;
 
   // Индекс значения по умолчанию
   var DefaultIndex = {
@@ -16,8 +17,12 @@
     NOT_GUESTS: 0,
     MAX_ROOMS_COUNT: 100,
     MAX_PRICE: 1000000,
-    IMAGES_TYPE: 'image/png, image/jpeg',
+    IMAGES_AVATAR: 'image/*',
+    IMAGES_AD: 'image/png, image/jpeg',
   };
+
+  // Типы изображений
+  var FILE_TYPES = ['gif', 'svg', 'jpg', 'jpeg', 'png'];
 
   function AdFormController(adFormComponent) {
     this._adFormComponent = adFormComponent;
@@ -48,9 +53,16 @@
     this.setDefaultValues();
     // Удалить обработчики событий валидации
     this.stopValidity();
+    this.stopLoadImagesListeners();
     // Удалить обработчик отправки формы
     this._adFormComponent.removeAdFormSubmitListener();
     // this._adFormConponent.removeAdFormResetListener(); // Почему не удаляется? Говорит нет такого метода
+  };
+
+  AdFormController.prototype.run = function () {
+    this.toggleState();
+    this.runValidity();
+    this.runLoadImagesListeners();
   };
 
   /**
@@ -70,9 +82,9 @@
     // Сделать поле адреес недоступным ("валидация" подя по ТЗ)
     this._adFormComponent.getAdAddress().disabled = true;
     // Установить валидацию аватара, загрузка только JPEG и PNG
-    this._adFormComponent.getAdAvatar().accept = ValidateValue.IMAGES_TYPE;
+    this._adFormComponent.getAdAvatar().accept = ValidateValue.IMAGES_AVATAR;
     // Установить валидацию изображений объявлений, загрузка только JPEG и PNG
-    this._adFormComponent.getAdImages().accept = ValidateValue.IMAGES_TYPE;
+    this._adFormComponent.getAdImages().accept = ValidateValue.IMAGES_AD;
     // Установить валидацию, установка максимальной цены
     this._adFormComponent.getAdPrice().max = ValidateValue.MAX_PRICE;
     // Установить валидацию заголовка объявления
@@ -147,6 +159,25 @@
     this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
     // Установить по умолчанию удобства
     this._adFormComponent._getFeatures().forEach(toggleDefaultFeature);
+  };
+
+  /**
+   * @description Запустить обработчики событий по загрузке файлов
+   */
+
+  AdFormController.prototype.runLoadImagesListeners = function () {
+    this._setLoadHandlers();
+    this._adFormComponent.addAdAvatarListener();
+    this._adFormComponent.addAdImagesListener();
+  };
+
+  /**
+   * @description Остановливает загрузку файлов
+   */
+
+  AdFormController.prototype.stopLoadImagesListeners = function () {
+    this._adFormComponent.removeAdAvatarListener();
+    this._adFormComponent.removeAdImagesListener();
   };
 
   /**
@@ -271,6 +302,52 @@
     // Значение количества комнат
     this._adFormComponent.getAdPrice().placeholder = minPrice;
     this._adFormComponent.getAdPrice().min = minPrice;
+  };
+
+
+  AdFormController.prototype._setLoadHandlers = function () {
+    this._adFormComponent.adAvatarChangeHandler = this._adAvatarChangeHandler.bind(this);
+    this._adFormComponent.adAdImagesChangeHandler = this._adAdImagesChangeHandler.bind(this);
+
+  };
+
+  AdFormController.prototype._loadImage = function (file, $preview) {
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (fileType) {
+      return fileName.endsWith(fileType);
+    });
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        $preview.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  AdFormController.prototype._adAvatarChangeHandler = function () {
+    var file = this._adFormComponent.getAdAvatar().files[0];
+    var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector('img');
+    this._loadImage(file, $previewImage);
+  };
+
+  AdFormController.prototype._adAdImagesChangeHandler = function () {
+    var file = this._adFormComponent.getAdImages().files[0];
+    var $previewContainer = this._adFormComponent.getAdImagesContainer();
+    var $preview = this._adFormComponent.getAdImagesPreview();
+
+    if (!$preview.querySelector('img')) {
+      var $previewImage = document.createElement('img');
+      this._loadImage(file, $previewImage);
+      Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
+    } else {
+      $preview = $preview.cloneNode(true);
+      $previewImage = $preview.querySelector('img');
+      this._loadImage(file, $previewImage);
+      Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
+    }
   };
 
   window.AdFormController = AdFormController;

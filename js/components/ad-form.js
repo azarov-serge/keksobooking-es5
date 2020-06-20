@@ -6,11 +6,14 @@
     AD_FORM: '.ad-form',
     TOGGLE_CLASS: 'ad-form--disabled',
     AD_TITLE: '#title',
-    AD_AFATAR: '#avatar',
+    AD_AVATAR: '#avatar',
+    AD_AVATAR_PREVIEW: '.ad-form-header__preview',
     AD_ADDRESS: '#address',
     AD_ROOM: '#room_number',
     AD_GUEST: '#capacity',
-    AD_IMAGE: '#images',
+    AD_IMAGES_CONTAINER: '.ad-form__photo-container',
+    AD_IMAGES: '#images',
+    AD_IMAGES_PREVIEW: '.ad-form__photo',
     AD_PRICE: '#price',
     AD_TYPE: '#type',
     AD_CHECK_IN: '#timein',
@@ -27,10 +30,13 @@
     this._TOGGLE_CLASS = AdFormSelector.TOGGLE_CLASS;
     this._$adTitle = null;
     this._$adAvatar = null;
+    this._$adAvatarPreview = null;
     this._$adAddress = null;
     this._$adRoom = null;
     this._$adGuest = null;
-    this._$adImage = null;
+    this._$adImagesContainer = null;
+    this._$adImages = null;
+    this._$adImagesPreview = null;
     this._$adPrice = null;
     this._$adType = null;
     this._$adCheckIn = null;
@@ -44,6 +50,8 @@
     this.adCheckOutChangeHandler = null;
     this.adFormSubmitHandler = null;
     this.adFormResetHandler = null;
+    this.adAvatarChangeHandler = null;
+    this.adAdImagesChangeHandler = null;
   }
 
   AdFormComponent.prototype = Object.create(AbsctractElement.prototype);
@@ -54,7 +62,11 @@
   };
 
   AdFormComponent.prototype.getAdAvatar = function () {
-    return this.getCustomElement(this._$adAvatar, AdFormSelector.AD_AFATAR, this.getElement());
+    return this.getCustomElement(this._$adAvatar, AdFormSelector.AD_AVATAR, this.getElement());
+  };
+
+  AdFormComponent.prototype.getAdAvatarPreview = function () {
+    return this.getCustomElement(this._$adAvatarPreview, AdFormSelector.AD_AVATAR_PREVIEW, this.getElement());
   };
 
   AdFormComponent.prototype.getAdAddress = function () {
@@ -69,8 +81,16 @@
     return this.getCustomElement(this._$adGuest, AdFormSelector.AD_GUEST, this.getElement());
   };
 
+  AdFormComponent.prototype.getAdImagesContainer = function () {
+    return this.getCustomElement(this._$adImagesContainer, AdFormSelector.AD_IMAGES_CONTAINER, this.getElement());
+  };
+
   AdFormComponent.prototype.getAdImages = function () {
-    return this.getCustomElement(this._$adImage, AdFormSelector.AD_IMAGE, this.getElement());
+    return this.getCustomElement(this._$adImages, AdFormSelector.AD_IMAGES, this.getElement());
+  };
+
+  AdFormComponent.prototype.getAdImagesPreview = function () {
+    return this.getCustomElement(this._$adImagesPreview, AdFormSelector.AD_IMAGES_PREVIEW, this.getElement());
   };
 
   AdFormComponent.prototype.getAdPrice = function () {
@@ -148,6 +168,23 @@
 
   AdFormComponent.prototype.removeAdFormResetListener = function () {
     this.getAdResetBtn().removeEventListener('click', this.adFormResetHandler);
+  };
+
+  AdFormComponent.prototype.addAdAvatarListener = function () {
+    this.getAdAvatar().addEventListener('change', this.adAvatarChangeHandler);
+  };
+
+  AdFormComponent.prototype.removeAdAvatarListener = function () {
+    this.getAdAvatar().removeEventListener('change', this.adAvatarChangeHandler);
+  };
+
+
+  AdFormComponent.prototype.addAdImagesListener = function () {
+    this.getAdImages().addEventListener('change', this.adAdImagesChangeHandler);
+  };
+
+  AdFormComponent.prototype.removeAdImagesListener = function () {
+    this.getAdImages().removeEventListener('change', this.adAdImagesChangeHandler);
   };
 
   window.AdFormComponent = AdFormComponent;

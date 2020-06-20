@@ -49,18 +49,16 @@
       adFormController.setAddress(coordsMainPin);
       // Переключить состояние карты на активное
       mainMapComponent.toggleState();
-      // Переключить форму в активное состояние
-      adFormController.toggleState();
-      // Запустить валидацию формы
-      adFormController.runValidity();
+      // Запустить контроллер: Переключить форму в активное состояние. Запустить валидацию формы. ЗАгрузить обработчики событий preview для аватара и изображений
+      adFormController.run();
       // Положить данные в модель данных
       ordersModel.setOrders(orders);
-      // Отрисовать пины на карте
-      mapPinsController.renderPins();
       // Установить контейнер, куда отрисовывать карточку
       mapPinsController.setCardContainer(mainMapComponent.getElement());
       // Установить место, куда отрисовывать карточку
       mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
+      // Отрисовать пины на карте
+      mapPinsController.renderPins();
       // Установить callbak для обработчика события кнопки reset
       adFormConponent.adFormResetHandler = deactivateMap;
       // Запустить обработчики события кнопки reset
