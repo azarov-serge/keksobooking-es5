@@ -27,9 +27,5 @@
     return $pin;
   };
 
-  PinComponent.prototype.setOnClickPin = function (onClickPin) {
-    this.getElement().addEventListener('click', onClickPin);
-  };
-
   window.PinComponent = PinComponent;
 })();
