@@ -21,9 +21,6 @@
     IMAGES_AD: 'image/png, image/jpeg',
   };
 
-  // Типы изображений
-  var FILE_TYPES = ['gif', 'svg', 'jpg', 'jpeg', 'png'];
-
   function AdFormController(adFormComponent) {
     this._adFormComponent = adFormComponent;
   }
@@ -315,36 +312,13 @@
   };
 
   /**
-   * @description Устанавливает изображение file в $preview
-   * @param {Object} file Объект file
-   * @param {Object} $previewImage DOM элемент для вставки изображения
-   */
-
-  AdFormController.prototype._loadImage = function (file, $previewImage) {
-    var fileName = file.name.toLowerCase();
-    var matches = FILE_TYPES.some(function (fileType) {
-      return fileName.endsWith(fileType);
-    });
-
-    if (matches) {
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        $previewImage.src = reader.result;
-      });
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  /**
    * @description Загружает изображение для аватара
    */
 
   AdFormController.prototype._adAvatarChangeHandler = function () {
     var file = this._adFormComponent.getAdAvatar().files[0];
     var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector('img');
-    this._loadImage(file, $previewImage);
+    Util.loadImage(file, $previewImage);
   };
 
   /**
@@ -358,12 +332,12 @@
 
     if (!$preview.querySelector('img')) {
       var $previewImage = document.createElement('img');
-      this._loadImage(file, $previewImage);
+      Util.loadImage(file, $previewImage);
       Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
     } else {
       $preview = $preview.cloneNode(true);
       $previewImage = $preview.querySelector('img');
-      this._loadImage(file, $previewImage);
+      Util.loadImage(file, $previewImage);
       Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
     }
   };
