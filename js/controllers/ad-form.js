@@ -304,6 +304,9 @@
     this._adFormComponent.getAdPrice().min = minPrice;
   };
 
+  /**
+   * @description Устанавливает callbacks для загрузки изображений
+   */
 
   AdFormController.prototype._setLoadHandlers = function () {
     this._adFormComponent.adAvatarChangeHandler = this._adAvatarChangeHandler.bind(this);
@@ -311,27 +314,42 @@
 
   };
 
-  AdFormController.prototype._loadImage = function (file, $preview) {
+  /**
+   * @description Устанавливает изображение file в $preview
+   * @param {Object} file Объект file
+   * @param {Object} $previewImage DOM элемент для вставки изображения
+   */
+
+  AdFormController.prototype._loadImage = function (file, $previewImage) {
     var fileName = file.name.toLowerCase();
     var matches = FILE_TYPES.some(function (fileType) {
       return fileName.endsWith(fileType);
     });
+
     if (matches) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        $preview.src = reader.result;
+        $previewImage.src = reader.result;
       });
 
       reader.readAsDataURL(file);
     }
   };
 
+  /**
+   * @description Загружает изображение для аватара
+   */
+
   AdFormController.prototype._adAvatarChangeHandler = function () {
     var file = this._adFormComponent.getAdAvatar().files[0];
     var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector('img');
     this._loadImage(file, $previewImage);
   };
+
+  /**
+   * @description Загружает изображение для фотографии жилья
+   */
 
   AdFormController.prototype._adAdImagesChangeHandler = function () {
     var file = this._adFormComponent.getAdImages().files[0];
