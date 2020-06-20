@@ -34,8 +34,6 @@
     this.removePins();
     // Удалить активную карточку
     this._removeActiveCard();
-    // Удалить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
-    this._mapPinsComponent.removeMainMapListeners();
   };
 
   /**
@@ -94,6 +92,8 @@
     Util.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
     // Установить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
     this._setMapPinsClickHandler();
+    // Запустить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
+    this._mapPinsComponent.addMainMapListeners();
   };
 
   /**
@@ -107,6 +107,8 @@
     });
     // Очистить список компонентов
     this._pinComponents = [];
+    // Удалить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
+    this._mapPinsComponent.removeMainMapListeners();
   };
 
   /**

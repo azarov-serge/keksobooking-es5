@@ -61,8 +61,6 @@
       mapPinsController.setCardContainer(mainMapComponent.getElement());
       // Установить место, куда отрисовывать карточку
       mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
-      // Запустить обработчики событий контейнера с пинами
-      mapPinsComponent.addMainMapListeners();
       // Установить callbak для обработчика события кнопки reset
       adFormConponent.adFormResetHandler = deactivateMap;
       // Запустить обработчики события кнопки reset
