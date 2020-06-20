@@ -19,6 +19,24 @@
     MAX_PRICE: 1000000,
     IMAGES_AVATAR: 'image/*',
     IMAGES_AD: 'image/png, image/jpeg',
+    bookingType: {
+      palace: {
+        title: 'Дворец',
+        minPrice: 10000,
+      },
+      flat: {
+        title: 'Квартира',
+        minPrice: 1000,
+      },
+      house: {
+        title: 'Дом',
+        minPrice: 5000,
+      },
+      bungalo: {
+        title: 'Бунгало',
+        minPrice: 0,
+      },
+    },
   };
 
   function AdFormController(adFormComponent) {
@@ -147,7 +165,7 @@
     // Установить тип жилья по умолчанию
     this._adFormComponent.getAdType().value = Default.TYPE;
     // Установить минимальную стоимость для данного типа
-    this._setMinPrice(window.Constant.bookingType[Default.TYPE].minPrice);
+    this._setMinPrice(ValidateValue.bookingType[Default.TYPE].minPrice);
     // Установить время заезда
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
     // Установить время выезда, в зависимости от времени заезда
@@ -219,7 +237,7 @@
 
   AdFormController.prototype._adTypeChangeHandler = function (evt) {
     // Значение количества комнат
-    var minPrice = Constant.bookingType[evt.target.value].minPrice;
+    var minPrice = ValidateValue.bookingType[evt.target.value].minPrice;
     this._setMinPrice(minPrice);
   };
 

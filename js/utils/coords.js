@@ -1,6 +1,13 @@
 'use strict';
 (function () {
-  var Constant = window.Constant;
+  var PIN_WIDTH = 50;
+  var PIN_HEIGHT = 70;
+  var MAIN_PIN_WIDTH = 65;
+  var MAIN_PIN_HEIGHT = 82;
+  var MAP_MIN_X = 0;
+  var MAP_MAX_X = 1200;
+  var MAP_MIN_Y = 130;
+  var MAP_MAX_Y = 630;
 
   var CoordsUtil = {
     create: create,
@@ -26,9 +33,9 @@
    */
 
   function setX(x) {
-    var GAP = Constant.MAIN_PIN_WIDTH / 2;
-    var minX = Constant.MAP_MIN_X - GAP;
-    var maxX = Constant.MAP_MAX_X - GAP;
+    var GAP = MAIN_PIN_WIDTH / 2;
+    var minX = MAP_MIN_X - GAP;
+    var maxX = MAP_MAX_X - GAP;
     return Math.max(Math.min(x, maxX), minX);
   }
 
@@ -38,8 +45,8 @@
    */
 
   function setY(y) {
-    var minY = Constant.MAP_MIN_Y - Constant.MAIN_PIN_HEIGHT;
-    var maxY = Constant.MAP_MAX_Y - Constant.MAIN_PIN_HEIGHT;
+    var minY = MAP_MIN_Y - MAIN_PIN_HEIGHT;
+    var maxY = MAP_MAX_Y - MAIN_PIN_HEIGHT;
     return Math.max(Math.min(y, maxY), minY);
   }
 
@@ -62,8 +69,8 @@
 
   function convertToLocation(obj) {
     return {
-      x: Math.floor(obj.x + Constant.MAIN_PIN_WIDTH / 2),
-      y: Math.floor(obj.y + Constant.MAIN_PIN_HEIGHT),
+      x: Math.floor(obj.x + MAIN_PIN_WIDTH / 2),
+      y: Math.floor(obj.y + MAIN_PIN_HEIGHT),
     };
   }
 
@@ -73,8 +80,8 @@
 
   function convertFromLocation(obj) {
     return {
-      x: Math.floor(obj.x - Constant.PIN_WIDTH / 2),
-      y: Math.floor(obj.y - Constant.PIN_HEIGHT),
+      x: Math.floor(obj.x - PIN_WIDTH / 2),
+      y: Math.floor(obj.y - PIN_HEIGHT),
     };
   }
 

@@ -6,6 +6,9 @@
 
   var HIDE_CLASS = 'hidden';
 
+  var ROOM_TEXTS = ['комната', 'комнаты', 'комнат'];
+  var GUEST_TEXTS = ['гостя', 'гостей', 'гостей'];
+
   function CardComponent(data) {
     AbsctractComponent.call(this);
     this._data = data;
@@ -124,9 +127,9 @@
         '.popup__text--capacity',
         (
           this._data.offer.rooms + ' '
-          + Util.getWordEnd(this._data.offer.rooms, Constant.roomTexts)
+          + Util.getWordEnd(this._data.offer.rooms, ROOM_TEXTS)
           + ' для ' + this._data.offer.guests + ' '
-          + Util.getWordEnd(this._data.offer.guests, Constant.guestTexts)
+          + Util.getWordEnd(this._data.offer.guests, GUEST_TEXTS)
         )
     );
     // Установить время заезда и время выезда, если есть
