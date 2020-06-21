@@ -47,8 +47,12 @@
       adFormController.setAddress(coordsMainPin);
       // Переключить состояние карты на активное
       mainMapComponent.toggleState();
-      // Запустить контроллер: Переключить форму в активное состояние. Запустить валидацию формы. ЗАгрузить обработчики событий preview для аватара и изображений
-      adFormController.run();
+      // Переключить форму в активное состояние.
+      adFormController.toggleState();
+      // Запустить валидацию формы.
+      adFormController.runValidity();
+      // Загрузить обработчики событий preview для аватара и изображений
+      adFormController.runLoadImagesListeners();
       // Положить данные в модель данных
       ordersModel.setOrders(orders);
       // Установить контейнер, куда отрисовывать карточку
@@ -83,7 +87,7 @@
 
   function getOrdersFromServer() {
     // Получить список объявлений с сервера
-    Util.askServer(Constant.ConfigLoad, activateMap, errorLoadHandler);
+    Util.interactWithServer(Constant.ConfigLoad, activateMap, errorLoadHandler);
   }
 
   function errorLoadHandler() {

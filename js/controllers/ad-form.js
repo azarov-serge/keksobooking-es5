@@ -37,6 +37,7 @@
 
     // Установить значение по умолчанию
     this.setDefaultValues();
+    this._adFormComponent.getAdImages().multiple = 'multiple';
   };
 
   /**
@@ -54,12 +55,6 @@
     // Удалить обработчик отправки формы
     this._adFormComponent.removeAdFormSubmitListener();
     // this._adFormConponent.removeAdFormResetListener(); // Почему не удаляется? Говорит нет такого метода
-  };
-
-  AdFormController.prototype.run = function () {
-    this.toggleState();
-    this.runValidity();
-    this.runLoadImagesListeners();
   };
 
   /**
@@ -247,7 +242,7 @@
   AdFormController.prototype._adFormSubmitHandler = function (evt) {
     if (evt.target.checkValidity()) {
       evt.preventDefault();
-      evt.target.action = window.Constant.Url.UPLOAD;
+      // Util.interactWith();
     }
   };
 
@@ -326,19 +321,22 @@
    */
 
   AdFormController.prototype._adAdImagesChangeHandler = function () {
-    var file = this._adFormComponent.getAdImages().files[0];
-    var $previewContainer = this._adFormComponent.getAdImagesContainer();
-    var $preview = this._adFormComponent.getAdImagesPreview();
+    var files = this._adFormComponent.getAdImages().files;
 
-    if (!$preview.querySelector('img')) {
-      var $previewImage = document.createElement('img');
-      Util.loadImage(file, $previewImage);
-      Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
-    } else {
-      $preview = $preview.cloneNode(true);
-      $previewImage = $preview.querySelector('img');
-      Util.loadImage(file, $previewImage);
-      Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
+    for (var index = 0; index < files.length; index++) {
+      var $previewContainer = this._adFormComponent.getAdImagesContainer();
+      var $preview = this._adFormComponent.getAdImagesPreview();
+
+      if (!$preview.querySelector('img')) {
+        var $previewImage = document.createElement('img');
+        Util.loadImage(files[index], $previewImage);
+        Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
+      } else {
+        $preview = $preview.cloneNode(true);
+        $previewImage = $preview.querySelector('img');
+        Util.loadImage(files[index], $previewImage);
+        Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
+      }
     }
   };
 

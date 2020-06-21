@@ -2,10 +2,8 @@
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
 
-
   function SuccessComponent() {
     AbsctractComponent.call(this);
-    this.errorButtonClickHandler = null;
   }
 
   SuccessComponent.prototype = Object.create(AbsctractComponent.prototype);
@@ -17,5 +15,5 @@
     return $success;
   };
 
-  window.ErrorComponent = SuccessComponent;
+  window.SuccessComponent = SuccessComponent;
 })();

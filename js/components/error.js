@@ -2,7 +2,6 @@
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
 
-
   function ErrorComponent() {
     AbsctractComponent.call(this);
     this.errorButtonClickHandler = null;
