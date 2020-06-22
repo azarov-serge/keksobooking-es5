@@ -1,51 +1,21 @@
 'use strict';
 (function () {
-  var Util = window.Util;
+  var AbsctractComponent = window.AbsctractComponent;
 
   function AbsctractElement() {
-    this._$container = null;
-    this._$element = null;
+    AbsctractComponent.call(this);
     this._SELECTOR = null;
-    this._TOGGLE_CLASS = null;
   }
 
-  AbsctractElement.prototype.getCustomElement = function ($element, selector, $container) {
-    $container = $container || document;
-    if (!$element) {
-      $element = $container.querySelector(selector);
-    }
+  AbsctractElement.prototype = Object.create(AbsctractComponent.prototype);
+  AbsctractElement.prototype.constructor = AbsctractElement;
 
-    return $element;
-  };
-
-  AbsctractElement.prototype.getCustomElements = function ($elements, selector, $container) {
-    $container = $container || document;
-    if (!$elements) {
-      $elements = $container.querySelectorAll(selector);
-    }
-
-    return $elements;
+  AbsctractComponent.prototype._getTemplate = function () {
+    throw new Error('The element can\'t have method');
   };
 
   AbsctractElement.prototype.getElement = function () {
-    return this.getCustomElement(this._$element, this._SELECTOR, this._$container);
-  };
-
-  AbsctractElement.prototype.isActivate = function () {
-    return !this.getElement().classList.contains(this._TOGGLE_CLASS);
-  };
-
-  AbsctractElement.prototype.toggleState = function () {
-    this.getElement().classList.toggle(this._TOGGLE_CLASS);
-  };
-
-  AbsctractElement.prototype.render = function ($container, place) {
-    Util.render($container, this.getElement(), place);
-  };
-
-
-  AbsctractElement.prototype.remove = function () {
-    this._$element = null;
+    return this._getCustomElement(this._$element, this._SELECTOR, this._$container);
   };
 
   window.AbsctractElement = AbsctractElement;

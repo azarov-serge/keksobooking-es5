@@ -9,6 +9,7 @@
     ESC: 27,
     ENTER: 13,
   };
+  var STATUS_OK = 200;
   // Типы изображений
   var FILE_TYPES = ['gif', 'svg', 'jpg', 'jpeg', 'png'];
 
@@ -148,7 +149,7 @@
     xhr.responseType = ConfigXHR.RESPONSE_TYPE;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === STATUS_OK) {
         successHandler(xhr.response);
       } else {
         errorHandler();
@@ -167,11 +168,7 @@
 
     xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
 
-    if (data) {
-      xhr.send(data);
-    } else {
-      xhr.send();
-    }
+    xhr.send(data);
   }
 
   window.Util = Util;

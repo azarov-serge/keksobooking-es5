@@ -13,9 +13,8 @@
   var PIN_CLASS_NAME = 'map__pin';
   var MAIN_PIN_CLASS_NAME = 'map__pin--main';
 
-  function MapPinsController(mapPinsComponent, ordersModel) {
+  function MapPinsController(mapPinsComponent) {
     this._mapPinsComponent = mapPinsComponent;
-    this._ordersModel = ordersModel;
     this._pinComponents = [];
     this._activePinComponent = null;
     this._activeCardComponent = null;
@@ -72,7 +71,7 @@
    *@description Отрисовывает пины в контейнере
    */
 
-  MapPinsController.prototype.renderPins = function () {
+  MapPinsController.prototype.renderPins = function (orders) {
     // Если пины есть
     if (this._pinComponents) {
       // Удалить пины
@@ -83,7 +82,7 @@
 
     var $pins = [];
     // Создать массив пин компонентов
-    this._createPinsComponents();
+    this._createPinsComponents(orders);
     // Создать массив пин элементов для рендеринга
     this._pinComponents.forEach(function (pinComponent) {
       $pins.push(pinComponent.getElement());
@@ -133,8 +132,8 @@
    * @description Создать список компонентов по полученным данным не более чем Constant.ORDERS_COUNT (см. файл constant.js)
    */
 
-  MapPinsController.prototype._createPinsComponents = function () {
-    this._pinComponents = this._ordersModel.getOrders().slice(0, ORDERS_COUNT).map(function (order, index) {
+  MapPinsController.prototype._createPinsComponents = function (orders) {
+    this._pinComponents = orders.slice(0, ORDERS_COUNT).map(function (order, index) {
       // Создать новый копонент пина
       var pinComponent = new window.PinComponent(order, index);
       return pinComponent;

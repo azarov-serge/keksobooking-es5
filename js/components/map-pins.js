@@ -20,7 +20,7 @@
   MapPinsComponent.prototype.constructor = MapPinsComponent;
 
   MapPinsComponent.prototype.getMainPin = function () {
-    return this.getCustomElement(this._$mainPin, MapPinsSelector.MAIN_PIN, this.getElement());
+    return this._getCustomElement(this._$mainPin, MapPinsSelector.MAIN_PIN, this.getElement());
   };
 
   MapPinsComponent.prototype.addMainMapListeners = function () {

@@ -1,21 +1,15 @@
 'use strict';
 (function () {
-  var Constant = window.Constant;
   var CoordsUtil = window.CoordsUtil;
   var Util = window.Util;
 
-  // Модель с объявлениями
   var ordersModel = new window.OrdersModel();
-  // Карта страницы
   var mainMapComponent = new window.MainMapComponent();
-  // Контейнер с пинами
   var mapPinsComponent = new window.MapPinsComponent(mainMapComponent.getElement());
-  // Форма для размещения объявления
-  var adFormConponent = new window.AdFormComponent();
-  // Контроллер контейнера с пинами
-  var mapPinsController = new window.MapPinsController(mapPinsComponent, ordersModel);
-  // Контроллер формы
-  var adFormController = new window.AdFormController(adFormConponent);
+  var adFormComponent = new window.AdFormComponent();
+  var mapPinsController = new window.MapPinsController(mapPinsComponent);
+  var adFormController = new window.AdFormController(adFormComponent);
+  var backendController = new window.BackendController();
   // Координаты главного пина
   var coordsMainPin = null;
   // Координаты события
@@ -28,9 +22,7 @@
    */
 
   function setDefaultCoordsToForm() {
-    // Получить координаты главного пина утсановленные по умолчанию
     coordsMainPin = mapPinsController.getMainPinDefaultCoords();
-    // Установить адрес на форму объявлений
     adFormController.setAddress(coordsMainPin);
   }
 
@@ -39,33 +31,34 @@
    */
 
   function activateMap(orders) {
-    // Если карта не активирована, активировать
-    if (!mainMapComponent.isActivate()) {
-      // Получить координаты главного пина
-      coordsMainPin = mapPinsController.getMainPinCoords();
-      // Установить адресс в форму
-      adFormController.setAddress(coordsMainPin);
-      // Переключить состояние карты на активное
-      mainMapComponent.toggleState();
-      // Переключить форму в активное состояние.
-      adFormController.toggleState();
-      // Запустить валидацию формы.
-      adFormController.runValidity();
-      // Загрузить обработчики событий preview для аватара и изображений
-      adFormController.runLoadImagesListeners();
-      // Положить данные в модель данных
-      ordersModel.setOrders(orders);
-      // Установить контейнер, куда отрисовывать карточку
-      mapPinsController.setCardContainer(mainMapComponent.getElement());
-      // Установить место, куда отрисовывать карточку
-      mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
-      // Отрисовать пины на карте
-      mapPinsController.renderPins();
-      // Установить callbak для обработчика события кнопки reset
-      adFormConponent.adFormResetHandler = deactivateMap;
-      // Запустить обработчики события кнопки reset
-      adFormConponent.addAdFormResetListener();
-    }
+    // Получить координаты главного пина
+    coordsMainPin = mapPinsController.getMainPinCoords();
+    // Установить адресс в форму
+    adFormController.setAddress(coordsMainPin);
+    // Переключить состояние карты на активное
+    mainMapComponent.toggleState();
+    // Переключить форму в активное состояние.
+    adFormController.toggleState();
+    // Запустить валидацию формы.
+    adFormController.runValidity();
+    // Загрузить обработчики событий preview для аватара и изображений
+    adFormController.runLoadImagesListeners();
+    // Положить данные в модель данных
+    ordersModel.setOrders(orders);
+    // Установить контейнер, куда отрисовывать карточку
+    mapPinsController.setCardContainer(mainMapComponent.getElement());
+    // Установить место, куда отрисовывать карточку
+    mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
+    // Отрисовать пины на карте
+    mapPinsController.renderPins(ordersModel.getOrders());
+    // Установить функцию для события отправки формы
+    adFormComponent.adFormSubmitHandler = adFormSubmitHandler;
+    // Запустить обработчики события для отправки формы
+    adFormComponent.addAdFormSubmitListener();
+    // Установить callbak для обработчика события кнопки reset
+    adFormComponent.adFormResetHandler = deactivateMap;
+    // Запустить обработчики события кнопки reset
+    adFormComponent.addAdFormResetListener();
   }
 
   /**
@@ -73,8 +66,7 @@
    * @description Деактивация карты
    */
 
-  function deactivateMap(evt) {
-    evt.preventDefault();
+  function deactivateMap() {
     // Переключить состояние карты на неактивное
     mainMapComponent.toggleState();
     // Установить значение пина по умолчанию в поле адресс формы
@@ -83,27 +75,34 @@
     mapPinsController.deactivate();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
     adFormController.deactivate();
+    // Удалить обработчик отправки формы
+    adFormComponent.removeAdFormSubmitListener();
+    // Удалить обработчик события кнопки reset
+    adFormComponent.removeAdFormResetListener();
   }
 
-  function getOrdersFromServer() {
-    // Получить список объявлений с сервера
-    Util.interactWithServer(Constant.ConfigLoad, activateMap, errorLoadHandler);
-  }
+  /**
+   *
+   * @description Функции для события submit у формы
+   */
 
-  function errorLoadHandler() {
-    function errorButtonClickHandler() {
-      errorMesage.remove();
-      getOrdersFromServer();
+  function adFormSubmitHandler(evt) {
+    if (evt.target.checkValidity()) {
+      backendController.upload(evt.target);
+      evt.preventDefault();
     }
-
-    var errorMesage = new window.ErrorComponent();
-    errorMesage.errorButtonClickHandler = errorButtonClickHandler;
-    errorMesage.addErrorButtonListener();
-    errorMesage.render(document.querySelector('main'), Constant.RenderPosition.BEFOREEND);
   }
+
+  /**
+   * @description Нажатие клавиши мыши по главному пину
+   * @param {*} evt Событие
+   */
 
   function mapPinsMouseDownHandler(evt) {
-    getOrdersFromServer();
+    if (!mainMapComponent.isActivate()) {
+      backendController.load();
+    }
+
     // Зафиксировать текущие координаты главного пина
     coordsEvt.x = evt.clientX;
     coordsEvt.y = evt.clientY;
@@ -112,6 +111,11 @@
     // Активировать обработчик события на отпускание клавиши мыши у главного пина
     document.addEventListener('mouseup', mainPinMouseUpHandler);
   }
+
+  /**
+   * @description Перемещение мыши у главного пина
+   * @param {*} evt Событие
+   */
 
   function mainPinMouseMoveHandler(evt) {
     evt.preventDefault();
@@ -133,6 +137,11 @@
     adFormController.setAddress(coordsMainPin);
   }
 
+  /**
+   * @description Отпускание клавиши мыши у главного пина
+   * @param {*} evt Событие
+   */
+
   function mainPinMouseUpHandler(evt) {
     evt.preventDefault();
     document.removeEventListener('mousemove', mainPinMouseMoveHandler);
@@ -145,6 +154,8 @@
   adFormController.activate();
   // Установить значение пина по умолчанию в поле адресс формы
   setDefaultCoordsToForm();
+  backendController.setSuccessLoadHandler(activateMap);
+  backendController.setSuccessUploadHandler(deactivateMap);
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
@@ -158,7 +169,7 @@
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
     if (Util.isEnterPressed(evt)) {
       evt.preventDefault();
-      getOrdersFromServer();
+      backendController.load();
     }
   });
 })();

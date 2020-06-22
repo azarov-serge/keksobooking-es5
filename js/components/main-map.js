@@ -22,11 +22,11 @@
   MainMapComponent.prototype.constructor = MainMapComponent;
 
   MainMapComponent.prototype.getMapFilterContainer = function () {
-    return this.getCustomElement(this._$mapFilterContainer, MainMapSelector.MAP_FILTER_CONTAINER, this.getElement());
+    return this._getCustomElement(this._$mapFilterContainer, MainMapSelector.MAP_FILTER_CONTAINER, this.getElement());
   };
 
   MainMapComponent.prototype.getMapFilter = function () {
-    return this.getCustomElement(this._$mapFilter, MainMapSelector.MAP_FILTER, this.getMapFilterContainer());
+    return this._getCustomElement(this._$mapFilter, MainMapSelector.MAP_FILTER, this.getMapFilterContainer());
   };
 
   window.MainMapComponent = MainMapComponent;

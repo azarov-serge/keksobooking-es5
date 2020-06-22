@@ -10,17 +10,6 @@
     CHECK_IN: 0,
   };
 
-  // Значения для валидации
-  var ValidateValue = {
-    TITLE_MIN_LENGTH: 30,
-    TITLE_MAX_LENGTH: 100,
-    NOT_GUESTS: 0,
-    MAX_ROOMS_COUNT: 100,
-    MAX_PRICE: 1000000,
-    IMAGES_AVATAR: 'image/*',
-    IMAGES_AD: 'image/png, image/jpeg',
-  };
-
   function AdFormController(adFormComponent) {
     this._adFormComponent = adFormComponent;
   }
@@ -35,7 +24,6 @@
       this._adFormComponent.toggleStateFieldsets();
     }
 
-    // Установить значение по умолчанию
     this.setDefaultValues();
     this._adFormComponent.getAdImages().multiple = 'multiple';
   };
@@ -47,14 +35,10 @@
   AdFormController.prototype.deactivate = function () {
     // Переключить форму в неактивное состояние
     this.toggleState();
-    // Установить значение по умолчанию
     this.setDefaultValues();
     // Удалить обработчики событий валидации
     this.stopValidity();
     this.stopLoadImagesListeners();
-    // Удалить обработчик отправки формы
-    this._adFormComponent.removeAdFormSubmitListener();
-    // this._adFormConponent.removeAdFormResetListener(); // Почему не удаляется? Говорит нет такого метода
   };
 
   /**
@@ -71,24 +55,16 @@
    */
 
   AdFormController.prototype.runValidity = function () {
-    // Сделать поле адреес недоступным ("валидация" подя по ТЗ)
-    this._adFormComponent.getAdAddress().disabled = true;
-    // Установить валидацию аватара, загрузка только JPEG и PNG
-    this._adFormComponent.getAdAvatar().accept = ValidateValue.IMAGES_AVATAR;
-    // Установить валидацию изображений объявлений, загрузка только JPEG и PNG
-    this._adFormComponent.getAdImages().accept = ValidateValue.IMAGES_AD;
-    // Установить валидацию, установка максимальной цены
-    this._adFormComponent.getAdPrice().max = ValidateValue.MAX_PRICE;
+    this._adFormComponent.getAdAddress().readOnly = true;
+    this._adFormComponent.getAdAvatar().accept = Constant.ValidateValue.IMAGES_AVATAR;
+    this._adFormComponent.getAdImages().accept = Constant.ValidateValue.IMAGES_AD;
+    this._adFormComponent.getAdPrice().max = Constant.ValidateValue.MAX_PRICE;
     // Установить валидацию заголовка объявления
     this._setValidityTitle();
     // Установить функцию для обработчиков событий валидации
     this._setValidityHandlers();
     // Запустить обработчики событий для валидации формы
     this._adFormComponent.addAdFormValidityListeners();
-    // Установить функцию для события отправки формы
-    this._adFormComponent.adFormSubmitHandler = this._adFormSubmitHandler.bind(this);
-    // Запустить обработчики события для отправки формы
-    this._adFormComponent.addAdFormSubmitListener();
   };
 
   /**
@@ -98,12 +74,10 @@
   AdFormController.prototype.stopValidity = function () {
     // Удалить обработчики событий для валидации формы
     this._adFormComponent.removeAdFormValidityListeners();
-    // Удалить обработчик событий для отправки формы
-    this._adFormComponent.removeAdFormSubmitListener();
   };
 
   /**
-   * @description Установлмвает адресс в поле адресса
+   * @description Устанавливает адресс в поле адресса
    */
 
   AdFormController.prototype.setAddress = function (coords) {
@@ -111,7 +85,7 @@
   };
 
   /**
-   * @description Установливает значения по умолчанию
+   * @description Устанавливает значения по умолчанию
    */
 
   AdFormController.prototype.setDefaultValues = function () {
@@ -127,27 +101,21 @@
       $feature.checked = false;
     }
 
-    // Установить значение аватара по умолчанию
     this._adFormComponent.getAdAvatar().value = Default.EMPTY_STRING;
-    // Установить значения изображений по умолчанию
+    this._adFormComponent.getAdAddress().required = true;
     this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
-    // Установить заголовок объявления по умолчанию
     this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
-    // Установить значение фильтра количество комнат по умолчанию
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
     // Установить значение количества фильтров в соответствии с количеством комнат
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
     // Отключить количетсво гостей, которые не прошли валидацию
     this._disabledGuestsValues(Default.ROOMS);
-    // Установить тип жилья по умолчанию
     this._adFormComponent.getAdType().value = Default.TYPE;
     // Установить минимальную стоимость для данного типа
+    this._adFormComponent.getAdPrice().required = true;
     this._setMinPrice(Constant.bookingType[Default.TYPE].minPrice);
-    // Установить время заезда
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
-    // Установить время выезда, в зависимости от времени заезда
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
-    // Установить текст объявления по умолчанию
     this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
     // Установить по умолчанию удобства
     this._adFormComponent._getFeatures().forEach(toggleDefaultFeature);
@@ -193,8 +161,8 @@
 
   AdFormController.prototype._setValidityTitle = function () {
     this._adFormComponent.getAdTitle().required = true;
-    this._adFormComponent.getAdTitle().minLength = ValidateValue.TITLE_MIN_LENGTH;
-    this._adFormComponent.getAdTitle().maxLength = ValidateValue.TITLE_MAX_LENGTH;
+    this._adFormComponent.getAdTitle().minLength = Constant.ValidateValue.TITLE_MIN_LENGTH;
+    this._adFormComponent.getAdTitle().maxLength = Constant.ValidateValue.TITLE_MAX_LENGTH;
   };
 
   /**
@@ -235,25 +203,13 @@
   };
 
   /**
-   *
-   * @description Функции для события submit у формы
-   */
-
-  AdFormController.prototype._adFormSubmitHandler = function (evt) {
-    if (evt.target.checkValidity()) {
-      evt.preventDefault();
-      // Util.interactWith();
-    }
-  };
-
-  /**
    * @param {number} rooms Количество комнат
    * @return {number} Количество гостей
    */
 
   AdFormController.prototype._getGuests = function (rooms) {
-    if (rooms === ValidateValue.MAX_ROOMS_COUNT) {
-      return ValidateValue.NOT_GUESTS;
+    if (rooms === Constant.ValidateValue.MAX_ROOMS_COUNT) {
+      return Constant.ValidateValue.NOT_GUESTS;
     }
 
     return rooms;
@@ -265,7 +221,7 @@
    */
 
   AdFormController.prototype._disabledGuestsValues = function (validValue) {
-    var NOT_GUESTS = ValidateValue.NOT_GUESTS;
+    var NOT_GUESTS = Constant.ValidateValue.NOT_GUESTS;
 
     /**
      * @description Переключает элемент фильтра: enabled || diasabled
@@ -303,7 +259,6 @@
   AdFormController.prototype._setLoadHandlers = function () {
     this._adFormComponent.adAvatarChangeHandler = this._adAvatarChangeHandler.bind(this);
     this._adFormComponent.adAdImagesChangeHandler = this._adAdImagesChangeHandler.bind(this);
-
   };
 
   /**
