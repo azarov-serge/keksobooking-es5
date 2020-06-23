@@ -36,7 +36,6 @@
     // Переключить форму в неактивное состояние
     this.toggleState();
     this.setDefaultValues();
-    // Удалить обработчики событий валидации
     this.stopValidity();
     this.stopLoadImagesListeners();
   };
@@ -72,7 +71,6 @@
    */
 
   AdFormController.prototype.stopValidity = function () {
-    // Удалить обработчики событий для валидации формы
     this._adFormComponent.removeAdFormValidityListeners();
   };
 
@@ -95,6 +93,7 @@
       ROOMS: this._adFormComponent.getAdRooms()[DefaultIndex.ROOMS].value,
       TYPE: this._adFormComponent.getAdType()[DefaultIndex.TYPE].value,
       CHECK_IN: this._adFormComponent.getAdCheckIn()[DefaultIndex.CHECK_IN].value,
+      DEFAULT_AVATAR: 'img/muffin-grey.svg',
     };
 
     function toggleDefaultFeature($feature) {
@@ -102,22 +101,20 @@
     }
 
     this._adFormComponent.getAdAvatar().value = Default.EMPTY_STRING;
-    this._adFormComponent.getAdAddress().required = true;
+    this._adFormComponent.getAdAvatarPreview().querySelector('img').src = Default.DEFAULT_AVATAR;
     this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
+    this._clearAdImagesContainer();
     this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
-    // Установить значение количества фильтров в соответствии с количеством комнат
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
-    // Отключить количетсво гостей, которые не прошли валидацию
     this._disabledGuestsValues(Default.ROOMS);
     this._adFormComponent.getAdType().value = Default.TYPE;
-    // Установить минимальную стоимость для данного типа
     this._adFormComponent.getAdPrice().required = true;
     this._setMinPrice(Constant.bookingType[Default.TYPE].minPrice);
+    this._adFormComponent.getAdPrice().value = Default.EMPTY_STRING;
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
     this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
-    // Установить по умолчанию удобства
     this._adFormComponent._getFeatures().forEach(toggleDefaultFeature);
   };
 
@@ -145,13 +142,9 @@
    */
 
   AdFormController.prototype._setValidityHandlers = function () {
-    // Установить валидацию количества комнат
     this._adFormComponent.adRoomsChangeHandler = this._adRoomsChangeHandler.bind(this);
-    // Установить валидацию цены от типа
     this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
-    // Установить валидацию времени заезда
     this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
-    // Установить валидацию времени заезда
     this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
   };
 
@@ -170,7 +163,6 @@
    */
 
   AdFormController.prototype._adRoomsChangeHandler = function (evt) {
-    // Значение количества комнат
     var roomsCount = parseInt(evt.target.value, 10);
     this._adFormComponent.getAdGuests().value = this._getGuests(roomsCount);
     this._disabledGuestsValues(this._adFormComponent.getAdGuests().value);
@@ -181,7 +173,6 @@
    */
 
   AdFormController.prototype._adTypeChangeHandler = function (evt) {
-    // Значение количества комнат
     var minPrice = Constant.bookingType[evt.target.value].minPrice;
     this._setMinPrice(minPrice);
   };
@@ -229,7 +220,6 @@
      */
 
     function toggleItem($item) {
-      // Значение фильтра количество гостей
       var itemValue = parseInt($item.value, 10);
       if (validValue === NOT_GUESTS) {
         $item.disabled = itemValue !== validValue;
@@ -247,7 +237,6 @@
    */
 
   AdFormController.prototype._setMinPrice = function (minPrice) {
-    // Значение количества комнат
     this._adFormComponent.getAdPrice().placeholder = minPrice;
     this._adFormComponent.getAdPrice().min = minPrice;
   };
@@ -258,7 +247,7 @@
 
   AdFormController.prototype._setLoadHandlers = function () {
     this._adFormComponent.adAvatarChangeHandler = this._adAvatarChangeHandler.bind(this);
-    this._adFormComponent.adAdImagesChangeHandler = this._adAdImagesChangeHandler.bind(this);
+    this._adFormComponent.adAdImagesChangeHandler = this._addAdImagesChangeHandler.bind(this);
   };
 
   /**
@@ -275,8 +264,9 @@
    * @description Загружает изображение для фотографии жилья
    */
 
-  AdFormController.prototype._adAdImagesChangeHandler = function () {
+  AdFormController.prototype._addAdImagesChangeHandler = function () {
     var files = this._adFormComponent.getAdImages().files;
+    this._clearAdImagesContainer();
 
     for (var index = 0; index < files.length; index++) {
       var $previewContainer = this._adFormComponent.getAdImagesContainer();
@@ -293,6 +283,20 @@
         Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
       }
     }
+  };
+
+  /**
+   * @description Очищает контейнер с Preview изображений
+   */
+
+  AdFormController.prototype._clearAdImagesContainer = function () {
+    this._adFormComponent.getAllAdImagesPreviews().forEach(function ($adImagesPreview, index) {
+      if (index === 0) {
+        $adImagesPreview.innerHTML = '';
+      } else {
+        $adImagesPreview.parentElement.removeChild($adImagesPreview);
+      }
+    });
   };
 
   window.AdFormController = AdFormController;

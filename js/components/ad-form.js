@@ -37,6 +37,7 @@
     this._$adImagesContainer = null;
     this._$adImagesItem = null;
     this._$adImagesPreview = null;
+    this._$adImagesPreviews = null;
     this._$adPrice = null;
     this._$adType = null;
     this._$adCheckIn = null;
@@ -91,6 +92,10 @@
 
   AdFormComponent.prototype.getAdImagesPreview = function () {
     return this._getCustomElement(this._$adImagesPreview, AdFormSelector.AD_IMAGES_PREVIEW, this.getElement());
+  };
+
+  AdFormComponent.prototype.getAllAdImagesPreviews = function () {
+    return this._getCustomElements(this._$adImagesPreviews, AdFormSelector.AD_IMAGES_PREVIEW, this.getElement());
   };
 
   AdFormComponent.prototype.getAdPrice = function () {

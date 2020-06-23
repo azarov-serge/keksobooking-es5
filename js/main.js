@@ -156,6 +156,7 @@
   setDefaultCoordsToForm();
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
+  adFormController._clearAdImagesContainer();
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
