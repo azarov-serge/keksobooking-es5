@@ -49,8 +49,9 @@
   };
 
   BackendController.prototype._successUploadHandler = function () {
+    this._successUpload();
     this._successComponent = new SuccessComponent();
-    this._successComponent.addSuccessListeners(this._successUpload);
+    this._successComponent.addSuccessListeners();
     this._successComponent.render(document.querySelector('main'), Constant.RenderPosition.BEFOREEND);
   };
 

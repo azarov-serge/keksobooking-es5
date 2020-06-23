@@ -12,7 +12,6 @@
   function SuccessComponent() {
     AbsctractComponent.call(this);
     this._$successMessage = null;
-    this._successHandler = null;
     this._successClickHandler = this._successClickHandler.bind(this);
     this._documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
   }
@@ -30,8 +29,7 @@
     return this._getCustomElement(this._$successMessage, SuccessSelector.SUCCESS_MESSAGE, this.getElement());
   };
 
-  SuccessComponent.prototype.addSuccessListeners = function (successHandler) {
-    this._successHandler = successHandler;
+  SuccessComponent.prototype.addSuccessListeners = function () {
     this.getElement().addEventListener('click', this._successClickHandler);
     document.addEventListener('keydown', this._documentKeyDownHandler);
   };
@@ -39,7 +37,6 @@
   SuccessComponent.prototype._closeSuccess = function (evt) {
     evt.preventDefault();
     document.removeEventListener('keydown', this._documentKeyDownHandler);
-    this._successHandler();
     this.remove();
   };
 
