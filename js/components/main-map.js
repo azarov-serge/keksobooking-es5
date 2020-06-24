@@ -1,6 +1,8 @@
 'use strict';
 (function () {
-  var MainMapClass = {
+  var AbsctractElement = window.AbsctractElement;
+
+  var MainMapSelector = {
     MAIN_MAP: '.map',
     TOGGLE_CLASS: 'map--faded',
     MAP_FILTER_CONTAINER: '.map__filters-container',
@@ -8,23 +10,23 @@
   };
 
   function MainMapComponent() {
-    window.AbsctractElement.call(this);
-    this._SELECTOR = MainMapClass.MAIN_MAP;
-    this._TOGGLE_CLASS = MainMapClass.TOGGLE_CLASS;
+    AbsctractElement.call(this);
+    this._SELECTOR = MainMapSelector.MAIN_MAP;
+    this._TOGGLE_CLASS = MainMapSelector.TOGGLE_CLASS;
     this._$container = document;
     this._$mapFilterContainer = null;
     this._$mapFilter = null;
   }
 
-  MainMapComponent.prototype = Object.create(window.AbsctractElement.prototype);
+  MainMapComponent.prototype = Object.create(AbsctractElement.prototype);
   MainMapComponent.prototype.constructor = MainMapComponent;
 
   MainMapComponent.prototype.getMapFilterContainer = function () {
-    return this.getCustomElement(this._$mapFilterContainer, MainMapClass.MAP_FILTER_CONTAINER, this.getElement());
+    return this._getCustomElement(this._$mapFilterContainer, MainMapSelector.MAP_FILTER_CONTAINER, this.getElement());
   };
 
   MainMapComponent.prototype.getMapFilter = function () {
-    return this.getCustomElement(this._$mapFilter, MainMapClass.MAP_FILTER, this.getMapFilterContainer());
+    return this._getCustomElement(this._$mapFilter, MainMapSelector.MAP_FILTER, this.getMapFilterContainer());
   };
 
   window.MainMapComponent = MainMapComponent;

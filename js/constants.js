@@ -1,20 +1,7 @@
 'use strict';
 (function () {
   var Constant = {
-    ORDER_COUNT: 8,
-    PIN_WIDTH: 50,
-    PIN_HEIGHT: 70,
-    MAIN_PIN_WIDTH: 65,
-    MAIN_PIN_HEIGHT: 82,
-    MAP_MIN_X: 0,
-    MAP_MAX_X: 1200,
-    MAP_MIN_Y: 130,
-    MAP_MAX_Y: 630,
-    Url: {
-      LOAD: ' https://javascript.pages.academy/keksobooking/data',
-      UPLOAD: 'https://javascript.pages.academy/keksobooking',
-    },
-    bookingTypes: {
+    bookingType: {
       palace: {
         title: 'Дворец',
         minPrice: 10000,
@@ -32,11 +19,30 @@
         minPrice: 0,
       },
     },
-    roomTexts: ['комната', 'комнаты', 'комнат'],
-    guestTexts: ['гостя', 'гостей', 'гостей'],
     RenderPosition: {
       AFTERBEGIN: 'afterbegin',
       BEFOREEND: 'beforeend',
+    },
+    ConfigLoad: {
+      RESPONSE_TYPE: 'json',
+      METHOD: 'GET',
+      URL: 'https://javascript.pages.academy/keksobooking/data',
+      TIMEOUT: 10000,
+    },
+    ConfigUpLoad: {
+      RESPONSE_TYPE: 'json',
+      METHOD: 'POST',
+      URL: 'https://javascript.pages.academy/keksobooking',
+      TIMEOUT: 30000,
+    },
+    ValidateValue: {
+      TITLE_MIN_LENGTH: 30,
+      TITLE_MAX_LENGTH: 100,
+      NOT_GUESTS: 0,
+      MAX_ROOMS_COUNT: 100,
+      MAX_PRICE: 1000000,
+      IMAGES_AVATAR: 'image/*',
+      IMAGES_AD: 'image/png, image/jpeg',
     },
   };
 

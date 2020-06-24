@@ -2,18 +2,25 @@
 (function () {
   var Constant = window.Constant;
 
+  // Код нажатия кнопки мыши
   var LEFT_MOUSE_BUTTON = 0;
+  // Коды клавиш
   var KeyСode = {
     ESC: 27,
     ENTER: 13,
   };
+  var STATUS_OK = 200;
+  // Типы изображений
+  var FILE_TYPES = ['gif', 'svg', 'jpg', 'jpeg', 'png'];
 
-  var Utils = {
+  var Util = {
     render: render,
     getWordEnd: getWordEnd,
     isLeftMouseButtonPressed: isLeftMouseButtonPressed,
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,
+    loadImage: loadImage,
+    interactWithServer: interactWithServer,
   };
 
   /**
@@ -113,5 +120,56 @@
   function isEnterPressed(evt) {
     return evt.keyCode === KeyСode.ENTER;
   }
-  window.Utils = Utils;
+
+  /**
+   * @description Устанавливает изображение file в $preview
+   * @param {Object} file Объект file
+   * @param {Object} $previewImage DOM элемент для вставки изображения
+   */
+
+  function loadImage(file, $previewImage) {
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (fileType) {
+      return fileName.endsWith(fileType);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        $previewImage.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function interactWithServer(ConfigXHR, successHandler, errorHandler, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = ConfigXHR.RESPONSE_TYPE;
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === STATUS_OK) {
+        successHandler(xhr.response);
+      } else {
+        errorHandler();
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      errorHandler();
+    });
+
+    xhr.addEventListener('timeout', function () {
+      errorHandler();
+    });
+
+    xhr.timeout = ConfigXHR.TIMEOUT;
+
+    xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
+
+    xhr.send(data);
+  }
+
+  window.Util = Util;
 })();
