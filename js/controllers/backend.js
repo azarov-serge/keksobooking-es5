@@ -4,6 +4,8 @@
   var ErrorComponent = window.ErrorComponent;
   var Constant = window.Constant;
   var Util = window.Util;
+  // Контейнер куда размещается сообщение
+  var $container = document.querySelector('main');
 
   function BackendController() {
     this._successLoadHandler = null;
@@ -26,7 +28,7 @@
 
   BackendController.prototype.load = function () {
     // Получить список объявлений с сервера
-    Util.interactWithServer(Constant.ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
+    Util.requestServer(Constant.ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
   };
 
   /**
@@ -35,7 +37,7 @@
    */
 
   BackendController.prototype.upload = function ($form) {
-    Util.interactWithServer(Constant.ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
+    Util.requestServer(Constant.ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
   };
 
   /**
@@ -45,14 +47,14 @@
   BackendController.prototype._errorHandler = function () {
     this._errorComponent = new ErrorComponent();
     this._errorComponent.addErrorListeners();
-    this._errorComponent.render(document.querySelector('main'), Constant.RenderPosition.BEFOREEND);
+    this._errorComponent.render($container, Constant.RenderPosition.BEFOREEND);
   };
 
   BackendController.prototype._successUploadHandler = function () {
     this._successUpload();
     this._successComponent = new SuccessComponent();
     this._successComponent.addSuccessListeners();
-    this._successComponent.render(document.querySelector('main'), Constant.RenderPosition.BEFOREEND);
+    this._successComponent.render($container, Constant.RenderPosition.BEFOREEND);
   };
 
   window.BackendController = BackendController;

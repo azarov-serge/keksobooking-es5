@@ -7,7 +7,7 @@
   var mainMapComponent = new window.MainMapComponent();
   var mapPinsComponent = new window.MapPinsComponent(mainMapComponent.getElement());
   var adFormComponent = new window.AdFormComponent();
-  var mapPinsController = new window.MapPinsController(mapPinsComponent);
+  var mapPinsController = new window.MapPinsController(mapPinsComponent, ordersModel);
   var adFormController = new window.AdFormController(adFormComponent);
   var backendController = new window.BackendController();
   // Координаты главного пина

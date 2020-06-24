@@ -10,6 +10,10 @@
     CHECK_IN: 0,
   };
 
+  var PREVIEW_SELECTOR = 'img';
+  var AD_GUESTS_ITEM_SELECTOR = 'option';
+  var AD_AVATAR_SELECTOR = 'img';
+
   function AdFormController(adFormComponent) {
     this._adFormComponent = adFormComponent;
   }
@@ -101,7 +105,7 @@
     }
 
     this._adFormComponent.getAdAvatar().value = Default.EMPTY_STRING;
-    this._adFormComponent.getAdAvatarPreview().querySelector('img').src = Default.DEFAULT_AVATAR;
+    this._adFormComponent.getAdAvatarPreview().querySelector(AD_AVATAR_SELECTOR).src = Default.DEFAULT_AVATAR;
     this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
     this._clearAdImagesContainer();
     this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
@@ -229,7 +233,7 @@
     }
 
     validValue = parseInt(validValue, 10);
-    this._adFormComponent.getAdGuests().querySelectorAll('option').forEach(toggleItem);
+    this._adFormComponent.getAdGuests().querySelectorAll(AD_GUESTS_ITEM_SELECTOR).forEach(toggleItem);
   };
 
   /**
@@ -256,7 +260,7 @@
 
   AdFormController.prototype._adAvatarChangeHandler = function () {
     var file = this._adFormComponent.getAdAvatar().files[0];
-    var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector('img');
+    var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector(PREVIEW_SELECTOR);
     Util.loadImage(file, $previewImage);
   };
 
@@ -272,13 +276,13 @@
       var $previewContainer = this._adFormComponent.getAdImagesContainer();
       var $preview = this._adFormComponent.getAdImagesPreview();
 
-      if (!$preview.querySelector('img')) {
+      if (!$preview.querySelector(PREVIEW_SELECTOR)) {
         var $previewImage = document.createElement('img');
         Util.loadImage(files[index], $previewImage);
         Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
       } else {
         $preview = $preview.cloneNode(true);
-        $previewImage = $preview.querySelector('img');
+        $previewImage = $preview.querySelector(PREVIEW_SELECTOR);
         Util.loadImage(files[index], $previewImage);
         Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
       }

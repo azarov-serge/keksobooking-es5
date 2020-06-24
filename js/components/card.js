@@ -4,7 +4,23 @@
   var Constant = window.Constant;
   var Util = window.Util;
 
-  var HIDE_CLASS = 'hidden';
+  var CardSelector = {
+    TEMPLATE: '#card',
+    CARD: '.map__card',
+    AVATAR: '.popup__avatar',
+    TITLE: '.popup__title',
+    ADDRESS: '.popup__text--address',
+    PRICE: '.popup__text--price',
+    TYPE: '.popup__type',
+    CAPACITY: '.popup__text--capacity',
+    TIME: '.popup__text--time',
+    FEATURES: '.popup__features',
+    FEATURE: '.popup__feature',
+    PHOTOS: '.popup__photos',
+    PHOTO: 'img',
+    DESCRIPTION: '.popup__description',
+    HIDE_CLASS: 'hidden',
+  };
 
   var ROOM_TEXTS = ['комната', 'комнаты', 'комнат'];
   var GUEST_TEXTS = ['гостя', 'гостей', 'гостей'];
@@ -32,7 +48,7 @@
       if (cardData) {
         $card.querySelector(className).textContent = text;
       } else {
-        $card.querySelector(className).classList.add(HIDE_CLASS);
+        $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
       }
     }
 
@@ -45,7 +61,7 @@
       if (cardData) {
         $card.querySelector(className).src = cardData;
       } else {
-        $card.querySelector(className).classList.add(HIDE_CLASS);
+        $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
       }
     }
 
@@ -55,17 +71,17 @@
      */
 
     function renderFeatures(cardData) {
-      var $featuresContainer = $card.querySelector('.popup__features');
+      var $featuresContainer = $card.querySelector(CardSelector.FEATURES);
       if (cardData.length) {
-        var $features = $featuresContainer.querySelectorAll('.popup__feature');
+        var $features = $featuresContainer.querySelectorAll(CardSelector.FEATURE);
         $features.forEach(function ($feature) {
           var findFeature = $feature.className.split('--');
           if (cardData.indexOf(findFeature[1]) === -1) {
-            $feature.classList.add(HIDE_CLASS);
+            $feature.classList.add(CardSelector.HIDE_CLASS);
           }
         });
       } else {
-        $featuresContainer.classList.add(HIDE_CLASS);
+        $featuresContainer.classList.add(CardSelector.HIDE_CLASS);
       }
     }
 
@@ -76,9 +92,9 @@
 
     function renderPhotos(cardData) {
       // Получить контейнер фотографий
-      var $photosContainer = $card.querySelector('.popup__photos');
+      var $photosContainer = $card.querySelector(CardSelector.PHOTOS);
       // Получить шаблон изображений
-      var $templatePhoto = $photosContainer.querySelector('img');
+      var $templatePhoto = $photosContainer.querySelector(CardSelector.PHOTO);
       // Если изображения есть, отрисовать
       if (cardData.length) {
         // Установить первое фото в массиве
@@ -98,33 +114,33 @@
         Util.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
       } else {
         // Если изображений нет, скрыть контейнер фотографий
-        $photosContainer.classList.add(HIDE_CLASS);
+        $photosContainer.classList.add(CardSelector.HIDE_CLASS);
       }
     }
 
     // Получить шаблона карточки
-    var $template = document.querySelector('#card').content.querySelector('.map__card');
+    var $template = document.querySelector(CardSelector.TEMPLATE).content.querySelector(CardSelector.CARD);
     // Склонировать шаблон
     var $card = $template.cloneNode(true);
     // Установить аватар, если есть
-    setImage(this._cardData.author.avatar, '.popup__avatar');
+    setImage(this._cardData.author.avatar, CardSelector.AVATAR);
     // Установить текст заголовка, если есть
-    setText(this._cardData.offer.title, '.popup__title');
+    setText(this._cardData.offer.title, CardSelector.TITLE);
     // Установить адресс, если есть
-    setText(this._cardData.offer.address, '.popup__text--address');
+    setText(this._cardData.offer.address, CardSelector.ADDRESS);
     // Установить цену, если есть
-    setText(this._cardData.offer.price, '.popup__text--price', parseInt(this._cardData.offer.price, 10).toLocaleString() + '₽/ночь');
+    setText(this._cardData.offer.price, CardSelector.PRICE, parseInt(this._cardData.offer.price, 10).toLocaleString() + '₽/ночь');
     // Установить тип жилья, если есть
     setText(
         this._cardData.offer.type,
-        '.popup__type',
+        CardSelector.TYPE,
         this._cardData.offer.type ? Constant.bookingType[this._cardData.offer.type].title : ''
     );
 
     // Установить количество гостей и комнат, если есть
     setText(
         this._cardData.offer.rooms && this._cardData.offer.guests,
-        '.popup__text--capacity',
+        CardSelector.CAPACITY,
         (
           this._cardData.offer.rooms + ' '
           + Util.getWordEnd(this._cardData.offer.rooms, ROOM_TEXTS)
@@ -135,14 +151,14 @@
     // Установить время заезда и время выезда, если есть
     setText(
         this._cardData.offer.checkin && this._cardData.offer.checkout,
-        '.popup__text--time',
+        CardSelector.TIME,
         'Заезд после ' + this._cardData.offer.checkin + ', выезд до ' + this._cardData.offer.checkout
     );
 
     // Отрисовать все доступные удобств в объявлении
     renderFeatures(this._cardData.offer.features);
     // Установить описание объявления, если есть
-    setText(this._cardData.offer.description, '.popup__description', this._cardData.offer.description);
+    setText(this._cardData.offer.description, CardSelector.DESCRIPTION, this._cardData.offer.description);
     // Отрисовать все фотографии объявления
     renderPhotos(this._cardData.offer.photos);
 

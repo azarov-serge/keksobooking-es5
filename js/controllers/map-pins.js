@@ -13,9 +13,10 @@
   var PIN_CLASS_NAME = 'map__pin';
   var MAIN_PIN_CLASS_NAME = 'map__pin--main';
 
-  function MapPinsController(mapPinsComponent) {
+  function MapPinsController(mapPinsComponent, ordersModel) {
     this._mapPinsComponent = mapPinsComponent;
     this._pinComponents = [];
+    this._ordersModel = ordersModel;
     this._activePinComponent = null;
     this._activeCardComponent = null;
     this._$cardContainer = null;
@@ -235,9 +236,8 @@
 
   MapPinsController.prototype._removeActiveCard = function () {
     if (this._activeCardComponent) {
-      // Удалить активную карточку
+      this._activeCardComponent.removeCardListeners();
       this._activeCardComponent.remove();
-      // Очистить активную карточку
       this._activeCardComponent = null;
     }
   };

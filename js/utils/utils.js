@@ -20,7 +20,7 @@
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,
     loadImage: loadImage,
-    interactWithServer: interactWithServer,
+    requestServer: requestServer,
   };
 
   /**
@@ -144,7 +144,7 @@
     }
   }
 
-  function interactWithServer(ConfigXHR, successHandler, errorHandler, data) {
+  function requestServer(ConfigXHR, successHandler, errorHandler, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = ConfigXHR.RESPONSE_TYPE;
 
