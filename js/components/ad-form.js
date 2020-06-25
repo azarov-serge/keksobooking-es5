@@ -136,10 +136,6 @@
     });
   };
 
-  AdFormComponent.prototype.toggleStateCallback = function () {
-    this.toggleStateFieldsets();
-  };
-
   AdFormComponent.prototype.isActivateFieldsets = function () {
     return !this._getFieldsets()[0].disabled;
   };
