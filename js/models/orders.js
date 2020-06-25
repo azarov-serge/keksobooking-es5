@@ -2,6 +2,8 @@
 (function () {
   var Util = window.Util;
 
+  var FILTER_ALL = 'any';
+
   function OrdersModel() {
     this._orders = [];
     this._listFilters = [];
@@ -11,24 +13,24 @@
     };
     this.filters = {
       'housing-type': {
+        type: 'type',
         value: null,
-        rank: 2,
-      },
-      'housing-price': {
-        value: null,
-        rank: 2,
       },
       'housing-rooms': {
+        type: 'rooms',
         value: null,
-        rank: 2,
       },
       'housing-guests': {
+        type: 'guests',
         value: null,
-        rank: 2,
+      },
+      'housing-price': {
+        type: 'price',
+        value: null,
       },
       'housing-features': {
+        type: 'features',
         value: null,
-        rank: 2,
       },
     };
   }
@@ -49,15 +51,17 @@
     if (!this._orders.length) {
       throw new Error('Orders are not exist');
     }
-    var getRank = this._getRank.bind(this);
 
-    return this._orders.slice().sort((function (left, right) {
-      var rankDiff = getRank(right) - getRank(left);
-      if (rankDiff === 0) {
-        rankDiff = left.id - right.id;
-      }
+    var isFiltering = this._isFiltering.bind(this);
 
-      return rankDiff;
+    return this._orders.filter((function (order) {
+      return (
+        isFiltering(order, 'housing-type')
+        &&
+        isFiltering(order, 'housing-rooms')
+        &&
+        isFiltering(order, 'housing-guests')
+      );
     }));
   };
 
@@ -71,37 +75,12 @@
     return orderModel;
   };
 
-  OrdersModel.prototype._willFilter = function (orderValue, filterValue) {
+  OrdersModel.prototype._isFiltering = function (order, type) {
     return (
-      (orderValue === filterValue)
-      &&
-      (filterValue !== this._FILTER_ALL)
+      this.filters[type].value === FILTER_ALL
+        ? true
+        : String(this.filters[type].value) === String(order.offer[this.filters[type].type])
     );
-  };
-
-  OrdersModel.prototype._getSimpleRank = function (rank, orderValue, filterName) {
-    if (this.filters[filterName].value === this._filterAll.value) {
-      return rank + this._filterAll.rank;
-    }
-
-    if (String(orderValue) === this.filters[filterName].value) {
-      return rank + this.filters[filterName].rank;
-    }
-
-    return rank;
-  };
-
-  OrdersModel.prototype._getRank = function (order) {
-    var rank = 0;
-    // Получить ранг по типу
-    rank = this._getSimpleRank(rank, order.offer.type, 'housing-type');
-    // Получить ранг по количеству комнат
-    rank = this._getSimpleRank(rank, order.offer.rooms, 'housing-rooms');
-    // Получить ранг по количеству гостей
-    rank = this._getSimpleRank(rank, order.offer.guests, 'housing-guests');
-    order.rank = rank;
-
-    return rank;
   };
 
   window.OrdersModel = OrdersModel;
