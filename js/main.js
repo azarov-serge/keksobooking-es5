@@ -59,6 +59,9 @@
     adFormComponent.adFormResetHandler = deactivateMap;
     // Запустить обработчики события кнопки reset
     adFormComponent.addAdFormResetListener();
+    if (ordersModel.isOrdersExist()) {
+      mainMapComponent.toggleStateMapFilter();
+    }
   }
 
   /**
@@ -157,6 +160,9 @@
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
+  if (mainMapComponent.isMapFilterActivate()) {
+    mainMapComponent.toggleStateMapFilter();
+  }
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {

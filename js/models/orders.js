@@ -3,7 +3,7 @@
   var Util = window.Util;
 
   function OrdersModel() {
-    this._orders = null;
+    this._orders = [];
   }
 
   OrdersModel.prototype.setOrders = function (orders) {
@@ -16,6 +16,10 @@
 
   OrdersModel.prototype.getOrderByID = function (id) {
     return Util.getByID(this._orders, parseInt(id, 10));
+  };
+
+  OrdersModel.prototype.isOrdersExist = function () {
+    return Boolean(this._orders.length);
   };
 
   OrdersModel.prototype._createOrder = function (order, id) {
