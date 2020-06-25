@@ -183,12 +183,12 @@
   /**
    *
    * @param {Object[]} array Массив объектов
-   * @param {number} id Идентификатор
+   * @param {object} id Идентификатор
    */
 
   function getByID(array, id) {
     return array.filter(function (item) {
-      return item.id === parseInt(id, 10);
+      return item.id === id;
     })[0];
   }
 
