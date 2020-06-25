@@ -229,7 +229,7 @@
     // Деактивировать активный пин, если он есть
     this._deactivatePin();
     // Установить активный пин
-    this._activePinComponent = Util.getByID(this._pinComponents, id);
+    this._activePinComponent = Util.getByID(this._pinComponents, parseInt(id, 10));
     // Активировать нажатый пин
     this._activePinComponent.toggleState();
   };
