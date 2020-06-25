@@ -2,6 +2,7 @@
 (function () {
   var CoordsUtil = window.CoordsUtil;
   var Util = window.Util;
+  var DEFAULT_FILTER_INDEX = 0;
 
   var ordersModel = new window.OrdersModel();
   var mainMapComponent = new window.MainMapComponent();
@@ -26,6 +27,12 @@
     adFormController.setAddress(coordsMainPin);
   }
 
+  function setDefaultFilters() {
+    mainMapComponent.getMapFilters().forEach(function ($filter) {
+      $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
+    });
+  }
+
   /**
    * @description Активация карты
    */
@@ -48,7 +55,7 @@
     // Установить контейнер, куда отрисовывать карточку
     mapPinsController.setCardContainer(mainMapComponent.getElement());
     // Установить место, куда отрисовывать карточку
-    mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
+    mapPinsController.setCardPlace(mainMapComponent.getMapFiltersContainer());
     // Отрисовать пины на карте
     mapPinsController.renderPins(ordersModel.getOrders());
     // Установить функцию для события отправки формы
@@ -59,6 +66,12 @@
     adFormComponent.adFormResetHandler = deactivateMap;
     // Запустить обработчики события кнопки reset
     adFormComponent.addAdFormResetListener();
+    setDefaultFilters();
+    if (ordersModel.isOrdersExist()) {
+      mainMapComponent.mapFiltersHandler = mapFiltersHandler;
+      mainMapComponent.toggleStateMapFilters();
+      mainMapComponent.addMapFiltersListener();
+    }
   }
 
   /**
@@ -71,6 +84,7 @@
     mainMapComponent.toggleState();
     // Установить значение пина по умолчанию в поле адресс формы
     setDefaultCoordsToForm();
+    setDefaultFilters();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
     mapPinsController.deactivate();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
@@ -79,6 +93,8 @@
     adFormComponent.removeAdFormSubmitListener();
     // Удалить обработчик события кнопки reset
     adFormComponent.removeAdFormResetListener();
+    // Удалить обработчик события фильтров
+    mainMapComponent.removeMapFiltersListener();
   }
 
   /**
@@ -148,6 +164,25 @@
     document.removeEventListener('mouseup', mainPinMouseUpHandler);
   }
 
+  /**
+   * @description Событие на изменение фильтров
+   */
+
+  function setFilterToOrdersModel() {
+    mainMapComponent.getMapFilters().forEach(function ($filter) {
+      ordersModel.filters[$filter.id].value = $filter.value;
+    });
+  }
+
+  /**
+  * @description Событие на изменение фильтров
+  */
+
+  function mapFiltersHandler() {
+    setFilterToOrdersModel();
+    mapPinsController.renderPins(ordersModel.getOrdersByFilters());
+  }
+
   // Активировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
   mapPinsController.activate();
   // Активировать контроллер формы объявлений
@@ -157,6 +192,10 @@
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
+  // Отключить фильтры если включены
+  if (mainMapComponent.isMapFiltersActivate()) {
+    mainMapComponent.toggleStateMapFilters();
+  }
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {

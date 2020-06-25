@@ -134,9 +134,13 @@
    */
 
   MapPinsController.prototype._createPinsComponents = function (orders) {
-    this._pinComponents = orders.slice(0, ORDERS_COUNT).map(function (order, index) {
+    function filterOrders(order) {
+      return Boolean(order.offer);
+    }
+
+    this._pinComponents = orders.filter(filterOrders).slice(0, ORDERS_COUNT).map(function (order) {
       // Создать новый копонент пина
-      var pinComponent = new window.PinComponent(order, index);
+      var pinComponent = new window.PinComponent(order);
       return pinComponent;
     });
   };
@@ -159,7 +163,7 @@
     if (this._isPinClicked(evt.target)) {
       evt.preventDefault();
       // Активировать нажатый пин и отрисовать его карточку
-      this._renderActiveCardAndActivatePin(evt.target.dataset.orderIndex || evt.target.parentElement.dataset.orderIndex);
+      this._renderActiveCardAndActivatePin(evt.target.dataset.orderId || evt.target.parentElement.dataset.orderId);
     }
   };
 
@@ -179,11 +183,11 @@
    * @description Активирует нажатый пин и отрисовывает его карточку
    */
 
-  MapPinsController.prototype._renderActiveCardAndActivatePin = function (index) {
+  MapPinsController.prototype._renderActiveCardAndActivatePin = function (id) {
     // Активировать пин по индексу
-    this._activatePin(index);
+    this._activatePin(id);
     // Отрисовать карточку пина по индексу
-    this._renderActiveCard(index);
+    this._renderActiveCard(id);
   };
 
   /**
@@ -221,11 +225,11 @@
    * @description Активирует активный пин, если он есть
    */
 
-  MapPinsController.prototype._activatePin = function (index) {
+  MapPinsController.prototype._activatePin = function (id) {
     // Деактивировать активный пин, если он есть
     this._deactivatePin();
     // Установить активный пин
-    this._activePinComponent = this._pinComponents[index];
+    this._activePinComponent = Util.getByID(this._pinComponents, parseInt(id, 10));
     // Активировать нажатый пин
     this._activePinComponent.toggleState();
   };
@@ -246,11 +250,11 @@
    * @description Отрисовывает активную карточку, добовляет обработчики событий для неё
    */
 
-  MapPinsController.prototype._renderActiveCard = function (index) {
+  MapPinsController.prototype._renderActiveCard = function (id) {
     // Удалить активную карточку, если она есть
     this._removeActiveCard();
     // Создать новую карточку и установить в переменную
-    this._activeCardComponent = new window.CardComponent(this._ordersModel.getOrderByIndex(index));
+    this._activeCardComponent = new window.CardComponent(this._ordersModel.getOrderByID(id));
     // Отрисовать карточку на карте
     this._activeCardComponent.render(this._$cardContainer, this._$cardPlace);
     // Установить обработчики событий для карточку

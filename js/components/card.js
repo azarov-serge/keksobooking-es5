@@ -25,9 +25,9 @@
   var ROOM_TEXTS = ['комната', 'комнаты', 'комнат'];
   var GUEST_TEXTS = ['гостя', 'гостей', 'гостей'];
 
-  function CardComponent(cardData) {
+  function CardComponent(order) {
     AbsctractComponent.call(this);
-    this._cardData = cardData;
+    this._order = order;
     this.closeCardClickHandler = null;
     this.documentKeyDownHandler = null;
   }
@@ -38,14 +38,14 @@
   CardComponent.prototype._getTemplate = function () {
 
     /**
-     * @param {*} cardData Данные объявления
+     * @param {*} order Данные объявления
      * @param {string} className Название класса элемента в шаблоне
      * @param {string} text Текст для вставки в элемент
      */
 
-    function setText(cardData, className, text) {
-      text = text || cardData;
-      if (cardData) {
+    function setText(order, className, text) {
+      text = text || order;
+      if (order) {
         $card.querySelector(className).textContent = text;
       } else {
         $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
@@ -53,13 +53,13 @@
     }
 
     /**
-     * @param {*} cardData Адресс изображения
+     * @param {*} order Адресс изображения
      * @param {string} className Название класса элемента в шаблоне
      */
 
-    function setImage(cardData, className) {
-      if (cardData) {
-        $card.querySelector(className).src = cardData;
+    function setImage(order, className) {
+      if (order) {
+        $card.querySelector(className).src = order;
       } else {
         $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
       }
@@ -70,13 +70,13 @@
      * @param {Object[]} features Массив строк удобств
      */
 
-    function renderFeatures(cardData) {
+    function renderFeatures(order) {
       var $featuresContainer = $card.querySelector(CardSelector.FEATURES);
-      if (cardData.length) {
+      if (order.length) {
         var $features = $featuresContainer.querySelectorAll(CardSelector.FEATURE);
         $features.forEach(function ($feature) {
           var findFeature = $feature.className.split('--');
-          if (cardData.indexOf(findFeature[1]) === -1) {
+          if (order.indexOf(findFeature[1]) === -1) {
             $feature.classList.add(CardSelector.HIDE_CLASS);
           }
         });
@@ -90,23 +90,23 @@
      * @param {Object[]} features Массив строк с фото (путь к фото)
      */
 
-    function renderPhotos(cardData) {
+    function renderPhotos(order) {
       // Получить контейнер фотографий
       var $photosContainer = $card.querySelector(CardSelector.PHOTOS);
       // Получить шаблон изображений
       var $templatePhoto = $photosContainer.querySelector(CardSelector.PHOTO);
       // Если изображения есть, отрисовать
-      if (cardData.length) {
+      if (order.length) {
         // Установить первое фото в массиве
-        $templatePhoto.src = cardData[0];
+        $templatePhoto.src = order[0];
         // Добавить в массив для рендеринга
         var $photos = [$templatePhoto];
         // Добавить фотографии, начиная со второй в массив для рендеринга
-        for (var i = 1; i < cardData.length; i++) {
+        for (var index = 1; index < order.length; index++) {
           // Склонировать шаблон
           var $photo = $templatePhoto.cloneNode(true);
           // Установить данные по фото из элемента массива
-          $photo.src = cardData[i];
+          $photo.src = order[index];
           // Добавить в массив для рендеринга
           $photos.push($photo);
         }
@@ -123,44 +123,44 @@
     // Склонировать шаблон
     var $card = $template.cloneNode(true);
     // Установить аватар, если есть
-    setImage(this._cardData.author.avatar, CardSelector.AVATAR);
+    setImage(this._order.author.avatar, CardSelector.AVATAR);
     // Установить текст заголовка, если есть
-    setText(this._cardData.offer.title, CardSelector.TITLE);
+    setText(this._order.offer.title, CardSelector.TITLE);
     // Установить адресс, если есть
-    setText(this._cardData.offer.address, CardSelector.ADDRESS);
+    setText(this._order.offer.address, CardSelector.ADDRESS);
     // Установить цену, если есть
-    setText(this._cardData.offer.price, CardSelector.PRICE, parseInt(this._cardData.offer.price, 10).toLocaleString() + '₽/ночь');
+    setText(this._order.offer.price, CardSelector.PRICE, parseInt(this._order.offer.price, 10).toLocaleString() + '₽/ночь');
     // Установить тип жилья, если есть
     setText(
-        this._cardData.offer.type,
+        this._order.offer.type,
         CardSelector.TYPE,
-        this._cardData.offer.type ? Constant.bookingType[this._cardData.offer.type].title : ''
+        this._order.offer.type ? Constant.bookingType[this._order.offer.type].title : ''
     );
 
     // Установить количество гостей и комнат, если есть
     setText(
-        this._cardData.offer.rooms && this._cardData.offer.guests,
+        this._order.offer.rooms && this._order.offer.guests,
         CardSelector.CAPACITY,
         (
-          this._cardData.offer.rooms + ' '
-          + Util.getWordEnd(this._cardData.offer.rooms, ROOM_TEXTS)
-          + ' для ' + this._cardData.offer.guests + ' '
-          + Util.getWordEnd(this._cardData.offer.guests, GUEST_TEXTS)
+          this._order.offer.rooms + ' '
+          + Util.getWordEnd(this._order.offer.rooms, ROOM_TEXTS)
+          + ' для ' + this._order.offer.guests + ' '
+          + Util.getWordEnd(this._order.offer.guests, GUEST_TEXTS)
         )
     );
     // Установить время заезда и время выезда, если есть
     setText(
-        this._cardData.offer.checkin && this._cardData.offer.checkout,
+        this._order.offer.checkin && this._order.offer.checkout,
         CardSelector.TIME,
-        'Заезд после ' + this._cardData.offer.checkin + ', выезд до ' + this._cardData.offer.checkout
+        'Заезд после ' + this._order.offer.checkin + ', выезд до ' + this._order.offer.checkout
     );
 
     // Отрисовать все доступные удобств в объявлении
-    renderFeatures(this._cardData.offer.features);
+    renderFeatures(this._order.offer.features);
     // Установить описание объявления, если есть
-    setText(this._cardData.offer.description, CardSelector.DESCRIPTION, this._cardData.offer.description);
+    setText(this._order.offer.description, CardSelector.DESCRIPTION, this._order.offer.description);
     // Отрисовать все фотографии объявления
-    renderPhotos(this._cardData.offer.photos);
+    renderPhotos(this._order.offer.photos);
 
     return $card;
   };

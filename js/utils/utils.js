@@ -21,6 +21,7 @@
     isEnterPressed: isEnterPressed,
     loadImage: loadImage,
     requestServer: requestServer,
+    getByID: getByID,
   };
 
   /**
@@ -144,6 +145,14 @@
     }
   }
 
+  /**
+   *
+   * @param {Object} ConfigXHR Файл с конфигурациями
+   * @param {function} successHandler Callback в случае успеха
+   * @param {function} errorHandler Callback в случае ошибки
+   * @param {*} data Данные
+   */
+
   function requestServer(ConfigXHR, successHandler, errorHandler, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = ConfigXHR.RESPONSE_TYPE;
@@ -169,6 +178,18 @@
     xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
 
     xhr.send(data);
+  }
+
+  /**
+   *
+   * @param {Object[]} array Массив объектов
+   * @param {object} id Идентификатор
+   */
+
+  function getByID(array, id) {
+    return array.filter(function (item) {
+      return item.id === id;
+    })[0];
   }
 
   window.Util = Util;
