@@ -2,6 +2,7 @@
 (function () {
   var CoordsUtil = window.CoordsUtil;
   var Util = window.Util;
+  var DEFAULT_FILTER_INDEX = 0;
 
   var ordersModel = new window.OrdersModel();
   var mainMapComponent = new window.MainMapComponent();
@@ -24,6 +25,13 @@
   function setDefaultCoordsToForm() {
     coordsMainPin = mapPinsController.getMainPinDefaultCoords();
     adFormController.setAddress(coordsMainPin);
+  }
+
+  function setDefaultFilters() {
+    mainMapComponent.getMapFilters().forEach(function ($filter) {
+      $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
+      ordersModel.filters[$filter.id].value = $filter.value;
+    });
   }
 
   /**
@@ -183,6 +191,7 @@
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
+  setDefaultFilters();
   // Отключить фильтры если включены
   if (mainMapComponent.isMapFiltersActivate()) {
     mainMapComponent.toggleStateMapFilters();
