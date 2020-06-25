@@ -60,6 +60,7 @@
     // Запустить обработчики события кнопки reset
     adFormComponent.addAdFormResetListener();
     if (ordersModel.isOrdersExist()) {
+      mainMapComponent.mapFiltersHandler = mapFiltersHandler;
       mainMapComponent.toggleStateMapFilters();
       mainMapComponent.addMapFiltersListener();
     }
@@ -83,6 +84,8 @@
     adFormComponent.removeAdFormSubmitListener();
     // Удалить обработчик события кнопки reset
     adFormComponent.removeAdFormResetListener();
+    // Удалить обработчик события фильтров
+    mainMapComponent.removeMapFiltersListener();
   }
 
   /**
@@ -152,6 +155,25 @@
     document.removeEventListener('mouseup', mainPinMouseUpHandler);
   }
 
+  /**
+   * @description Событие на изменение фильтров
+   */
+
+  function setFilterToOrdersModel() {
+    mainMapComponent.getMapFilters().forEach(function ($filter) {
+      ordersModel.filters[$filter.id].value = $filter.value;
+    });
+  }
+
+  /**
+  * @description Событие на изменение фильтров
+  */
+
+  function mapFiltersHandler() {
+    setFilterToOrdersModel();
+    mapPinsController.renderPins(ordersModel.getOrdersByFilters());
+  }
+
   // Активировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
   mapPinsController.activate();
   // Активировать контроллер формы объявлений
@@ -161,6 +183,7 @@
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
+  // Отключить фильтры если включены
   if (mainMapComponent.isMapFiltersActivate()) {
     mainMapComponent.toggleStateMapFilters();
   }

@@ -50,5 +50,9 @@
     this.getMapFiltersForm().addEventListener('change', this.mapFiltersHandler);
   };
 
+  MainMapComponent.prototype.removeMapFiltersListener = function () {
+    this.getMapFiltersForm().removeEventListener('change', this.mapFiltersHandler);
+  };
+
   window.MainMapComponent = MainMapComponent;
 })();
