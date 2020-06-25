@@ -30,7 +30,6 @@
   function setDefaultFilters() {
     mainMapComponent.getMapFilters().forEach(function ($filter) {
       $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
-      ordersModel.filters[$filter.id].value = $filter.value;
     });
   }
 
@@ -67,6 +66,7 @@
     adFormComponent.adFormResetHandler = deactivateMap;
     // Запустить обработчики события кнопки reset
     adFormComponent.addAdFormResetListener();
+    setDefaultFilters();
     if (ordersModel.isOrdersExist()) {
       mainMapComponent.mapFiltersHandler = mapFiltersHandler;
       mainMapComponent.toggleStateMapFilters();
@@ -84,6 +84,7 @@
     mainMapComponent.toggleState();
     // Установить значение пина по умолчанию в поле адресс формы
     setDefaultCoordsToForm();
+    setDefaultFilters();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
     mapPinsController.deactivate();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
@@ -191,7 +192,6 @@
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
-  setDefaultFilters();
   // Отключить фильтры если включены
   if (mainMapComponent.isMapFiltersActivate()) {
     mainMapComponent.toggleStateMapFilters();
