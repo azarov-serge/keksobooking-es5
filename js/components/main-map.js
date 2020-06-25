@@ -15,34 +15,39 @@
     this._SELECTOR = MainMapSelector.MAIN_MAP;
     this._TOGGLE_CLASS = MainMapSelector.TOGGLE_CLASS;
     this._$container = document;
-    this._$mapFilterContainer = null;
-    this._$mapFilterForm = null;
+    this._$mapFiltersContainer = null;
+    this._$mapFiltersForm = null;
     this._$mapFilters = null;
+    this.mapFiltersHandler = null;
   }
 
   MainMapComponent.prototype = Object.create(AbsctractElement.prototype);
   MainMapComponent.prototype.constructor = MainMapComponent;
 
-  MainMapComponent.prototype.getMapFilterContainer = function () {
-    return this._getCustomElement(this._$mapFilterContainer, MainMapSelector.MAP_FILTER_CONTAINER, this.getElement());
+  MainMapComponent.prototype.getMapFiltersContainer = function () {
+    return this._getCustomElement(this._$mapFiltersContainer, MainMapSelector.MAP_FILTER_CONTAINER, this.getElement());
   };
 
   MainMapComponent.prototype.getMapFiltersForm = function () {
-    return this._getCustomElement(this._$mapFilterForm, MainMapSelector.MAP_FILTERS_FORM, this.getMapFilterContainer());
+    return this._getCustomElement(this._$mapFiltersForm, MainMapSelector.MAP_FILTERS_FORM, this.getMapFiltersContainer());
   };
 
-  MainMapComponent.prototype._getMapFilters = function () {
+  MainMapComponent.prototype.getMapFilters = function () {
     return this._getCustomElements(this._$mapFilters, MainMapSelector.MAP_FILTER, this.getMapFiltersForm());
   };
 
-  MainMapComponent.prototype.toggleStateMapFilter = function () {
-    this._getMapFilters().forEach(function ($filter) {
+  MainMapComponent.prototype.toggleStateMapFilters = function () {
+    this.getMapFilters().forEach(function ($filter) {
       $filter.disabled = !$filter.disabled;
     });
   };
 
-  MainMapComponent.prototype.isMapFilterActivate = function () {
-    return !this._getMapFilters()[0].disabled;
+  MainMapComponent.prototype.isMapFiltersActivate = function () {
+    return !this.getMapFilters()[0].disabled;
+  };
+
+  MainMapComponent.prototype.addMapFiltersListener = function () {
+    this.getMapFiltersForm().addEventListener('change', this.mapFiltersHandler);
   };
 
   window.MainMapComponent = MainMapComponent;

@@ -4,6 +4,13 @@
 
   function OrdersModel() {
     this._orders = [];
+    this.filters = {
+      'housing-type': null,
+      'housing-price': null,
+      'housing-rooms': null,
+      'housing-guests': null,
+      'housing-features': null,
+    };
   }
 
   OrdersModel.prototype.setOrders = function (orders) {

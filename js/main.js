@@ -48,7 +48,7 @@
     // Установить контейнер, куда отрисовывать карточку
     mapPinsController.setCardContainer(mainMapComponent.getElement());
     // Установить место, куда отрисовывать карточку
-    mapPinsController.setCardPlace(mainMapComponent.getMapFilterContainer());
+    mapPinsController.setCardPlace(mainMapComponent.getMapFiltersContainer());
     // Отрисовать пины на карте
     mapPinsController.renderPins(ordersModel.getOrders());
     // Установить функцию для события отправки формы
@@ -60,7 +60,8 @@
     // Запустить обработчики события кнопки reset
     adFormComponent.addAdFormResetListener();
     if (ordersModel.isOrdersExist()) {
-      mainMapComponent.toggleStateMapFilter();
+      mainMapComponent.toggleStateMapFilters();
+      mainMapComponent.addMapFiltersListener();
     }
   }
 
@@ -160,8 +161,8 @@
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
-  if (mainMapComponent.isMapFilterActivate()) {
-    mainMapComponent.toggleStateMapFilter();
+  if (mainMapComponent.isMapFiltersActivate()) {
+    mainMapComponent.toggleStateMapFilters();
   }
 
   // Установить обработчик клика мыши у главного пина
