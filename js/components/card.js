@@ -89,7 +89,7 @@
         var $features = $featuresContainer.querySelectorAll(CardSelector.FEATURE);
         $features.forEach(function ($feature) {
           var findFeature = $feature.className.split('--');
-          if (order.indexOf(findFeature[1]) === -1) {
+          if (!order.includes(findFeature[1])) {
             $feature.classList.add(CardSelector.HIDE_CLASS);
           }
         });

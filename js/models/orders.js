@@ -124,7 +124,7 @@
   OrdersModel.prototype._isFilteringFeatures = function (order) {
     var isFiltering = true;
     this.filters['housing-features'].value.forEach(function (filter) {
-      if (order.offer.features.indexOf(filter) === -1) {
+      if (!order.offer.features.includes(filter)) {
         isFiltering = false;
         return;
       }
