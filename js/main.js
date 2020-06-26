@@ -66,8 +66,6 @@
     mapPinsController.setCardContainer(mainMapComponent.getElement());
     // Установить место, куда отрисовывать карточку
     mapPinsController.setCardPlace(mainMapComponent.getMapFiltersContainer());
-    // Отрисовать пины на карте
-    mapPinsController.renderPins(ordersModel.getOrders());
     // Установить функцию для события отправки формы
     adFormComponent.adFormSubmitHandler = adFormSubmitHandler;
     // Запустить обработчики события для отправки формы
@@ -81,6 +79,8 @@
       mainMapComponent.mapFiltersHandler = Util.debounce(mapFiltersHandler);
       mainMapComponent.toggleStateMapFilters();
       mainMapComponent.addMapFiltersListener();
+      // Отрисовать пины на карте
+      mapFiltersHandler();
     }
   }
 

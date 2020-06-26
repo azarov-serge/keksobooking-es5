@@ -42,10 +42,6 @@
     this._orders = orders.map(this._createOrder);
   };
 
-  OrdersModel.prototype.getOrders = function () {
-    return this._orders;
-  };
-
   OrdersModel.prototype.getOrderByID = function (id) {
     return Util.getByID(this._orders, parseInt(id, 10));
   };
