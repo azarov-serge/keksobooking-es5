@@ -7,7 +7,7 @@
 
   var Default = {
     MAIN_PIN_LEFT: 570,
-    MAIN_PIN_TOP: 357,
+    MAIN_PIN_TOP: 375,
   };
 
   var PIN_CLASS_NAME = 'map__pin';

@@ -52,6 +52,19 @@
       }
     }
 
+    /* @param {*} order Данные объявления
+    * @param {string} className Название класса элемента в шаблоне
+    * @param {string} text Текст для вставки в элемент
+    */
+
+    function setPrice(orderPrice, className) {
+      if (!isNaN(parseInt(orderPrice, 10)) && (orderPrice >= 0)) {
+        $card.querySelector(className).textContent = parseInt(orderPrice, 10).toLocaleString() + '₽/ночь';
+      } else {
+        $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
+      }
+    }
+
     /**
      * @param {*} order Адресс изображения
      * @param {string} className Название класса элемента в шаблоне
@@ -76,7 +89,7 @@
         var $features = $featuresContainer.querySelectorAll(CardSelector.FEATURE);
         $features.forEach(function ($feature) {
           var findFeature = $feature.className.split('--');
-          if (order.indexOf(findFeature[1]) === -1) {
+          if (!order.includes(findFeature[1])) {
             $feature.classList.add(CardSelector.HIDE_CLASS);
           }
         });
@@ -129,7 +142,7 @@
     // Установить адресс, если есть
     setText(this._order.offer.address, CardSelector.ADDRESS);
     // Установить цену, если есть
-    setText(this._order.offer.price, CardSelector.PRICE, parseInt(this._order.offer.price, 10).toLocaleString() + '₽/ночь');
+    setPrice(this._order.offer.price, CardSelector.PRICE);
     // Установить тип жилья, если есть
     setText(
         this._order.offer.type,

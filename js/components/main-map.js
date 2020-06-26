@@ -8,6 +8,7 @@
     MAP_FILTER_CONTAINER: '.map__filters-container',
     MAP_FILTERS_FORM: '.map__filters',
     MAP_FILTER: '.map__filter',
+    MAP_FEATURE_FILTER: 'input[name="features"]',
   };
 
   function MainMapComponent() {
@@ -18,6 +19,7 @@
     this._$mapFiltersContainer = null;
     this._$mapFiltersForm = null;
     this._$mapFilters = null;
+    this._$mapFeaturesFilters = null;
     this.mapFiltersHandler = null;
   }
 
@@ -40,6 +42,10 @@
     this.getMapFilters().forEach(function ($filter) {
       $filter.disabled = !$filter.disabled;
     });
+  };
+
+  MainMapComponent.prototype.getMapFeaturesFilters = function () {
+    return this._getCustomElements(this._$mapFeaturesFilters, MainMapSelector.MAP_FEATURE_FILTER, this.getMapFiltersForm());
   };
 
   MainMapComponent.prototype.isMapFiltersActivate = function () {

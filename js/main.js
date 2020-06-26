@@ -27,9 +27,19 @@
     adFormController.setAddress(coordsMainPin);
   }
 
+  /**
+   * @description Сброс фильтров на значение по умолчанию
+   */
+
   function setDefaultFilters() {
     mainMapComponent.getMapFilters().forEach(function ($filter) {
-      $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
+      if ($filter.id !== 'housing-features') {
+        $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
+      }
+    });
+
+    mainMapComponent.getMapFeaturesFilters().forEach(function ($featuresFilter) {
+      $featuresFilter.checked = false;
     });
   }
 
@@ -40,6 +50,7 @@
   function activateMap(orders) {
     // Получить координаты главного пина
     coordsMainPin = mapPinsController.getMainPinCoords();
+    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
     // Установить адресс в форму
     adFormController.setAddress(coordsMainPin);
     // Переключить состояние карты на активное
@@ -56,8 +67,6 @@
     mapPinsController.setCardContainer(mainMapComponent.getElement());
     // Установить место, куда отрисовывать карточку
     mapPinsController.setCardPlace(mainMapComponent.getMapFiltersContainer());
-    // Отрисовать пины на карте
-    mapPinsController.renderPins(ordersModel.getOrders());
     // Установить функцию для события отправки формы
     adFormComponent.adFormSubmitHandler = adFormSubmitHandler;
     // Запустить обработчики события для отправки формы
@@ -68,9 +77,11 @@
     adFormComponent.addAdFormResetListener();
     setDefaultFilters();
     if (ordersModel.isOrdersExist()) {
-      mainMapComponent.mapFiltersHandler = mapFiltersHandler;
+      mainMapComponent.mapFiltersHandler = Util.debounce(mapFiltersHandler);
       mainMapComponent.toggleStateMapFilters();
       mainMapComponent.addMapFiltersListener();
+      // Отрисовать пины на карте
+      mapFiltersHandler();
     }
   }
 
@@ -169,9 +180,20 @@
    */
 
   function setFilterToOrdersModel() {
+    var features = [];
     mainMapComponent.getMapFilters().forEach(function ($filter) {
-      ordersModel.filters[$filter.id].value = $filter.value;
+      if ($filter.id !== 'housing-features') {
+        ordersModel.filters[$filter.id].value = $filter.value;
+      }
     });
+
+    mainMapComponent.getMapFeaturesFilters().forEach(function ($featuresFilter) {
+      if ($featuresFilter.checked) {
+        features.push($featuresFilter.value);
+      }
+    });
+
+    ordersModel.filters['housing-features'].value = features;
   }
 
   /**
