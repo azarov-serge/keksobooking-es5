@@ -50,6 +50,7 @@
   function activateMap(orders) {
     // Получить координаты главного пина
     coordsMainPin = mapPinsController.getMainPinCoords();
+    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
     // Установить адресс в форму
     adFormController.setAddress(coordsMainPin);
     // Переключить состояние карты на активное
