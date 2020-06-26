@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
+  var DEBOUNCE_INTERVAL = 500;
 
   // Код нажатия кнопки мыши
   var LEFT_MOUSE_BUTTON = 0;
@@ -22,6 +23,7 @@
     loadImage: loadImage,
     requestServer: requestServer,
     getByID: getByID,
+    debounce: debounce,
   };
 
   /**
@@ -190,6 +192,27 @@
     return array.filter(function (item) {
       return item.id === id;
     })[0];
+  }
+
+  /**
+   * @description Откладывает выполнение callback на DEBOUNCE_INTERVAL
+   * @param {function} callback Callback
+   */
+
+  function debounce(callback) {
+    var lastTimeout = null;
+
+    return function () {
+      var parameters = arguments;
+
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+
+      lastTimeout = window.setTimeout(function () {
+        callback.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
   }
 
   window.Util = Util;

@@ -78,7 +78,7 @@
     adFormComponent.addAdFormResetListener();
     setDefaultFilters();
     if (ordersModel.isOrdersExist()) {
-      mainMapComponent.mapFiltersHandler = mapFiltersHandler;
+      mainMapComponent.mapFiltersHandler = Util.debounce(mapFiltersHandler);
       mainMapComponent.toggleStateMapFilters();
       mainMapComponent.addMapFiltersListener();
     }
