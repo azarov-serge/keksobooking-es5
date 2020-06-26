@@ -3,6 +3,11 @@
   var Util = window.Util;
 
   var FILTER_ALL = 'any';
+  var filterPrice = {
+    low: 10000,
+    hight: 50000,
+  };
+
 
   function OrdersModel() {
     this._orders = [];
@@ -25,11 +30,9 @@
         value: null,
       },
       'housing-price': {
-        type: 'price',
         value: null,
       },
       'housing-features': {
-        type: 'features',
         value: null,
       },
     };
@@ -53,6 +56,8 @@
     }
 
     var isFiltering = this._isFiltering.bind(this);
+    var isFilteringPrice = this._isFilteringPrice.bind(this);
+    var isFilteringFeatures = this._isFilteringFeatures.bind(this);
 
     return this._orders.filter((function (order) {
       return (
@@ -61,6 +66,10 @@
         isFiltering(order, 'housing-rooms')
         &&
         isFiltering(order, 'housing-guests')
+        &&
+        isFilteringPrice(order)
+        &&
+        isFilteringFeatures(order)
       );
     }));
   };
@@ -75,12 +84,58 @@
     return orderModel;
   };
 
+  /**
+   * @description Делает простую проверку для фильтрации
+   * @param {Object} order Объявление
+   * @param {string} type Название фильра
+   * @return Возвращает true || false (проходит условие фильтра)
+   */
+
   OrdersModel.prototype._isFiltering = function (order, type) {
     return (
       this.filters[type].value === FILTER_ALL
         ? true
         : String(this.filters[type].value) === String(order.offer[this.filters[type].type])
     );
+  };
+
+  /**
+   * @description Делает проверку для фильтрации цены
+   * @param {Object} order Объявление
+   * @return Возвращает true || false (проходит условие фильтра)
+   */
+
+  OrdersModel.prototype._isFilteringPrice = function (order) {
+    switch (this.filters['housing-price'].value) {
+      case 'low':
+        return order.offer.price < filterPrice.low;
+      case 'middle':
+        return order.offer.price >= filterPrice.low && order.offer.price < filterPrice.hight;
+      case 'high':
+        return order.offer.price >= filterPrice.hight;
+      default:
+        return true;
+    }
+  };
+
+
+  /**
+   * @description Делает проверку для фильтрации удобств
+   * @param {Object} order Объявление
+   * @return Возвращает true || false (проходит условие фильтра)
+   */
+
+  OrdersModel.prototype._isFilteringFeatures = function (order) {
+    var isFiltering = true;
+    this.filters['housing-features'].value.forEach(function (filter) {
+      if (order.offer.features.indexOf(filter) === -1) {
+        isFiltering = false;
+        return;
+      }
+
+    });
+
+    return isFiltering;
   };
 
   window.OrdersModel = OrdersModel;

@@ -27,9 +27,19 @@
     adFormController.setAddress(coordsMainPin);
   }
 
+  /**
+   * @description Сброс фильтров на значение по умолчанию
+   */
+
   function setDefaultFilters() {
     mainMapComponent.getMapFilters().forEach(function ($filter) {
-      $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
+      if ($filter.id !== 'housing-features') {
+        $filter.value = $filter[DEFAULT_FILTER_INDEX].value;
+      }
+    });
+
+    mainMapComponent.getMapFeaturesFilters().forEach(function ($featuresFilter) {
+      $featuresFilter.checked = false;
     });
   }
 
@@ -169,9 +179,20 @@
    */
 
   function setFilterToOrdersModel() {
+    var features = [];
     mainMapComponent.getMapFilters().forEach(function ($filter) {
-      ordersModel.filters[$filter.id].value = $filter.value;
+      if ($filter.id !== 'housing-features') {
+        ordersModel.filters[$filter.id].value = $filter.value;
+      }
     });
+
+    mainMapComponent.getMapFeaturesFilters().forEach(function ($featuresFilter) {
+      if ($featuresFilter.checked) {
+        features.push($featuresFilter.value);
+      }
+    });
+
+    ordersModel.filters['housing-features'].value = features;
   }
 
   /**
