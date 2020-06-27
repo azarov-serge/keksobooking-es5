@@ -10,6 +10,9 @@
     CHECK_IN: 0,
   };
 
+  var NOT_GUESTS = 0;
+  var MAX_ROOMS_COUNT = 100;
+
   var PREVIEW_SELECTOR = 'img';
   var AD_GUESTS_ITEM_SELECTOR = 'option';
   var AD_AVATAR_SELECTOR = 'img';
@@ -58,12 +61,6 @@
    */
 
   AdFormController.prototype.runValidity = function () {
-    this._adFormComponent.getAdAddress().readOnly = true;
-    this._adFormComponent.getAdAvatar().accept = Constant.ValidateValue.IMAGES_AVATAR;
-    this._adFormComponent.getAdImages().accept = Constant.ValidateValue.IMAGES_AD;
-    this._adFormComponent.getAdPrice().max = Constant.ValidateValue.MAX_PRICE;
-    // Установить валидацию заголовка объявления
-    this._setValidityTitle();
     // Установить функцию для обработчиков событий валидации
     this._setValidityHandlers();
     // Запустить обработчики событий для валидации формы
@@ -113,7 +110,6 @@
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
     this._disabledGuestsValues(Default.ROOMS);
     this._adFormComponent.getAdType().value = Default.TYPE;
-    this._adFormComponent.getAdPrice().required = true;
     this._setMinPrice(Constant.bookingType[Default.TYPE].minPrice);
     this._adFormComponent.getAdPrice().value = Default.EMPTY_STRING;
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
@@ -150,16 +146,6 @@
     this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
     this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
     this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
-  };
-
-  /**
-   * @description Валидация заголовка
-   */
-
-  AdFormController.prototype._setValidityTitle = function () {
-    this._adFormComponent.getAdTitle().required = true;
-    this._adFormComponent.getAdTitle().minLength = Constant.ValidateValue.TITLE_MIN_LENGTH;
-    this._adFormComponent.getAdTitle().maxLength = Constant.ValidateValue.TITLE_MAX_LENGTH;
   };
 
   /**
@@ -203,8 +189,8 @@
    */
 
   AdFormController.prototype._getGuests = function (rooms) {
-    if (rooms === Constant.ValidateValue.MAX_ROOMS_COUNT) {
-      return Constant.ValidateValue.NOT_GUESTS;
+    if (rooms === MAX_ROOMS_COUNT) {
+      return NOT_GUESTS;
     }
 
     return rooms;
@@ -216,8 +202,6 @@
    */
 
   AdFormController.prototype._disabledGuestsValues = function (validValue) {
-    var NOT_GUESTS = Constant.ValidateValue.NOT_GUESTS;
-
     /**
      * @description Переключает элемент фильтра: enabled || diasabled
      * @param {Object} $item Элемент филтра (option у select)
