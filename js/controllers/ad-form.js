@@ -154,6 +154,7 @@
 
   /**
    * @description Валидация количества комнат
+   * @param evt Событие
    */
 
   AdFormController.prototype._adRoomsChangeHandler = function (evt) {
