@@ -14,7 +14,7 @@
   // Типы изображений
   var FILE_TYPES = ['gif', 'svg', 'jpg', 'jpeg', 'png'];
 
-  var Util = {
+  var util = {
     render: render,
     getWordEnd: getWordEnd,
     isLeftMouseButtonPressed: isLeftMouseButtonPressed,
@@ -215,5 +215,5 @@
     };
   }
 
-  window.Util = Util;
+  window.util = util;
 })();

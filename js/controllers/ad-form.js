@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
-  var Util = window.Util;
+  var util = window.util;
 
   // Индекс значения по умолчанию
   var DefaultIndex = {
@@ -245,7 +245,7 @@
   AdFormController.prototype._adAvatarChangeHandler = function () {
     var file = this._adFormComponent.getAdAvatar().files[0];
     var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector(PREVIEW_SELECTOR);
-    Util.loadImage(file, $previewImage);
+    util.loadImage(file, $previewImage);
   };
 
   /**
@@ -262,13 +262,13 @@
 
       if (!$preview.querySelector(PREVIEW_SELECTOR)) {
         var $previewImage = document.createElement('img');
-        Util.loadImage(files[index], $previewImage);
-        Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
+        util.loadImage(files[index], $previewImage);
+        util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
       } else {
         $preview = $preview.cloneNode(true);
         $previewImage = $preview.querySelector(PREVIEW_SELECTOR);
-        Util.loadImage(files[index], $previewImage);
-        Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
+        util.loadImage(files[index], $previewImage);
+        util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
       }
     }
   };

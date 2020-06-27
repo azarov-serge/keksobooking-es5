@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var CoordsUtil = window.CoordsUtil;
-  var Util = window.Util;
+  var coordsUtil = window.coordsUtil;
+  var util = window.util;
 
   var ORDERS_COUNT = 5;
 
@@ -62,7 +62,7 @@
    */
 
   MapPinsController.prototype.getMainPinCoords = function () {
-    return CoordsUtil.convertToCoords(
+    return coordsUtil.convertToCoords(
         this._mapPinsComponent.getMainPin().style.left,
         this._mapPinsComponent.getMainPin().style.top
     );
@@ -90,7 +90,7 @@
     });
 
     // Отрисовать пины на карте
-    Util.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
+    util.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
     // Установить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
     this._setMapPinsClickHandler();
     // Запустить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
@@ -172,7 +172,7 @@
    */
 
   MapPinsController.prototype._mainPinKeyDownHandler = function (evt) {
-    if (Util.isEnterPressed(evt)) {
+    if (util.isEnterPressed(evt)) {
       evt.preventDefault();
       // Использовать callbak клика (активировать нажатый пин и отрисовать его карточку)
       this._mainPinClickHandler(evt);
@@ -229,7 +229,7 @@
     // Деактивировать активный пин, если он есть
     this._deactivatePin();
     // Установить активный пин
-    this._activePinComponent = Util.getByID(this._pinComponents, parseInt(id, 10));
+    this._activePinComponent = util.getByID(this._pinComponents, parseInt(id, 10));
     // Активировать нажатый пин
     this._activePinComponent.toggleState();
   };
@@ -290,7 +290,7 @@
    */
 
   MapPinsController.prototype._documentKeyDownHandler = function (evt) {
-    if (Util.isEscPressed(evt)) {
+    if (util.isEscPressed(evt)) {
       evt.preventDefault();
       // Использовать callback для клика кнопки закрыть у карточке (удалить карточку и деактивировать пин карточки)
       this._closeCardClickHandler();

@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
-  var Util = window.Util;
+  var util = window.util;
 
   var SuccessSelector = {
     SUCCESS_TEMPLATE: '#success',
@@ -41,7 +41,7 @@
   };
 
   SuccessComponent.prototype._documentKeyDownHandler = function (evt) {
-    if (Util.isEscPressed(evt)) {
+    if (util.isEscPressed(evt)) {
       this._closeSuccess(evt);
     }
   };

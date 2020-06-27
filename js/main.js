@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var CoordsUtil = window.CoordsUtil;
-  var Util = window.Util;
+  var coordsUtil = window.coordsUtil;
+  var util = window.util;
   var DEFAULT_FILTER_INDEX = 0;
 
   var ordersModel = new window.OrdersModel();
@@ -14,9 +14,9 @@
   // Координаты главного пина
   var coordsMainPin = null;
   // Координаты события
-  var coordsEvt = CoordsUtil.create();
+  var coordsEvt = coordsUtil.create();
   // Сдвиг координат главного пина
-  var coordsShift = CoordsUtil.create();
+  var coordsShift = coordsUtil.create();
 
 
   function start() {
@@ -57,7 +57,7 @@
   function activateMap(orders) {
     // Получить координаты главного пина
     coordsMainPin = mapPinsController.getMainPinCoords();
-    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
+    coordsMainPin = coordsUtil.convertToLocation(coordsMainPin);
     // Установить адресс в форму
     adFormController.setAddress(coordsMainPin);
     // Переключить состояние карты на активное
@@ -84,7 +84,7 @@
     adFormComponent.addAdFormResetListener();
     setDefaultFilters();
     if (ordersModel.isOrdersExist()) {
-      mainMapComponent.mapFiltersHandler = Util.debounce(mapFiltersHandler);
+      mainMapComponent.mapFiltersHandler = util.debounce(mapFiltersHandler);
       mainMapComponent.toggleStateMapFilters();
       mainMapComponent.addMapFiltersListener();
       // Отрисовать пины на карте
@@ -158,13 +158,13 @@
     coordsEvt.x = evt.clientX;
     coordsEvt.y = evt.clientY;
     // Вычислить координаты главного пина в допустимых пределах карты
-    coordsMainPin.x = CoordsUtil.setX(mapPinsComponent.getMainPin().offsetLeft - coordsShift.x);
-    coordsMainPin.y = CoordsUtil.setY(mapPinsComponent.getMainPin().offsetTop - coordsShift.y);
+    coordsMainPin.x = coordsUtil.setX(mapPinsComponent.getMainPin().offsetLeft - coordsShift.x);
+    coordsMainPin.y = coordsUtil.setY(mapPinsComponent.getMainPin().offsetTop - coordsShift.y);
     // Установить координаты главного пина в допустимых пределах карты
     mapPinsComponent.getMainPin().style.left = coordsMainPin.x + 'px';
     mapPinsComponent.getMainPin().style.top = coordsMainPin.y + 'px';
     // Сконвертировать координаты в адресс
-    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
+    coordsMainPin = coordsUtil.convertToLocation(coordsMainPin);
     // Установить адресс в форму
     adFormController.setAddress(coordsMainPin);
   }
@@ -226,7 +226,7 @@
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
-    if (Util.isLeftMouseButtonPressed(evt)) {
+    if (util.isLeftMouseButtonPressed(evt)) {
       evt.preventDefault();
       mapPinsMouseDownHandler(evt);
     }
@@ -234,7 +234,7 @@
 
   // Установить обработчик клика клавиши у главного пина
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
-    if (Util.isEnterPressed(evt)) {
+    if (util.isEnterPressed(evt)) {
       evt.preventDefault();
       start();
     }

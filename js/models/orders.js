@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var Util = window.Util;
+  var util = window.util;
 
   var FILTER_ALL = 'any';
   var filterPrice = {
@@ -43,7 +43,7 @@
   };
 
   OrdersModel.prototype.getOrderByID = function (id) {
-    return Util.getByID(this._orders, parseInt(id, 10));
+    return util.getByID(this._orders, parseInt(id, 10));
   };
 
   OrdersModel.prototype.getOrdersByFilters = function () {

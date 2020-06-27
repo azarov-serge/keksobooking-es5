@@ -3,7 +3,7 @@
   var SuccessComponent = window.SuccessComponent;
   var ErrorComponent = window.ErrorComponent;
   var Constant = window.Constant;
-  var Util = window.Util;
+  var util = window.util;
   // Конфигруация загруски для XMLHttpRequest
   var ConfigLoad = {
     RESPONSE_TYPE: 'json',
@@ -42,7 +42,7 @@
 
   BackendController.prototype.load = function () {
     // Получить список объявлений с сервера
-    Util.requestServer(ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
+    util.requestServer(ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
   };
 
   /**
@@ -51,7 +51,7 @@
    */
 
   BackendController.prototype.upload = function ($form) {
-    Util.requestServer(ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
+    util.requestServer(ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
   };
 
   /**

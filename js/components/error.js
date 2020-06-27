@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
-  var Util = window.Util;
+  var util = window.util;
 
   var ErrorSelector = {
     ERROR_TEMPLATE: '#error',
@@ -48,7 +48,7 @@
   };
 
   ErrorComponent.prototype._documentKeyDownHandler = function (evt) {
-    if (Util.isEscPressed(evt)) {
+    if (util.isEscPressed(evt)) {
       evt.preventDefault();
       this._errorButtonClickHandler();
     }

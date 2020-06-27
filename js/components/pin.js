@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
-  var CoordsUtil = window.CoordsUtil;
+  var coordsUtil = window.coordsUtil;
 
   var PinSelector = {
     TEMPLATE: '#pin',
@@ -22,7 +22,7 @@
 
   PinComponent.prototype._getTemplate = function () {
     var coordsPin = Object.assign({}, this._order.location);
-    coordsPin = CoordsUtil.convertFromLocation(coordsPin);
+    coordsPin = coordsUtil.convertFromLocation(coordsPin);
     var $template = document.querySelector(PinSelector.TEMPLATE).content.querySelector(PinSelector.PIN);
     var $pin = $template.cloneNode(true);
     $pin.style.left = coordsPin.x + 'px';

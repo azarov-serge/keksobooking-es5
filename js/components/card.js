@@ -2,7 +2,7 @@
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
   var Constant = window.Constant;
-  var Util = window.Util;
+  var util = window.util;
 
   var CardSelector = {
     TEMPLATE: '#card',
@@ -124,7 +124,7 @@
           $photos.push($photo);
         }
         // Отрисовать все фотографии объявления
-        Util.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
+        util.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
       } else {
         // Если изображений нет, скрыть контейнер фотографий
         $photosContainer.classList.add(CardSelector.HIDE_CLASS);
@@ -156,9 +156,9 @@
         CardSelector.CAPACITY,
         (
           this._order.offer.rooms + ' '
-          + Util.getWordEnd(this._order.offer.rooms, ROOM_TEXTS)
+          + util.getWordEnd(this._order.offer.rooms, ROOM_TEXTS)
           + ' для ' + this._order.offer.guests + ' '
-          + Util.getWordEnd(this._order.offer.guests, GUEST_TEXTS)
+          + util.getWordEnd(this._order.offer.guests, GUEST_TEXTS)
         )
     );
     // Установить время заезда и время выезда, если есть
