@@ -53,6 +53,8 @@
     this.adFormResetHandler = null;
     this.adAvatarChangeHandler = null;
     this.adAdImagesChangeHandler = null;
+    this.adPriceChangeHandler = null;
+    this.adTitleChangeHandler = null;
   }
 
   AdFormComponent.prototype = Object.create(AbsctractElement.prototype);
@@ -145,6 +147,8 @@
     this.getAdType().addEventListener('change', this.adTypeChangeHandler);
     this.getAdCheckIn().addEventListener('change', this.adCheckInChangeHandler);
     this.getAdCheckOut().addEventListener('change', this.adCheckOutChangeHandler);
+    this.getAdPrice().addEventListener('change', this.adPriceChangeHandler);
+    this.getAdTitle().addEventListener('change', this.adTitleChangeHandler);
   };
 
   AdFormComponent.prototype.removeAdFormValidityListeners = function () {
@@ -152,6 +156,8 @@
     this.getAdType().removeEventListener('change', this.adTypeChangeHandler);
     this.getAdCheckIn().removeEventListener('change', this.adCheckInChangeHandler);
     this.getAdCheckOut().removeEventListener('change', this.adCheckOutChangeHandler);
+    this.getAdPrice().removeEventListener('change', this.adPriceChangeHandler);
+    this.getAdTitle().removeEventListener('change', this.adTitleChangeHandler);
   };
 
   AdFormComponent.prototype.addAdFormSubmitListener = function () {

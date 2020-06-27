@@ -12,7 +12,7 @@
 
   var NOT_GUESTS = 0;
   var MAX_ROOMS_COUNT = 100;
-
+  var INVALID_STYLE = 'border: 2px solid #ff0000;';
   var PREVIEW_SELECTOR = 'img';
   var AD_GUESTS_ITEM_SELECTOR = 'option';
   var AD_AVATAR_SELECTOR = 'img';
@@ -31,7 +31,7 @@
       this._adFormComponent.toggleStateFieldsets();
     }
 
-    this.setDefaultValues();
+    this.setDefaultAdForm();
     this._adFormComponent.getAdImages().multiple = 'multiple';
   };
 
@@ -42,7 +42,7 @@
   AdFormController.prototype.deactivate = function () {
     // Переключить форму в неактивное состояние
     this.toggleState();
-    this.setDefaultValues();
+    this.setDefaultAdForm();
     this.stopValidity();
     this.stopLoadImagesListeners();
   };
@@ -87,7 +87,7 @@
    * @description Устанавливает значения по умолчанию
    */
 
-  AdFormController.prototype.setDefaultValues = function () {
+  AdFormController.prototype.setDefaultAdForm = function () {
     // Значения по умолчанию
     var Default = {
       EMPTY_STRING: '',
@@ -106,12 +106,14 @@
     this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
     this._clearAdImagesContainer();
     this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
+    this._adFormComponent.getAdTitle().style = Default.EMPTY_STRING;
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
     this._disabledGuestsValues(Default.ROOMS);
     this._adFormComponent.getAdType().value = Default.TYPE;
     this._setMinPrice(Constant.bookingType[Default.TYPE].minPrice);
     this._adFormComponent.getAdPrice().value = Default.EMPTY_STRING;
+    this._adFormComponent.getAdPrice().style = Default.EMPTY_STRING;
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
     this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
@@ -146,6 +148,8 @@
     this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
     this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
     this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
+    this._adFormComponent.adPriceChangeHandler = this.checkValidity;
+    this._adFormComponent.adTitleChangeHandler = this.checkValidity;
   };
 
   /**
@@ -181,6 +185,14 @@
 
   AdFormController.prototype._adCheckOutChangeHandler = function (evt) {
     this._adFormComponent.getAdCheckIn().value = evt.target.value;
+  };
+
+  /**
+   * @description Если ошибка, установить стиль ошибки
+   */
+
+  AdFormController.prototype.checkValidity = function (evt) {
+    evt.target.style = evt.target.validity.valid ? '' : INVALID_STYLE;
   };
 
   /**
