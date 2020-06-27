@@ -18,6 +18,13 @@
   // Сдвиг координат главного пина
   var coordsShift = CoordsUtil.create();
 
+
+  function start() {
+    if (!mainMapComponent.isActivate()) {
+      backendController.load();
+    }
+  }
+
   /**
    * @description Устанавливает значение пина по умолчанию в поле адресс формы
    */
@@ -126,9 +133,7 @@
    */
 
   function mapPinsMouseDownHandler(evt) {
-    if (!mainMapComponent.isActivate()) {
-      backendController.load();
-    }
+    start();
 
     // Зафиксировать текущие координаты главного пина
     coordsEvt.x = evt.clientX;
@@ -231,7 +236,7 @@
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
     if (Util.isEnterPressed(evt)) {
       evt.preventDefault();
-      backendController.load();
+      start();
     }
   });
 })();
