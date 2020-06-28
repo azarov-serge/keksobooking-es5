@@ -263,15 +263,15 @@
    */
 
   MapPinsController.prototype._setCloseCardHandler = function () {
-    this._activeCardComponent.closeCardClickHandler = this._closeCardClickHandler.bind(this);
+    this._activeCardComponent.closeCardClickHandler = this._сloseCard.bind(this);
     this._activeCardComponent.documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
   };
 
   /**
-   * @description Callback для клика кнопки закрыть у карточке (удалить карточку и деактивировать пин карточки)
+   * @description Закрывает карточку
    */
 
-  MapPinsController.prototype._closeCardClickHandler = function () {
+  MapPinsController.prototype._сloseCard = function () {
     // Удалить обработчики событий карточки
     this._activeCardComponent.removeCardListeners();
     // Удалить карточку
@@ -287,8 +287,7 @@
   MapPinsController.prototype._documentKeyDownHandler = function (evt) {
     if (util.isEscPressed(evt)) {
       evt.preventDefault();
-      // Использовать callback для клика кнопки закрыть у карточке (удалить карточку и деактивировать пин карточки)
-      this._closeCardClickHandler();
+      this._сloseCard();
     }
   };
 

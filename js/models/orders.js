@@ -72,12 +72,12 @@
   };
 
   OrdersModel.prototype.isOrdersExist = function () {
-    return Boolean(this._orders.length);
+    return this._orders.length;
   };
 
   OrdersModel.prototype._getFilteredOrders = function () {
     function filterOrders(order) {
-      return Boolean(order.offer);
+      return order.offer;
     }
     if (!this._filteredOrders.length) {
       this._filteredOrders = this._orders.filter(filterOrders);
