@@ -134,11 +134,7 @@
    */
 
   MapPinsController.prototype._createPinsComponents = function (orders) {
-    function filterOrders(order) {
-      return Boolean(order.offer);
-    }
-
-    this._pinComponents = orders.filter(filterOrders).slice(0, ORDERS_COUNT).map(function (order) {
+    this._pinComponents = orders.slice(0, ORDERS_COUNT).map(function (order) {
       // Создать новый копонент пина
       var pinComponent = new window.PinComponent(order);
       return pinComponent;

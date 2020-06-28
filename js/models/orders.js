@@ -11,6 +11,7 @@
 
   function OrdersModel() {
     this._orders = [];
+    this._filteredOrders = [];
     this._listFilters = [];
     this._filterAll = {
       value: 'any',
@@ -55,7 +56,7 @@
     var isFilteringPrice = this._isFilteringPrice.bind(this);
     var isFilteringFeatures = this._isFilteringFeatures.bind(this);
 
-    return this._orders.filter((function (order) {
+    return this._getFilteredOrders().filter((function (order) {
       return (
         isFiltering(order, 'housing-type')
         &&
@@ -72,6 +73,17 @@
 
   OrdersModel.prototype.isOrdersExist = function () {
     return Boolean(this._orders.length);
+  };
+
+  OrdersModel.prototype._getFilteredOrders = function () {
+    function filterOrders(order) {
+      return Boolean(order.offer);
+    }
+    if (!this._filteredOrders.length) {
+      this._filteredOrders = this._orders.filter(filterOrders);
+    }
+
+    return this._filteredOrders;
   };
 
   OrdersModel.prototype._createOrder = function (order, id) {
