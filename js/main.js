@@ -19,10 +19,25 @@
   var coordsShift = coordsUtil.create();
 
 
+  /**
+   * @description Делает запрос к серверу, в случае успеха активирует карту
+   */
   function start() {
     if (!mainMapComponent.isActivate()) {
       backendController.load();
     }
+  }
+
+  /**
+   * @description Конвертирует координаты и устанавливает в поле адрес
+   * @param {Ob} coords Координаты {x, y}
+   */
+
+  function setCoordsToAdress(coords) {
+    // Сконвертировать координаты в адресс
+    coords = coordsUtil.convertToLocation(coords);
+    // Установить адресс в форму
+    adFormController.setAddress(coords);
   }
 
   /**
@@ -57,9 +72,8 @@
   function activateMap(orders) {
     // Получить координаты главного пина
     coordsMainPin = mapPinsController.getMainPinCoords();
-    coordsMainPin = coordsUtil.convertToLocation(coordsMainPin);
-    // Установить адресс в форму
-    adFormController.setAddress(coordsMainPin);
+    // Конвертация и установка координат
+    setCoordsToAdress(coordsMainPin);
     // Переключить состояние карты на активное
     mainMapComponent.toggleState();
     // Переключить форму в активное состояние.
@@ -102,6 +116,7 @@
     mainMapComponent.toggleState();
     // Установить значение пина по умолчанию в поле адресс формы
     setDefaultCoordsToForm();
+    // Установка фильтров по умолчанию
     setDefaultFilters();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
     mapPinsController.deactivate();
@@ -163,10 +178,8 @@
     // Установить координаты главного пина в допустимых пределах карты
     mapPinsComponent.getMainPin().style.left = coordsMainPin.x + 'px';
     mapPinsComponent.getMainPin().style.top = coordsMainPin.y + 'px';
-    // Сконвертировать координаты в адресс
-    coordsMainPin = coordsUtil.convertToLocation(coordsMainPin);
-    // Установить адресс в форму
-    adFormController.setAddress(coordsMainPin);
+    // Конвертация и установка координат
+    setCoordsToAdress(coordsMainPin);
   }
 
   /**
