@@ -32,7 +32,6 @@
     }
 
     this.setDefaultAdForm();
-    this._adFormComponent.getAdImages().multiple = 'multiple';
   };
 
   /**
