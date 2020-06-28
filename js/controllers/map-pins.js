@@ -16,6 +16,7 @@
   function MapPinsController(mapPinsComponent, ordersModel) {
     this._mapPinsComponent = mapPinsComponent;
     this._pinComponents = [];
+    this._$pins = [];
     this._ordersModel = ordersModel;
     this._activePinComponent = null;
     this._activeCardComponent = null;
@@ -81,16 +82,12 @@
       this._removeActiveCard();
     }
 
-    var $pins = [];
+
     // Создать массив пин компонентов
     this._createPinsComponents(orders);
-    // Создать массив пин элементов для рендеринга
-    this._pinComponents.forEach(function (pinComponent) {
-      $pins.push(pinComponent.getElement());
-    });
-
     // Отрисовать пины на карте
-    util.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
+    util.render(this._mapPinsComponent.getElement(), this._$pins, this._mapPinsComponent.getMainPin());
+    this._$pins = [];
     // Установить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
     this._setMapPinsClickHandler();
     // Запустить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
@@ -134,9 +131,11 @@
    */
 
   MapPinsController.prototype._createPinsComponents = function (orders) {
+    var $pins = this._$pins;
     this._pinComponents = orders.slice(0, ORDERS_COUNT).map(function (order) {
       // Создать новый копонент пина
       var pinComponent = new window.PinComponent(order);
+      $pins.push(pinComponent.getElement());
       return pinComponent;
     });
   };
