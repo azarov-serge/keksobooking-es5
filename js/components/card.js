@@ -25,6 +25,9 @@
   var ROOM_TEXTS = ['комната', 'комнаты', 'комнат'];
   var GUEST_TEXTS = ['гостя', 'гостей', 'гостей'];
 
+  // Получить шаблона карточки
+  var $template = document.querySelector(CardSelector.TEMPLATE).content.querySelector(CardSelector.CARD);
+
   function CardComponent(order) {
     AbsctractComponent.call(this);
     this._order = order;
@@ -131,8 +134,6 @@
       }
     }
 
-    // Получить шаблона карточки
-    var $template = document.querySelector(CardSelector.TEMPLATE).content.querySelector(CardSelector.CARD);
     // Склонировать шаблон
     var $card = $template.cloneNode(true);
     // Установить аватар, если есть

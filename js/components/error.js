@@ -10,6 +10,8 @@
     ERROR_BTN: '.error__button',
   };
 
+  var $template = document.querySelector(ErrorSelector.ERROR_TEMPLATE).content.querySelector(ErrorSelector.ERROR_CLASS);
+
   function ErrorComponent() {
     AbsctractComponent.call(this);
     this._$errorMessage = null;
@@ -23,7 +25,6 @@
   ErrorComponent.prototype.constructor = ErrorComponent;
 
   ErrorComponent.prototype._getTemplate = function () {
-    var $template = document.querySelector(ErrorSelector.ERROR_TEMPLATE).content.querySelector(ErrorSelector.ERROR_CLASS);
     var $error = $template.cloneNode(true);
     return $error;
   };

@@ -9,6 +9,8 @@
     SUCCESS_MESSAGE: '.success__message',
   };
 
+  var $template = document.querySelector(SuccessSelector.SUCCESS_TEMPLATE).content.querySelector(SuccessSelector.SUCCESS_CLASS);
+
   function SuccessComponent() {
     AbsctractComponent.call(this);
     this._$successMessage = null;
@@ -20,7 +22,6 @@
   SuccessComponent.prototype.constructor = SuccessComponent;
 
   SuccessComponent.prototype._getTemplate = function () {
-    var $template = document.querySelector(SuccessSelector.SUCCESS_TEMPLATE).content.querySelector(SuccessSelector.SUCCESS_CLASS);
     var $success = $template.cloneNode(true);
     return $success;
   };
