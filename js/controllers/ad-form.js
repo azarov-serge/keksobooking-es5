@@ -268,11 +268,10 @@
   AdFormController.prototype._addAdImagesChangeHandler = function () {
     var files = this._adFormComponent.getAdImages().files;
     this._clearAdImagesContainer();
+    var $previewContainer = this._adFormComponent.getAdImagesContainer();
+    var $preview = this._adFormComponent.getAdImagesPreview();
 
-    for (var index = 0; index < files.length; index++) {
-      var $previewContainer = this._adFormComponent.getAdImagesContainer();
-      var $preview = this._adFormComponent.getAdImagesPreview();
-
+    files.forEach(function (file, index) {
       if (!$preview.querySelector(PREVIEW_SELECTOR)) {
         var $previewImage = document.createElement('img');
         util.loadImage(files[index], $previewImage);
@@ -283,7 +282,7 @@
         util.loadImage(files[index], $previewImage);
         util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
       }
-    }
+    });
   };
 
   /**
