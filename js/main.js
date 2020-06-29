@@ -30,23 +30,17 @@
 
   /**
    * @description Конвертирует координаты и устанавливает в поле адрес
-   * @param {Ob} coords Координаты {x, y}
+   * @param {Object} coords Координаты {x, y}
+   * @param {boolean} isDefault Установить по умолчанию
    */
 
-  function setCoordsToAdress(coords) {
+  function setCoordsToAdress(coords, isDefault) {
     // Сконвертировать координаты в адресс
-    coords = coordsUtil.convertToLocation(coords);
+    coords = isDefault
+      ? mapPinsController.getMainPinDefaultCoords()
+      : coordsUtil.convertToLocation(coords);
     // Установить адресс в форму
     adFormController.setAddress(coords);
-  }
-
-  /**
-   * @description Устанавливает значение пина по умолчанию в поле адресс формы
-   */
-
-  function setDefaultCoordsToForm() {
-    coordsMainPin = mapPinsController.getMainPinDefaultCoords();
-    adFormController.setAddress(coordsMainPin);
   }
 
   /**
@@ -115,7 +109,7 @@
     // Переключить состояние карты на неактивное
     mainMapComponent.toggleState();
     // Установить значение пина по умолчанию в поле адресс формы
-    setDefaultCoordsToForm();
+    setCoordsToAdress(coordsMainPin, true);
     // Установка фильтров по умолчанию
     setDefaultFilters();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
@@ -173,8 +167,10 @@
     coordsEvt.x = evt.clientX;
     coordsEvt.y = evt.clientY;
     // Вычислить координаты главного пина в допустимых пределах карты
-    coordsMainPin.x = coordsUtil.setX(mapPinsComponent.getMainPin().offsetLeft - coordsShift.x);
-    coordsMainPin.y = coordsUtil.setY(mapPinsComponent.getMainPin().offsetTop - coordsShift.y);
+    coordsMainPin = coordsUtil.set(
+        mapPinsComponent.getMainPin().offsetLeft - coordsShift.x,
+        mapPinsComponent.getMainPin().offsetTop - coordsShift.y
+    );
     // Установить координаты главного пина в допустимых пределах карты
     mapPinsComponent.getMainPin().style.left = coordsMainPin.x + 'px';
     mapPinsComponent.getMainPin().style.top = coordsMainPin.y + 'px';
@@ -228,7 +224,7 @@
   // Активировать контроллер формы объявлений
   adFormController.activate();
   // Установить значение пина по умолчанию в поле адресс формы
-  setDefaultCoordsToForm();
+  setCoordsToAdress(coordsMainPin, true);
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
   adFormController._clearAdImagesContainer();
