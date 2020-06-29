@@ -87,7 +87,7 @@
   function getWordEnd(number, txt) {
     var cases = [2, 0, 1, 1, 1, 2];
     var index = 0;
-    if (number % 100 > 4 && number % 100 < 20) {
+    if ((number % 100 > 4) && (number % 100 < 20)) {
       index = 2;
     } else {
       index = cases[(number % 10 < 5) ? number % 10 : 5];
