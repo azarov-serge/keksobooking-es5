@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var CoordsUtil = window.CoordsUtil;
-  var Util = window.Util;
+  var coordsUtil = window.coordsUtil;
+  var util = window.util;
   var DEFAULT_FILTER_INDEX = 0;
 
   var ordersModel = new window.OrdersModel();
@@ -14,17 +14,33 @@
   // Координаты главного пина
   var coordsMainPin = null;
   // Координаты события
-  var coordsEvt = CoordsUtil.create();
+  var coordsEvt = coordsUtil.create();
   // Сдвиг координат главного пина
-  var coordsShift = CoordsUtil.create();
+  var coordsShift = coordsUtil.create();
+
 
   /**
-   * @description Устанавливает значение пина по умолчанию в поле адресс формы
+   * @description Делает запрос к серверу, в случае успеха активирует карту
+   */
+  function start() {
+    if (!mainMapComponent.isActivate()) {
+      backendController.load();
+    }
+  }
+
+  /**
+   * @description Конвертирует координаты и устанавливает в поле адрес
+   * @param {Object} coords Координаты {x, y}
+   * @param {boolean} isDefault Установить по умолчанию
    */
 
-  function setDefaultCoordsToForm() {
-    coordsMainPin = mapPinsController.getMainPinDefaultCoords();
-    adFormController.setAddress(coordsMainPin);
+  function setCoordsToAdress(coords, isDefault) {
+    // Сконвертировать координаты в адресс
+    coords = isDefault
+      ? mapPinsController.getMainPinDefaultCoords()
+      : coordsUtil.convertToLocation(coords);
+    // Установить адресс в форму
+    adFormController.setAddress(coords);
   }
 
   /**
@@ -50,9 +66,8 @@
   function activateMap(orders) {
     // Получить координаты главного пина
     coordsMainPin = mapPinsController.getMainPinCoords();
-    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
-    // Установить адресс в форму
-    adFormController.setAddress(coordsMainPin);
+    // Конвертация и установка координат
+    setCoordsToAdress(coordsMainPin);
     // Переключить состояние карты на активное
     mainMapComponent.toggleState();
     // Переключить форму в активное состояние.
@@ -77,7 +92,7 @@
     adFormComponent.addAdFormResetListener();
     setDefaultFilters();
     if (ordersModel.isOrdersExist()) {
-      mainMapComponent.mapFiltersHandler = Util.debounce(mapFiltersHandler);
+      mainMapComponent.mapFiltersHandler = util.debounce(mapFiltersHandler);
       mainMapComponent.toggleStateMapFilters();
       mainMapComponent.addMapFiltersListener();
       // Отрисовать пины на карте
@@ -94,7 +109,8 @@
     // Переключить состояние карты на неактивное
     mainMapComponent.toggleState();
     // Установить значение пина по умолчанию в поле адресс формы
-    setDefaultCoordsToForm();
+    setCoordsToAdress(coordsMainPin, true);
+    // Установка фильтров по умолчанию
     setDefaultFilters();
     // Деактивировать контроллер контейнера с пинами (сброс настроек компонента по умолчанию)
     mapPinsController.deactivate();
@@ -126,9 +142,7 @@
    */
 
   function mapPinsMouseDownHandler(evt) {
-    if (!mainMapComponent.isActivate()) {
-      backendController.load();
-    }
+    start();
 
     // Зафиксировать текущие координаты главного пина
     coordsEvt.x = evt.clientX;
@@ -153,15 +167,15 @@
     coordsEvt.x = evt.clientX;
     coordsEvt.y = evt.clientY;
     // Вычислить координаты главного пина в допустимых пределах карты
-    coordsMainPin.x = CoordsUtil.setX(mapPinsComponent.getMainPin().offsetLeft - coordsShift.x);
-    coordsMainPin.y = CoordsUtil.setY(mapPinsComponent.getMainPin().offsetTop - coordsShift.y);
+    coordsMainPin = coordsUtil.set(
+        mapPinsComponent.getMainPin().offsetLeft - coordsShift.x,
+        mapPinsComponent.getMainPin().offsetTop - coordsShift.y
+    );
     // Установить координаты главного пина в допустимых пределах карты
     mapPinsComponent.getMainPin().style.left = coordsMainPin.x + 'px';
     mapPinsComponent.getMainPin().style.top = coordsMainPin.y + 'px';
-    // Сконвертировать координаты в адресс
-    coordsMainPin = CoordsUtil.convertToLocation(coordsMainPin);
-    // Установить адресс в форму
-    adFormController.setAddress(coordsMainPin);
+    // Конвертация и установка координат
+    setCoordsToAdress(coordsMainPin);
   }
 
   /**
@@ -210,10 +224,10 @@
   // Активировать контроллер формы объявлений
   adFormController.activate();
   // Установить значение пина по умолчанию в поле адресс формы
-  setDefaultCoordsToForm();
+  setCoordsToAdress(coordsMainPin, true);
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
-  adFormController._clearAdImagesContainer();
+
   // Отключить фильтры если включены
   if (mainMapComponent.isMapFiltersActivate()) {
     mainMapComponent.toggleStateMapFilters();
@@ -221,7 +235,7 @@
 
   // Установить обработчик клика мыши у главного пина
   mapPinsComponent.getMainPin().addEventListener('mousedown', function (evt) {
-    if (Util.isLeftMouseButtonPressed(evt)) {
+    if (util.isLeftMouseButtonPressed(evt)) {
       evt.preventDefault();
       mapPinsMouseDownHandler(evt);
     }
@@ -229,9 +243,9 @@
 
   // Установить обработчик клика клавиши у главного пина
   mapPinsComponent.getMainPin().addEventListener('keydown', function (evt) {
-    if (Util.isEnterPressed(evt)) {
+    if (util.isEnterPressed(evt)) {
       evt.preventDefault();
-      backendController.load();
+      start();
     }
   });
 })();

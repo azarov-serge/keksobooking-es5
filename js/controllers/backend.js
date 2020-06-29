@@ -3,7 +3,21 @@
   var SuccessComponent = window.SuccessComponent;
   var ErrorComponent = window.ErrorComponent;
   var Constant = window.Constant;
-  var Util = window.Util;
+  var util = window.util;
+  // Конфигруация загруски для XMLHttpRequest
+  var ConfigLoad = {
+    RESPONSE_TYPE: 'json',
+    METHOD: 'GET',
+    URL: 'https://javascript.pages.academy/keksobooking/data',
+    TIMEOUT: 10000,
+  };
+  // Конфигруация отправки для XMLHttpRequest
+  var ConfigUpLoad = {
+    RESPONSE_TYPE: 'json',
+    METHOD: 'POST',
+    URL: 'https://javascript.pages.academy/keksobooking',
+    TIMEOUT: 30000,
+  };
   // Контейнер куда размещается сообщение
   var $container = document.querySelector('main');
 
@@ -28,7 +42,7 @@
 
   BackendController.prototype.load = function () {
     // Получить список объявлений с сервера
-    Util.requestServer(Constant.ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
+    util.requestServer(ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
   };
 
   /**
@@ -37,7 +51,7 @@
    */
 
   BackendController.prototype.upload = function ($form) {
-    Util.requestServer(Constant.ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
+    util.requestServer(ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
   };
 
   /**

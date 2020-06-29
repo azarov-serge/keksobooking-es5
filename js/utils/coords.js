@@ -9,7 +9,7 @@
   var MAP_MIN_Y = 130;
   var MAP_MAX_Y = 630;
 
-  var CoordsUtil = {
+  var coordsUtil = {
     create: create,
     setX: setX,
     setY: setY,
@@ -108,5 +108,5 @@
     return parseInt(String(coord).replace('px', ''), 10);
   }
 
-  window.CoordsUtil = CoordsUtil;
+  window.coordsUtil = coordsUtil;
 })();

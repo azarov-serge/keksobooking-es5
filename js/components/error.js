@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
-  var Util = window.Util;
+  var util = window.util;
 
   var ErrorSelector = {
     ERROR_TEMPLATE: '#error',
@@ -9,6 +9,8 @@
     ERROR_MESSAGE: '.error__message',
     ERROR_BTN: '.error__button',
   };
+
+  var $template = document.querySelector(ErrorSelector.ERROR_TEMPLATE).content.querySelector(ErrorSelector.ERROR_CLASS);
 
   function ErrorComponent() {
     AbsctractComponent.call(this);
@@ -23,7 +25,6 @@
   ErrorComponent.prototype.constructor = ErrorComponent;
 
   ErrorComponent.prototype._getTemplate = function () {
-    var $template = document.querySelector(ErrorSelector.ERROR_TEMPLATE).content.querySelector(ErrorSelector.ERROR_CLASS);
     var $error = $template.cloneNode(true);
     return $error;
   };
@@ -48,7 +49,7 @@
   };
 
   ErrorComponent.prototype._documentKeyDownHandler = function (evt) {
-    if (Util.isEscPressed(evt)) {
+    if (util.isEscPressed(evt)) {
       evt.preventDefault();
       this._errorButtonClickHandler();
     }

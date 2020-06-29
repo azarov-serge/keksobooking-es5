@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var CoordsUtil = window.CoordsUtil;
-  var Util = window.Util;
+  var coordsUtil = window.coordsUtil;
+  var util = window.util;
 
   var ORDERS_COUNT = 5;
 
@@ -16,6 +16,7 @@
   function MapPinsController(mapPinsComponent, ordersModel) {
     this._mapPinsComponent = mapPinsComponent;
     this._pinComponents = [];
+    this._$pins = [];
     this._ordersModel = ordersModel;
     this._activePinComponent = null;
     this._activeCardComponent = null;
@@ -62,7 +63,7 @@
    */
 
   MapPinsController.prototype.getMainPinCoords = function () {
-    return CoordsUtil.convertToCoords(
+    return coordsUtil.convertToCoords(
         this._mapPinsComponent.getMainPin().style.left,
         this._mapPinsComponent.getMainPin().style.top
     );
@@ -81,16 +82,12 @@
       this._removeActiveCard();
     }
 
-    var $pins = [];
+
     // Создать массив пин компонентов
     this._createPinsComponents(orders);
-    // Создать массив пин элементов для рендеринга
-    this._pinComponents.forEach(function (pinComponent) {
-      $pins.push(pinComponent.getElement());
-    });
-
     // Отрисовать пины на карте
-    Util.render(this._mapPinsComponent.getElement(), $pins, this._mapPinsComponent.getMainPin());
+    util.render(this._mapPinsComponent.getElement(), this._$pins, this._mapPinsComponent.getMainPin());
+    this._$pins = [];
     // Установить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
     this._setMapPinsClickHandler();
     // Запустить обработчики событий для контейнера с пинами (делегирование по клику на пин и нажатие Enter на пин)
@@ -134,13 +131,11 @@
    */
 
   MapPinsController.prototype._createPinsComponents = function (orders) {
-    function filterOrders(order) {
-      return Boolean(order.offer);
-    }
-
-    this._pinComponents = orders.filter(filterOrders).slice(0, ORDERS_COUNT).map(function (order) {
+    var $pins = this._$pins;
+    this._pinComponents = orders.slice(0, ORDERS_COUNT).map(function (order) {
       // Создать новый копонент пина
       var pinComponent = new window.PinComponent(order);
+      $pins.push(pinComponent.getElement());
       return pinComponent;
     });
   };
@@ -172,7 +167,7 @@
    */
 
   MapPinsController.prototype._mainPinKeyDownHandler = function (evt) {
-    if (Util.isEnterPressed(evt)) {
+    if (util.isEnterPressed(evt)) {
       evt.preventDefault();
       // Использовать callbak клика (активировать нажатый пин и отрисовать его карточку)
       this._mainPinClickHandler(evt);
@@ -229,7 +224,7 @@
     // Деактивировать активный пин, если он есть
     this._deactivatePin();
     // Установить активный пин
-    this._activePinComponent = Util.getByID(this._pinComponents, parseInt(id, 10));
+    this._activePinComponent = util.getByID(this._pinComponents, parseInt(id, 10));
     // Активировать нажатый пин
     this._activePinComponent.toggleState();
   };
@@ -268,15 +263,15 @@
    */
 
   MapPinsController.prototype._setCloseCardHandler = function () {
-    this._activeCardComponent.closeCardClickHandler = this._closeCardClickHandler.bind(this);
+    this._activeCardComponent.closeCardClickHandler = this._сloseCard.bind(this);
     this._activeCardComponent.documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
   };
 
   /**
-   * @description Callback для клика кнопки закрыть у карточке (удалить карточку и деактивировать пин карточки)
+   * @description Закрывает карточку
    */
 
-  MapPinsController.prototype._closeCardClickHandler = function () {
+  MapPinsController.prototype._сloseCard = function () {
     // Удалить обработчики событий карточки
     this._activeCardComponent.removeCardListeners();
     // Удалить карточку
@@ -290,10 +285,9 @@
    */
 
   MapPinsController.prototype._documentKeyDownHandler = function (evt) {
-    if (Util.isEscPressed(evt)) {
+    if (util.isEscPressed(evt)) {
       evt.preventDefault();
-      // Использовать callback для клика кнопки закрыть у карточке (удалить карточку и деактивировать пин карточки)
-      this._closeCardClickHandler();
+      this._сloseCard();
     }
   };
 

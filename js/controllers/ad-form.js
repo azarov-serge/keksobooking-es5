@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var Constant = window.Constant;
-  var Util = window.Util;
+  var util = window.util;
 
   // Индекс значения по умолчанию
   var DefaultIndex = {
@@ -10,6 +10,9 @@
     CHECK_IN: 0,
   };
 
+  var NOT_GUESTS = 0;
+  var MAX_ROOMS_COUNT = 100;
+  var INVALID_STYLE = 'border: 2px solid #ff0000;';
   var PREVIEW_SELECTOR = 'img';
   var AD_GUESTS_ITEM_SELECTOR = 'option';
   var AD_AVATAR_SELECTOR = 'img';
@@ -28,8 +31,7 @@
       this._adFormComponent.toggleStateFieldsets();
     }
 
-    this.setDefaultValues();
-    this._adFormComponent.getAdImages().multiple = 'multiple';
+    this.setDefaultAdForm();
   };
 
   /**
@@ -39,7 +41,7 @@
   AdFormController.prototype.deactivate = function () {
     // Переключить форму в неактивное состояние
     this.toggleState();
-    this.setDefaultValues();
+    this.setDefaultAdForm();
     this.stopValidity();
     this.stopLoadImagesListeners();
   };
@@ -58,12 +60,6 @@
    */
 
   AdFormController.prototype.runValidity = function () {
-    this._adFormComponent.getAdAddress().readOnly = true;
-    this._adFormComponent.getAdAvatar().accept = Constant.ValidateValue.IMAGES_AVATAR;
-    this._adFormComponent.getAdImages().accept = Constant.ValidateValue.IMAGES_AD;
-    this._adFormComponent.getAdPrice().max = Constant.ValidateValue.MAX_PRICE;
-    // Установить валидацию заголовка объявления
-    this._setValidityTitle();
     // Установить функцию для обработчиков событий валидации
     this._setValidityHandlers();
     // Запустить обработчики событий для валидации формы
@@ -90,7 +86,7 @@
    * @description Устанавливает значения по умолчанию
    */
 
-  AdFormController.prototype.setDefaultValues = function () {
+  AdFormController.prototype.setDefaultAdForm = function () {
     // Значения по умолчанию
     var Default = {
       EMPTY_STRING: '',
@@ -109,13 +105,14 @@
     this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
     this._clearAdImagesContainer();
     this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
+    this._adFormComponent.getAdTitle().style = Default.EMPTY_STRING;
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
     this._disabledGuestsValues(Default.ROOMS);
     this._adFormComponent.getAdType().value = Default.TYPE;
-    this._adFormComponent.getAdPrice().required = true;
     this._setMinPrice(Constant.bookingType[Default.TYPE].minPrice);
     this._adFormComponent.getAdPrice().value = Default.EMPTY_STRING;
+    this._adFormComponent.getAdPrice().style = Default.EMPTY_STRING;
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
     this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
@@ -150,20 +147,13 @@
     this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
     this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
     this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
-  };
-
-  /**
-   * @description Валидация заголовка
-   */
-
-  AdFormController.prototype._setValidityTitle = function () {
-    this._adFormComponent.getAdTitle().required = true;
-    this._adFormComponent.getAdTitle().minLength = Constant.ValidateValue.TITLE_MIN_LENGTH;
-    this._adFormComponent.getAdTitle().maxLength = Constant.ValidateValue.TITLE_MAX_LENGTH;
+    this._adFormComponent.adPriceChangeHandler = this.checkValidity;
+    this._adFormComponent.adTitleChangeHandler = this.checkValidity;
   };
 
   /**
    * @description Валидация количества комнат
+   * @param evt Событие
    */
 
   AdFormController.prototype._adRoomsChangeHandler = function (evt) {
@@ -198,13 +188,21 @@
   };
 
   /**
+   * @description Если ошибка, установить стиль ошибки
+   */
+
+  AdFormController.prototype.checkValidity = function (evt) {
+    evt.target.style = evt.target.validity.valid ? '' : INVALID_STYLE;
+  };
+
+  /**
    * @param {number} rooms Количество комнат
    * @return {number} Количество гостей
    */
 
   AdFormController.prototype._getGuests = function (rooms) {
-    if (rooms === Constant.ValidateValue.MAX_ROOMS_COUNT) {
-      return Constant.ValidateValue.NOT_GUESTS;
+    if (rooms === MAX_ROOMS_COUNT) {
+      return NOT_GUESTS;
     }
 
     return rooms;
@@ -216,8 +214,6 @@
    */
 
   AdFormController.prototype._disabledGuestsValues = function (validValue) {
-    var NOT_GUESTS = Constant.ValidateValue.NOT_GUESTS;
-
     /**
      * @description Переключает элемент фильтра: enabled || diasabled
      * @param {Object} $item Элемент филтра (option у select)
@@ -261,7 +257,7 @@
   AdFormController.prototype._adAvatarChangeHandler = function () {
     var file = this._adFormComponent.getAdAvatar().files[0];
     var $previewImage = this._adFormComponent.getAdAvatarPreview().querySelector(PREVIEW_SELECTOR);
-    Util.loadImage(file, $previewImage);
+    util.loadImage(file, $previewImage);
   };
 
   /**
@@ -271,22 +267,21 @@
   AdFormController.prototype._addAdImagesChangeHandler = function () {
     var files = this._adFormComponent.getAdImages().files;
     this._clearAdImagesContainer();
+    var $previewContainer = this._adFormComponent.getAdImagesContainer();
+    var $preview = this._adFormComponent.getAdImagesPreview();
 
-    for (var index = 0; index < files.length; index++) {
-      var $previewContainer = this._adFormComponent.getAdImagesContainer();
-      var $preview = this._adFormComponent.getAdImagesPreview();
-
+    Array.from(files).forEach(function (file, index) {
       if (!$preview.querySelector(PREVIEW_SELECTOR)) {
         var $previewImage = document.createElement('img');
-        Util.loadImage(files[index], $previewImage);
-        Util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
+        util.loadImage(files[index], $previewImage);
+        util.render($preview, $previewImage, Constant.RenderPosition.BEFOREEND);
       } else {
         $preview = $preview.cloneNode(true);
         $previewImage = $preview.querySelector(PREVIEW_SELECTOR);
-        Util.loadImage(files[index], $previewImage);
-        Util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
+        util.loadImage(files[index], $previewImage);
+        util.render($previewContainer, $preview, Constant.RenderPosition.BEFOREEND);
       }
-    }
+    });
   };
 
   /**

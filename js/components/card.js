@@ -2,7 +2,7 @@
 (function () {
   var AbsctractComponent = window.AbsctractComponent;
   var Constant = window.Constant;
-  var Util = window.Util;
+  var util = window.util;
 
   var CardSelector = {
     TEMPLATE: '#card',
@@ -24,6 +24,9 @@
 
   var ROOM_TEXTS = ['комната', 'комнаты', 'комнат'];
   var GUEST_TEXTS = ['гостя', 'гостей', 'гостей'];
+
+  // Получить шаблона карточки
+  var $template = document.querySelector(CardSelector.TEMPLATE).content.querySelector(CardSelector.CARD);
 
   function CardComponent(order) {
     AbsctractComponent.call(this);
@@ -58,8 +61,9 @@
     */
 
     function setPrice(orderPrice, className) {
-      if (!isNaN(parseInt(orderPrice, 10)) && (orderPrice >= 0)) {
-        $card.querySelector(className).textContent = parseInt(orderPrice, 10).toLocaleString() + '₽/ночь';
+      orderPrice = parseInt(orderPrice, 10);
+      if (!isNaN(orderPrice) && (orderPrice >= 0)) {
+        $card.querySelector(className).textContent = orderPrice.toLocaleString() + '₽/ночь';
       } else {
         $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
       }
@@ -89,7 +93,7 @@
         var $features = $featuresContainer.querySelectorAll(CardSelector.FEATURE);
         $features.forEach(function ($feature) {
           var findFeature = $feature.className.split('--');
-          if (!order.includes(findFeature[1])) {
+          if (order.indexOf(findFeature[1]) === -1) {
             $feature.classList.add(CardSelector.HIDE_CLASS);
           }
         });
@@ -124,15 +128,13 @@
           $photos.push($photo);
         }
         // Отрисовать все фотографии объявления
-        Util.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
+        util.render($photosContainer, $photos, Constant.RenderPosition.BEFOREEND);
       } else {
         // Если изображений нет, скрыть контейнер фотографий
         $photosContainer.classList.add(CardSelector.HIDE_CLASS);
       }
     }
 
-    // Получить шаблона карточки
-    var $template = document.querySelector(CardSelector.TEMPLATE).content.querySelector(CardSelector.CARD);
     // Склонировать шаблон
     var $card = $template.cloneNode(true);
     // Установить аватар, если есть
@@ -156,9 +158,9 @@
         CardSelector.CAPACITY,
         (
           this._order.offer.rooms + ' '
-          + Util.getWordEnd(this._order.offer.rooms, ROOM_TEXTS)
+          + util.getWordEnd(this._order.offer.rooms, ROOM_TEXTS)
           + ' для ' + this._order.offer.guests + ' '
-          + Util.getWordEnd(this._order.offer.guests, GUEST_TEXTS)
+          + util.getWordEnd(this._order.offer.guests, GUEST_TEXTS)
         )
     );
     // Установить время заезда и время выезда, если есть

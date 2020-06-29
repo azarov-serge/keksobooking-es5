@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var Util = window.Util;
+  var util = window.util;
 
   var FILTER_ALL = 'any';
   var filterPrice = {
@@ -11,6 +11,7 @@
 
   function OrdersModel() {
     this._orders = [];
+    this._filteredOrders = [];
     this._listFilters = [];
     this._filterAll = {
       value: 'any',
@@ -43,7 +44,7 @@
   };
 
   OrdersModel.prototype.getOrderByID = function (id) {
-    return Util.getByID(this._orders, parseInt(id, 10));
+    return util.getByID(this._orders, parseInt(id, 10));
   };
 
   OrdersModel.prototype.getOrdersByFilters = function () {
@@ -55,7 +56,7 @@
     var isFilteringPrice = this._isFilteringPrice.bind(this);
     var isFilteringFeatures = this._isFilteringFeatures.bind(this);
 
-    return this._orders.filter((function (order) {
+    return this._getFilteredOrders().filter((function (order) {
       return (
         isFiltering(order, 'housing-type')
         &&
@@ -71,7 +72,18 @@
   };
 
   OrdersModel.prototype.isOrdersExist = function () {
-    return Boolean(this._orders.length);
+    return this._orders.length;
+  };
+
+  OrdersModel.prototype._getFilteredOrders = function () {
+    function filterOrders(order) {
+      return order.offer;
+    }
+    if (!this._filteredOrders.length) {
+      this._filteredOrders = this._orders.filter(filterOrders);
+    }
+
+    return this._filteredOrders;
   };
 
   OrdersModel.prototype._createOrder = function (order, id) {
@@ -124,7 +136,7 @@
   OrdersModel.prototype._isFilteringFeatures = function (order) {
     var isFiltering = true;
     this.filters['housing-features'].value.forEach(function (filter) {
-      if (!order.offer.features.includes(filter)) {
+      if (order.offer.features.indexOf(filter) === -1) {
         isFiltering = false;
         return;
       }
