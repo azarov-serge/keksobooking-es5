@@ -61,8 +61,9 @@
     */
 
     function setPrice(orderPrice, className) {
-      if (!isNaN(parseInt(orderPrice, 10)) && (orderPrice >= 0)) {
-        $card.querySelector(className).textContent = parseInt(orderPrice, 10).toLocaleString() + '₽/ночь';
+      orderPrice = parseInt(orderPrice, 10);
+      if (!isNaN(orderPrice) && (orderPrice >= 0)) {
+        $card.querySelector(className).textContent = orderPrice.toLocaleString() + '₽/ночь';
       } else {
         $card.querySelector(className).classList.add(CardSelector.HIDE_CLASS);
       }
