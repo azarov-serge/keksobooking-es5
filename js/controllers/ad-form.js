@@ -270,7 +270,7 @@
     var $previewContainer = this._adFormComponent.getAdImagesContainer();
     var $preview = this._adFormComponent.getAdImagesPreview();
 
-    files.forEach(function (file, index) {
+    Array.from(files).forEach(function (file, index) {
       if (!$preview.querySelector(PREVIEW_SELECTOR)) {
         var $previewImage = document.createElement('img');
         util.loadImage(files[index], $previewImage);

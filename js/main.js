@@ -227,7 +227,7 @@
   setCoordsToAdress(coordsMainPin, true);
   backendController.setSuccessLoadHandler(activateMap);
   backendController.setSuccessUploadHandler(deactivateMap);
-  adFormController._clearAdImagesContainer();
+
   // Отключить фильтры если включены
   if (mainMapComponent.isMapFiltersActivate()) {
     mainMapComponent.toggleStateMapFilters();
