@@ -104,19 +104,32 @@
     this._adFormComponent.getAdAvatarPreview().querySelector(AD_AVATAR_SELECTOR).src = Default.DEFAULT_AVATAR;
     this._adFormComponent.getAdImages().value = Default.EMPTY_STRING;
     this._clearAdImagesContainer();
-    this._adFormComponent.getAdTitle().value = Default.EMPTY_STRING;
-    this._adFormComponent.getAdTitle().style = Default.EMPTY_STRING;
+    this._resetRequiredElement(this._adFormComponent.getAdTitle());
     this._adFormComponent.getAdRooms().value = Default.ROOMS;
     this._adFormComponent.getAdGuests().value = this._getGuests(Default.ROOMS);
     this._disabledGuestsValues(Default.ROOMS);
     this._adFormComponent.getAdType().value = Default.TYPE;
     this._setMinPrice(Constant.bookingType[Default.TYPE].minPrice);
-    this._adFormComponent.getAdPrice().value = Default.EMPTY_STRING;
-    this._adFormComponent.getAdPrice().style = Default.EMPTY_STRING;
+    this._resetRequiredElement(this._adFormComponent.getAdPrice());
     this._adFormComponent.getAdCheckIn().value = Default.CHECK_IN;
     this._adFormComponent.getAdCheckOut().value = this._adFormComponent.getAdCheckIn().value;
     this._adFormComponent.getAdDescription().value = Default.EMPTY_STRING;
     this._adFormComponent._getFeatures().forEach(toggleDefaultFeature);
+  };
+
+  /**
+   * @description Сбрасывает значение обязательного поля. Меняет состояние required, что бы избежать ошибки в MS Eadge
+   * @param {Object} $element Элемент который неоюъодимо сбросить
+   * @param {*} defaultValue Значение по умолчанию, необязательный параметр
+   */
+
+  AdFormController.prototype._resetRequiredElement = function ($element, defaultValue) {
+    defaultValue = defaultValue || '';
+    $element.required = false;
+    $element.width = $element.width;
+    $element.required = true;
+    $element.value = defaultValue;
+    $element.style = '';
   };
 
   /**
