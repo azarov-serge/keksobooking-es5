@@ -134,16 +134,9 @@
    */
 
   OrdersModel.prototype._isFilteringFeatures = function (order) {
-    var isFiltering = true;
-    this.filters['housing-features'].value.forEach(function (filter) {
-      if (order.offer.features.indexOf(filter) === -1) {
-        isFiltering = false;
-        return;
-      }
-
+    return this.filters['housing-features'].value.every(function (feature) {
+      return order.offer.features.indexOf(feature) !== -1;
     });
-
-    return isFiltering;
   };
 
   window.OrdersModel = OrdersModel;
