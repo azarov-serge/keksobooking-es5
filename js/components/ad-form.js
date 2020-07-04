@@ -42,6 +42,7 @@
     this._$adType = null;
     this._$adCheckIn = null;
     this._$adCheckOut = null;
+    this._$adDescription = null;
     this._$adResetBtn = null;
     this._$features = null;
     this._$fieldsets = null;
@@ -117,7 +118,7 @@
   };
 
   AdFormComponent.prototype.getAdDescription = function () {
-    return this._getCustomElement(this._$adCheckOut, AdFormSelector.AD_DESCRIPTION, this.getElement());
+    return this._getCustomElement(this._$adDescription, AdFormSelector.AD_DESCRIPTION, this.getElement());
   };
 
   AdFormComponent.prototype.getAdResetBtn = function () {
