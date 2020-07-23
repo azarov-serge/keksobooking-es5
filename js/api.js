@@ -6,19 +6,22 @@
   // var util = window.util;
 
   var STATUS_OK = 200;
+  var END_POINT = 'https://javascript.pages.academy/keksobooking';
   // Конфигруация загруски для XMLHttpRequest
-  var ConfigLoad = {
-    RESPONSE_TYPE: 'json',
-    METHOD: 'GET',
-    URL: 'https://javascript.pages.academy/keksobooking/data',
-    TIMEOUT: 10000,
+  var configLoad = {
+    responseType: 'json',
+    method: 'GET',
+    url: END_POINT + '/data',
+    timeout: 10000,
+    body: '',
   };
   // Конфигруация отправки для XMLHttpRequest
-  var ConfigUpLoad = {
-    RESPONSE_TYPE: 'json',
-    METHOD: 'POST',
-    URL: 'https://javascript.pages.academy/keksobooking',
-    TIMEOUT: 30000,
+  var configUpLoad = {
+    responseType: 'json',
+    method: 'POST',
+    url: END_POINT,
+    timeout: 10000,
+    body: '',
   };
   // Контейнер куда размещается сообщение
   var $container = document.querySelector('main');
@@ -44,7 +47,7 @@
 
   API.prototype.load = function () {
     // Получить список объявлений с сервера
-    this._request(ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
+    this._request(configLoad, this._successLoadHandler, this._errorHandler.bind(this));
   };
 
   /**
@@ -53,7 +56,8 @@
    */
 
   API.prototype.upload = function ($form) {
-    this._request(ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
+    configUpLoad.body = new FormData($form);
+    this._request(configUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this));
   };
 
   /**
@@ -64,9 +68,16 @@
    * @param {*} data Данные
    */
 
-  API.prototype._request = function (ConfigXHR, successHandler, errorHandler, data) {
+  API.prototype._request = function (configXHR, successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = ConfigXHR.RESPONSE_TYPE;
+
+    var responseType = configXHR.responseType;
+    var method = configXHR.method;
+    var url = configXHR.url;
+    var timeout = configXHR.timeout;
+    var body = configXHR.body;
+
+    xhr.responseType = responseType;
 
     xhr.addEventListener('load', function () {
       if (xhr.status === STATUS_OK) {
@@ -84,11 +95,9 @@
       errorHandler();
     });
 
-    xhr.timeout = ConfigXHR.TIMEOUT;
-
-    xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
-
-    xhr.send(data);
+    xhr.timeout = timeout;
+    xhr.open(method, url);
+    xhr.send(body);
   };
 
   /**
