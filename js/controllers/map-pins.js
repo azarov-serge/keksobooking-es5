@@ -3,8 +3,6 @@
   var coordsUtil = window.coordsUtil;
   var util = window.util;
 
-  var ORDERS_COUNT = 5;
-
   var Default = {
     MAIN_PIN_LEFT: 570,
     MAIN_PIN_TOP: 375,
@@ -22,6 +20,11 @@
     this._activeCardComponent = null;
     this._$cardContainer = null;
     this._$cardPlace = null;
+
+    this._mainPinClickHandler = this._mainPinClickHandler.bind(this);
+    this._mainPinKeyDownHandler = this._mainPinKeyDownHandler.bind(this);
+    this._сloseCard = this._сloseCard.bind(this);
+    this._documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
   }
 
   MapPinsController.prototype.activate = function () {
@@ -132,7 +135,7 @@
 
   MapPinsController.prototype._createPinsComponents = function (orders) {
     var $pins = this._$pins;
-    this._pinComponents = orders.slice(0, ORDERS_COUNT).map(function (order) {
+    this._pinComponents = orders.map(function (order) {
       // Создать новый копонент пина
       var pinComponent = new window.PinComponent(order);
       $pins.push(pinComponent.getElement());
@@ -145,8 +148,8 @@
    */
 
   MapPinsController.prototype._setMapPinsClickHandler = function () {
-    this._mapPinsComponent.mainPinClickHandler = this._mainPinClickHandler.bind(this);
-    this._mapPinsComponent.mainPinKeyDownHandler = this._mainPinKeyDownHandler.bind(this);
+    this._mapPinsComponent.mainPinClickHandler = this._mainPinClickHandler;
+    this._mapPinsComponent.mainPinKeyDownHandler = this._mainPinKeyDownHandler;
   };
 
 
@@ -263,8 +266,8 @@
    */
 
   MapPinsController.prototype._setCloseCardHandler = function () {
-    this._activeCardComponent.closeCardClickHandler = this._сloseCard.bind(this);
-    this._activeCardComponent.documentKeyDownHandler = this._documentKeyDownHandler.bind(this);
+    this._activeCardComponent.closeCardClickHandler = this._сloseCard;
+    this._activeCardComponent.documentKeyDownHandler = this._documentKeyDownHandler;
   };
 
   /**

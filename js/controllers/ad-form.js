@@ -19,6 +19,12 @@
 
   function AdFormController(adFormComponent) {
     this._adFormComponent = adFormComponent;
+    this._adRoomsChangeHandler = this._adRoomsChangeHandler.bind(this);
+    this._adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
+    this._adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
+    this._adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
+    this._adAvatarChangeHandler = this._adAvatarChangeHandler.bind(this);
+    this._addAdImagesChangeHandler = this._addAdImagesChangeHandler.bind(this);
   }
 
   /**
@@ -156,10 +162,10 @@
    */
 
   AdFormController.prototype._setValidityHandlers = function () {
-    this._adFormComponent.adRoomsChangeHandler = this._adRoomsChangeHandler.bind(this);
-    this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler.bind(this);
-    this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler.bind(this);
-    this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler.bind(this);
+    this._adFormComponent.adRoomsChangeHandler = this._adRoomsChangeHandler;
+    this._adFormComponent.adTypeChangeHandler = this._adTypeChangeHandler;
+    this._adFormComponent.adCheckInChangeHandler = this._adCheckInChangeHandler;
+    this._adFormComponent.adCheckOutChangeHandler = this._adCheckOutChangeHandler;
     this._adFormComponent.adPriceChangeHandler = this.checkValidity;
     this._adFormComponent.adTitleChangeHandler = this.checkValidity;
   };
@@ -259,8 +265,8 @@
    */
 
   AdFormController.prototype._setLoadHandlers = function () {
-    this._adFormComponent.adAvatarChangeHandler = this._adAvatarChangeHandler.bind(this);
-    this._adFormComponent.adAdImagesChangeHandler = this._addAdImagesChangeHandler.bind(this);
+    this._adFormComponent.adAvatarChangeHandler = this._adAvatarChangeHandler;
+    this._adFormComponent.adAdImagesChangeHandler = this._addAdImagesChangeHandler;
   };
 
   /**

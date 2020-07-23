@@ -10,7 +10,7 @@
     ESC: 27,
     ENTER: 13,
   };
-  var STATUS_OK = 200;
+
   // Типы изображений
   var FILE_TYPES = ['gif', 'svg', 'jpg', 'jpeg', 'png'];
 
@@ -21,7 +21,6 @@
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,
     loadImage: loadImage,
-    requestServer: requestServer,
     getByID: getByID,
     debounce: debounce,
   };
@@ -152,41 +151,6 @@
 
       reader.readAsDataURL(file);
     }
-  }
-
-  /**
-   *
-   * @param {Object} ConfigXHR Файл с конфигурациями
-   * @param {function} successHandler Callback в случае успеха
-   * @param {function} errorHandler Callback в случае ошибки
-   * @param {*} data Данные
-   */
-
-  function requestServer(ConfigXHR, successHandler, errorHandler, data) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = ConfigXHR.RESPONSE_TYPE;
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === STATUS_OK) {
-        successHandler(xhr.response);
-      } else {
-        errorHandler();
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      errorHandler();
-    });
-
-    xhr.addEventListener('timeout', function () {
-      errorHandler();
-    });
-
-    xhr.timeout = ConfigXHR.TIMEOUT;
-
-    xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
-
-    xhr.send(data);
   }
 
   /**
