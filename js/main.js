@@ -10,7 +10,7 @@
   var adFormComponent = new window.AdFormComponent();
   var mapPinsController = new window.MapPinsController(mapPinsComponent, ordersModel);
   var adFormController = new window.AdFormController(adFormComponent);
-  var backendController = new window.BackendController();
+  var api = new window.API();
   // Координаты главного пина
   var coordsMainPin = null;
   // Координаты события
@@ -24,7 +24,7 @@
    */
   function start() {
     if (!mainMapComponent.isActivate()) {
-      backendController.load();
+      api.load();
     }
   }
 
@@ -131,7 +131,7 @@
 
   function adFormSubmitHandler(evt) {
     if (evt.target.checkValidity()) {
-      backendController.upload(evt.target);
+      api.upload(evt.target);
       evt.preventDefault();
     }
   }
@@ -225,8 +225,8 @@
   adFormController.activate();
   // Установить значение пина по умолчанию в поле адресс формы
   setCoordsToAdress(coordsMainPin, true);
-  backendController.setSuccessLoadHandler(activateMap);
-  backendController.setSuccessUploadHandler(deactivateMap);
+  api.setSuccessLoadHandler(activateMap);
+  api.setSuccessUploadHandler(deactivateMap);
 
   // Отключить фильтры если включены
   if (mainMapComponent.isMapFiltersActivate()) {
