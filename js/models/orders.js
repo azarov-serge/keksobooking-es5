@@ -2,6 +2,8 @@
 (function () {
   var util = window.util;
 
+  var ORDERS_COUNT = 5;
+
   var FILTER_ALL = 'any';
   var filterPrice = {
     low: 10000,
@@ -15,7 +17,6 @@
     this._listFilters = [];
     this._filterAll = {
       value: 'any',
-      rank: 1
     };
     this.filters = {
       'housing-type': {
@@ -52,23 +53,19 @@
       throw new Error('Orders are not exist');
     }
 
-    var isFiltering = this._isFiltering.bind(this);
-    var isFilteringPrice = this._isFilteringPrice.bind(this);
-    var isFilteringFeatures = this._isFilteringFeatures.bind(this);
+    var orders = [];
+    var index = 0;
 
-    return this._getFilteredOrders().filter((function (order) {
-      return (
-        isFiltering(order, 'housing-type')
-        &&
-        isFiltering(order, 'housing-rooms')
-        &&
-        isFiltering(order, 'housing-guests')
-        &&
-        isFilteringPrice(order)
-        &&
-        isFilteringFeatures(order)
-      );
-    }));
+    while (index < this._getFilteredOrders().length && orders.length < ORDERS_COUNT) {
+      var order = this._getFilteredOrders()[index];
+
+      if (this._isFiltering(order)) {
+        orders.push(order);
+      }
+      index++;
+    }
+
+    return orders;
   };
 
   OrdersModel.prototype.isOrdersExist = function () {
@@ -92,6 +89,20 @@
     return orderModel;
   };
 
+  OrdersModel.prototype._isFiltering = function (order) {
+    return (
+      this._isSimpleFiltering(order, 'housing-type')
+      &&
+      this._isSimpleFiltering(order, 'housing-rooms')
+      &&
+      this._isSimpleFiltering(order, 'housing-guests')
+      &&
+      this._isFilteringPrice(order)
+      &&
+      this._isFilteringFeatures(order)
+    );
+  };
+
   /**
    * @description Делает простую проверку для фильтрации
    * @param {Object} order Объявление
@@ -99,7 +110,7 @@
    * @return Возвращает true || false (проходит условие фильтра)
    */
 
-  OrdersModel.prototype._isFiltering = function (order, type) {
+  OrdersModel.prototype._isSimpleFiltering = function (order, type) {
     return (
       this.filters[type].value === FILTER_ALL
         ? true

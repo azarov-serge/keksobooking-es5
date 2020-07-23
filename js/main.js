@@ -194,20 +194,18 @@
    */
 
   function setFilterToOrdersModel() {
-    var features = [];
     mainMapComponent.getMapFilters().forEach(function ($filter) {
       if ($filter.id !== 'housing-features') {
         ordersModel.filters[$filter.id].value = $filter.value;
       }
     });
 
+    ordersModel.filters['housing-features'].value = [];
     mainMapComponent.getMapFeaturesFilters().forEach(function ($featuresFilter) {
       if ($featuresFilter.checked) {
-        features.push($featuresFilter.value);
+        ordersModel.filters['housing-features'].value.push($featuresFilter.value);
       }
     });
-
-    ordersModel.filters['housing-features'].value = features;
   }
 
   /**
