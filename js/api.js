@@ -3,7 +3,9 @@
   var SuccessComponent = window.SuccessComponent;
   var ErrorComponent = window.ErrorComponent;
   var Constant = window.Constant;
-  var util = window.util;
+  // var util = window.util;
+
+  var STATUS_OK = 200;
   // Конфигруация загруски для XMLHttpRequest
   var ConfigLoad = {
     RESPONSE_TYPE: 'json',
@@ -42,7 +44,7 @@
 
   API.prototype.load = function () {
     // Получить список объявлений с сервера
-    util.requestServer(ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
+    this._request(ConfigLoad, this._successLoadHandler, this._errorHandler.bind(this));
   };
 
   /**
@@ -51,7 +53,42 @@
    */
 
   API.prototype.upload = function ($form) {
-    util.requestServer(ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
+    this._request(ConfigUpLoad, this._successUploadHandler.bind(this), this._errorHandler.bind(this), new FormData($form));
+  };
+
+  /**
+   *
+   * @param {Object} ConfigXHR Файл с конфигурациями
+   * @param {function} successHandler Callback в случае успеха
+   * @param {function} errorHandler Callback в случае ошибки
+   * @param {*} data Данные
+   */
+
+  API.prototype._request = function (ConfigXHR, successHandler, errorHandler, data) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = ConfigXHR.RESPONSE_TYPE;
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === STATUS_OK) {
+        successHandler(xhr.response);
+      } else {
+        errorHandler();
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      errorHandler();
+    });
+
+    xhr.addEventListener('timeout', function () {
+      errorHandler();
+    });
+
+    xhr.timeout = ConfigXHR.TIMEOUT;
+
+    xhr.open(ConfigXHR.METHOD, ConfigXHR.URL);
+
+    xhr.send(data);
   };
 
   /**
