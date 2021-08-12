@@ -15,16 +15,16 @@
    */
   function render(container, element, place) {
     var rendElement = null;
-    var rendContainer = getDOMElement(container);
+    var rendContainer = getElement(container);
 
     if (Array.isArray(element)) {
       rendElement = createRenderFragment(element);
     } else {
-      rendElement = getDOMElement(element);
+      rendElement = getElement(element);
     }
 
     if (place instanceof Object) {
-      var rendPlace = getDOMElement(place);
+      var rendPlace = getElement(place);
       rendContainer.insertBefore(rendElement, rendPlace);
     } else {
       renderElement(rendContainer, rendElement, place);
@@ -52,10 +52,6 @@
   function remove(view) {
     view.getElement().remove();
     view.removeElement();
-  }
-
-  function getDOMElement(element) {
-    return element instanceof Element ? element : element.getElement();
   }
 
   /**
@@ -94,20 +90,15 @@
     var fragment = document.createDocumentFragment();
 
     elements.forEach(function (element) {
-      var rendElement = getDOMElement(element);
-      fragment.appendChild(rendElement);
+      var renderedElement = getElement(element);
+      fragment.appendChild(renderedElement);
     });
 
     return fragment;
   }
 
   function getElement(element) {
-    if (element instanceof Element) {
-
-      return element;
-    }
-
-    return element.getElement();
+    return element instanceof Element || element instanceof DocumentFragment ? element : element.getElement();
   }
 
   window.DomUtils = {
