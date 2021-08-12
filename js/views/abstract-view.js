@@ -6,6 +6,7 @@
   function AbsctractView() {
     this._element = null;
     this._TOGGLE_CLASS = null;
+    this._callback = {};
   }
 
   AbsctractView.prototype.remove = function () {
@@ -20,13 +21,15 @@
     return this._element;
   };
 
-  AbsctractView.prototype.isActivate = function () {
-    this._isClassExist(this._TOGGLE_CLASS, 'toggle');
-    return !this.getElement().classList.contains(this._TOGGLE_CLASS);
+  AbsctractView.prototype.setToggleClass = function (className) {
+    this._TOGGLE_CLASS = className;
+  };
+
+  AbsctractView.prototype.isHasToggleState = function () {
+    return this.getElement().classList.contains(this._TOGGLE_CLASS);
   };
 
   AbsctractView.prototype.toggleState = function () {
-    this._isClassExist(this._TOGGLE_CLASS, 'toggle');
     this.getElement().classList.toggle(this._TOGGLE_CLASS);
   };
 
