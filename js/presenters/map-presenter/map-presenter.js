@@ -29,14 +29,20 @@
 
     this._appModel = args.appModel;
 
-    this._handleMainPinClick = this._handleMainPinClick.bind(this);
+    this._handleMainPinMouseDown = this._handleMainPinMouseDown.bind(this);
     this._modelEventHandler = this._modelEventHandler.bind(this);
   }
 
   MapPresenter.prototype.init = function () {
     this._appModel.subscribe(this._modelEventHandler);
+
+
     this._mapView.setToggleClass(MAP_TOGGLE_CLASS);
-    this._mainPinView.setClickHandler(this._handleMainPinClick);
+    this._mainPinView.setKeyDownHandler(this._handleMainPinMouseDown);
+    this._mainPinView.setMouseDownHandler(this._handleMainPinMouseDown);
+    // eslint-disable-next-line
+    this._mainPinView.setMouseMoveHandler(console.log);
+
 
     if (!this._mapView.isHasToggleState()) {
       this._mapView.toggleState();
@@ -62,7 +68,10 @@
     }
   };
 
-  MapPresenter.prototype._handleMainPinClick = function () {
+  MapPresenter.prototype._handleMainPinMouseDown = function (coords) {
+    // eslint-disable-next-line no-console
+    console.log('Start coords: ', coords);
+
     if (this._appModel.getState() === AppState.DEACTIVATED) {
       this._appModel.setState(UpdateType.PATCH, AppState.ACTIVATED);
     }
