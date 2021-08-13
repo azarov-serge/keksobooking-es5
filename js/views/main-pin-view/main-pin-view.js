@@ -2,10 +2,21 @@
 (function () {
   var AbsctractView = window.AbsctractView;
 
+  var createCoords = window.CoordsUtils.createCoords;
+  var setCoords = window.CoordsUtils.setCoords;
+  var isEnterPressed = window.EventsUtils.isEnterPressed;
+  var isLeftMouseButtonPressed = window.EventsUtils.isLeftMouseButtonPressed;
+
   function MainPinView() {
     AbsctractView.call(this);
+    this._coordsMainPin = createCoords();
+    this._coordsEvt = createCoords();
+    this._coordsShift = createCoords();
 
-    this._handleMainPinClick = this._handleMainPinClick.bind(this);
+    this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._handleMouseDown = this._handleMouseDown.bind(this);
+    this._handleMouseMove = this._handleMouseMove.bind(this);
+    this._handleMouseUp = this._handleMouseUp.bind(this);
   }
 
   MainPinView.prototype = Object.create(AbsctractView.prototype);
@@ -26,14 +37,68 @@
     );
   };
 
-  MainPinView.prototype.setClickHandler = function (handler) {
-    this._callback.mapPinClick = handler;
-    this.getElement().addEventListener('click', this._handleMainPinClick);
+  MainPinView.prototype.setKeyDownHandler = function (handler) {
+    this._callback.mainPinKeyDown = handler;
+    this.getElement().addEventListener('keydown', this._handleKeyDown);
   };
 
-  MainPinView.prototype._handleMainPinClick = function (evt) {
+  MainPinView.prototype.setMouseDownHandler = function (handler) {
+    this._callback.mainPinMouseDown = handler;
+    this.getElement().addEventListener('mousedown', this._handleMouseDown);
+  };
+
+  MainPinView.prototype.setMouseMoveHandler = function (handler) {
+    this._callback.mainPinMouseMove = handler;
+  };
+
+  MainPinView.prototype._handleKeyDown = function (evt) {
+    if (isEnterPressed(evt)) {
+      evt.preventDefault();
+
+      this._callback.mainPinKeyDown(evt);
+    }
+  };
+
+  MainPinView.prototype._handleMouseDown = function (evt) {
+    if (!isLeftMouseButtonPressed(evt)) {
+      return;
+    }
+
     evt.preventDefault();
-    this._callback.mapPinClick();
+
+    this._coordsEvt.x = evt.clientX;
+    this._coordsEvt.y = evt.clientY;
+
+    this._callback.mainPinMouseDown(this._coordsEvt);
+
+    document.addEventListener('mousemove', this._handleMouseMove);
+    document.addEventListener('mouseup', this._handleMouseUp);
+  };
+
+  MainPinView.prototype._handleMouseMove = function (evt) {
+    evt.preventDefault();
+    this._coordsShift.x = this._coordsEvt.x - evt.clientX;
+    this._coordsShift.y = this._coordsEvt.y - evt.clientY;
+
+    this._coordsEvt.x = evt.clientX;
+    this._coordsEvt.y = evt.clientY;
+
+    this._coordsMainPin = setCoords(
+        this.getElement().offsetLeft - this._coordsShift.x,
+        this.getElement().offsetTop - this._coordsShift.y
+    );
+
+    this.getElement().style.left = this._coordsMainPin.x + 'px';
+    this.getElement().style.top = this._coordsMainPin.y + 'px';
+
+    this._callback.mainPinMouseMove(this._coordsMainPin);
+  };
+
+  MainPinView.prototype._handleMouseUp = function (evt) {
+    evt.preventDefault();
+
+    document.removeEventListener('mousemove', this._handleMouseMove);
+    document.removeEventListener('mouseup', this._handleMouseUp);
   };
 
   window.MainPinView = MainPinView;
