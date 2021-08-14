@@ -22,7 +22,7 @@
 
   OrdersModel.prototype.setError = function (actionType, error) {
     this._error = error;
-    this.notify(actionType);
+    this.notify(actionType, error);
   };
 
   OrdersModel.prototype.getError = function () {
