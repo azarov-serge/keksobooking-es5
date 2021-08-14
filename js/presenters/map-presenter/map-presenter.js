@@ -13,15 +13,16 @@
   var remove = window.DomUtils.remove;
   var RenderPosition = window.DomUtils.RenderPosition;
   var Api = window.Api;
+  var filterOrders = window.filterOrders;
 
+  // Import action types
   var UpdateType = window.UpdateType;
   var AppState = window.AppState;
+  // ----- * -----
 
   var MAP_TOGGLE_CLASS = 'map--faded';
+  var PIN_COUNT = 5;
 
-  /**
-   * @param {{appView: *, promoView: *}} args
-   */
   function MapPresenter(args) {
     this._appView = args.appView;
     this._promoView = args.promoView;
@@ -31,10 +32,14 @@
     this._messageView = null;
     this._pinViews = [];
 
-    this._mapFiltersPresenter = new MapFiltersPresenter({mapView: this._mapView});
-
     this._appModel = args.appModel;
     this._ordersModel = args.ordersModel;
+    this._filtersModel = args.filtersModel;
+
+    this._mapFiltersPresenter = new MapFiltersPresenter({
+      mapView: this._mapView,
+      filtersModel: args.filtersModel,
+    });
 
     this._setOrders = this._setOrders.bind(this);
     this._setError = this._setError.bind(this);
@@ -47,8 +52,10 @@
   }
 
   MapPresenter.prototype.init = function () {
+    // Add subscribe
     this._appModel.subscribe(this._modelEventHandler);
     this._ordersModel.subscribe(this._modelEventHandler);
+    this._filtersModel.subscribe(this._modelEventHandler);
 
     this._mapView.setToggleClass(MAP_TOGGLE_CLASS);
     this._mainPinView.setKeyDownHandler(this._handleMainPinMouseDown);
@@ -73,6 +80,7 @@
   MapPresenter.prototype.destroy = function () {
     this._appModel.unsubscribe(this._modelEventHandler);
     this._ordersModel.unsubscribe(this._modelEventHandler);
+    this._filtersModel.unsubscribe(this._modelEventHandler);
   };
 
   MapPresenter.prototype._toggleMapState = function () {
@@ -116,7 +124,15 @@
   };
 
   MapPresenter.prototype._renderPins = function () {
-    var orders = this._ordersModel.getOrders();
+    if (!this._ordersModel.getOrders().length) {
+      return;
+    }
+
+    var orders = filterOrders(
+        this._ordersModel.getOrders(),
+        this._filtersModel.getFilters(),
+        this._filtersModel.getFeatures()
+    ).slice(0, PIN_COUNT);
 
     for (var index = 0; index < orders.length; index++) {
       this._pinViews.push(new PinView(orders[index]));
@@ -126,9 +142,15 @@
   };
 
   MapPresenter.prototype._removePins = function () {
+    if (!this._ordersModel.getOrders().length) {
+      return;
+    }
+
     this._pinViews.forEach(function (pinView) {
       remove(pinView);
     });
+
+    this._pinViews = [];
   };
 
   MapPresenter.prototype._renderErrorMessage = function (error) {

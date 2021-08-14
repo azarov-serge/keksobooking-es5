@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var FILTER_ALL = 'any';
   var MapFiltersName = {
     TYPE: 'type',
     PRICE: 'price',
@@ -12,7 +13,7 @@
       name: MapFiltersName.TYPE,
       options: [
         {
-          value: 'any',
+          value: FILTER_ALL,
           title: 'Любой тип жилья',
         },
         {
@@ -37,7 +38,7 @@
       name: MapFiltersName.PRICE,
       options: [
         {
-          value: 'any',
+          value: FILTER_ALL,
           title: 'Любая',
         },
         {
@@ -58,7 +59,7 @@
       name: MapFiltersName.ROOMS,
       options: [
         {
-          value: 'any',
+          value: FILTER_ALL,
           title: 'Любое число комнат',
         },
         {
@@ -79,7 +80,7 @@
       name: MapFiltersName.GUESTS,
       options: [
         {
-          value: 'any',
+          value: FILTER_ALL,
           title: 'Любое число гостей',
         },
         {
@@ -99,7 +100,8 @@
   ];
 
   window.MapFilters = {
-    mapFilters: mapFilters,
     MapFiltersName: MapFiltersName,
+    mapFilters: mapFilters,
+    FILTER_ALL: FILTER_ALL,
   };
 })();

@@ -37,6 +37,7 @@
   ];
 
   window.MapFeatures = {
+    MapFeaturesValues: MapFeaturesValues,
     mapFeatures: mapFeatures,
   };
 })();
