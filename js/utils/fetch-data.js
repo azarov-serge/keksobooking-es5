@@ -20,11 +20,6 @@
     this._isFunction(handler);
 
     this._successHandlers.push(handler);
-
-    if (this._successHandlers.length === 1) {
-      this._request();
-    }
-
     return this;
   };
 
@@ -32,6 +27,8 @@
     this._isFunction(handler);
 
     this._errorHandler = handler;
+
+    this._request();
     return this;
   };
 
@@ -100,17 +97,25 @@
   };
 
   FetchData.prototype._handleError = function (error) {
-    if (typeof handler === 'function') {
+    if (typeof this._errorHandler === 'function') {
+
       this._errorHandler(new Error(error || 'Reqest error'));
     }
 
     // eslint-disable-next-line no-console
-    console.warn(error);
+    console.error(error);
   };
 
   FetchData.prototype._handleTimeout = function () {
     this._handleError(new Error('Request timeout'));
   };
+
+  /**
+   * @description Fetch data. If will not have .cath, then will not start to request
+   * @param {string} url
+   * @param {{method: string, timeout: number, body: object, responseType: string, headers: object}} params
+   * @returns
+   */
 
   function fetchData(url, params) {
     return new FetchData(url, params);
