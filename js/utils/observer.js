@@ -15,7 +15,7 @@
   };
 
   Observer.prototype.notify = function (actionType, payload) {
-    this._observers = this._observers.forEach(function (handler) {
+    this._observers.forEach(function (handler) {
       handler(actionType, payload);
     });
   };
