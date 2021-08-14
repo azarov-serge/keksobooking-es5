@@ -57,7 +57,7 @@
    * @param {Object} obj Coords {x: number, y:number}
    */
 
-  function convertToLocation(obj) {
+  function convertToLocationCoords(obj) {
     return {
       x: Math.floor(obj.x + MAIN_PIN_WIDTH / 2),
       y: Math.floor(obj.y + MAIN_PIN_HEIGHT),
@@ -68,7 +68,7 @@
    * @param {Object} obj Coords {x: number, y:number}
    */
 
-  function convertFromLocation(obj) {
+  function convertToMapCoords(obj) {
     return {
       x: Math.floor(obj.x - PIN_WIDTH / 2),
       y: Math.floor(obj.y - PIN_HEIGHT),
@@ -103,8 +103,8 @@
     setCoordX: setCoordX,
     setCoordY: setCoordY,
     setCoords: setCoords,
-    convertToLocation: convertToLocation,
-    convertFromLocation: convertFromLocation,
+    convertToLocationCoords: convertToLocationCoords,
+    convertToMapCoords: convertToMapCoords,
     convertToCoords: convertToCoords,
   };
 })();

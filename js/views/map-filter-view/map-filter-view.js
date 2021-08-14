@@ -22,8 +22,9 @@
 
     return (
       '<select name="housing-' + this._filter.name + '" ' +
-      'id="housing-' + this._filter.name + '" class="map__filter">' +
-      options +
+        'id="housing-' + this._filter.name + '" class="map__filter"' +
+      '>' +
+        options +
       '</select>'
     );
   };
@@ -34,7 +35,7 @@
 
     return (
       '<option value="' + option.value + '"' + selected + '>' +
-      option.title +
+        option.title +
       '</option>'
     );
   }

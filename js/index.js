@@ -9,12 +9,14 @@
 
   // Import models
   var AppModel = window.AppModel;
+  var OrdersModel = window.OrdersModel;
 
   // Import utils
   var render = window.DomUtils.render;
   var RenderPosition = window.DomUtils.RenderPosition;
 
   var appModel = new AppModel();
+  var ordersModel = new OrdersModel();
 
   var rootElement = document.getElementById('root');
   var appView = new AppView();
@@ -24,6 +26,7 @@
     appView: appView,
     promoView: promoView,
     appModel: appModel,
+    ordersModel: ordersModel,
   });
 
   render(rootElement, appView, RenderPosition.BEFORE_END);

@@ -20,7 +20,7 @@
 
     return (
       '<fieldset id="housing-features" class="map__features">' +
-      features +
+        features +
       '</<fieldset>'
     );
   };
@@ -28,12 +28,18 @@
 
   function getFeatureTemplate(feature) {
     return (
-      '<input type="checkbox" name="features" ' +
-      'value="' + feature.value + '" ' +
-      'id="filter-' + feature.value
-      + '" class="map__checkbox visually-hidden">' +
-      '<label class="map__feature map__feature--' + feature.value + '" '
-      + 'for="filter-' + feature.value + '">' + feature.title +
+      '<input ' +
+        'type="checkbox" ' +
+        'name="features" ' +
+        'value="' + feature.value + '" ' +
+        'id="filter-' + feature.value + '" ' +
+        'class="map__checkbox visually-hidden"' +
+      '>' +
+      '<label ' +
+        'class="map__feature map__feature--' + feature.value + '" ' +
+        'for="filter-' + feature.value + '"' +
+      '>' +
+        feature.title +
       '</label>'
     );
   }
