@@ -10,7 +10,7 @@
   var MAP_MAX_Y = 630;
 
   /**
-   * @return {Object} {x:null, y:null}
+   * @return {{x: Null, y: Null}}
    */
 
   function createCoords() {
@@ -18,8 +18,8 @@
   }
 
   /**
-   * @param {number} x Coord X
-   * @return {number} Coord in the map
+   * @param {Number} x Coord X
+   * @return {Number} Coord in the map
    */
 
   function setCoordX(x) {
@@ -30,8 +30,8 @@
   }
 
   /**
-   * @param {number} y Coord Y
-   * @return {number} Coord in the map
+   * @param {Number} y Coord Y
+   * @return {Number} Coord in the map
    */
 
   function setCoordY(y) {
@@ -41,9 +41,9 @@
   }
 
   /**
-   * @param {number} x Coord X
-   * @param {number} y Coord Y
-   * @return {Object} Coords in the map {x: number, y:number}
+   * @param {Number} x Coord X
+   * @param {Number} y Coord Y
+   * @return {{x: Number, y: Number}} Coords in the map
    */
 
   function setCoords(x, y) {
@@ -54,30 +54,32 @@
   }
 
   /**
-   * @param {Object} obj Coords {x: number, y:number}
+   * @param {{x: Number, y: Number}} coords
+   * @return {{x: Number, y: Number}}
    */
 
-  function convertToLocationCoords(obj) {
+  function convertToLocationCoords(coords) {
     return {
-      x: Math.floor(obj.x + MAIN_PIN_WIDTH / 2),
-      y: Math.floor(obj.y + MAIN_PIN_HEIGHT),
+      x: Math.floor(coords.x + MAIN_PIN_WIDTH / 2),
+      y: Math.floor(coords.y + MAIN_PIN_HEIGHT),
     };
   }
 
   /**
-   * @param {Object} obj Coords {x: number, y:number}
+   * @param {{x: Number, y: Number}} coords
+   * @return {{x: Number, y: Number}}
    */
 
-  function convertToMapCoords(obj) {
+  function convertToMapCoords(coords) {
     return {
-      x: Math.floor(obj.x - PIN_WIDTH / 2),
-      y: Math.floor(obj.y - PIN_HEIGHT),
+      x: Math.floor(coords.x - PIN_WIDTH / 2),
+      y: Math.floor(coords.y - PIN_HEIGHT),
     };
   }
 
   /**
    * @description Convert to number and remove "px" for a coord
-   * @param {Object} coord Coords {x: number, y:number}
+   * @param {Number | String} coord
    */
 
   function convertToCoord(coord) {
@@ -86,9 +88,9 @@
 
   /**
    * @description Convert to number and remove "px" for coords
-   * @param {string} x Coord X
-   * @param {string} y Coord Y
-   * @return {Object} Coords {x: number, y:number}
+   * @param {String} x Coord X
+   * @param {String} y Coord Y
+   * @return {{x: Number, y: Number}}
    */
 
   function convertToCoords(x, y) {
