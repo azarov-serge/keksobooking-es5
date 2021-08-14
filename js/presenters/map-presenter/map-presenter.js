@@ -6,6 +6,7 @@
   var MapPinsContainerView = window.MapPinsContainerView;
   var MainPinView = window.MainPinView;
   var PinView = window.PinView;
+  var MessageView = window.MessageView;
 
   // Import utils
   var render = window.DomUtils.render;
@@ -27,6 +28,7 @@
     this._mapView = new MapView();
     this._mapPinsContainerView = new MapPinsContainerView();
     this._mainPinView = new MainPinView();
+    this._messageView = null;
     this._pinViews = [];
 
     this._mapFiltersPresenter = new MapFiltersPresenter({mapView: this._mapView});
@@ -36,15 +38,17 @@
 
     this._setOrders = this._setOrders.bind(this);
     this._setError = this._setError.bind(this);
+    this._fetchOrders = this._fetchOrders.bind(this);
 
     this._handleMainPinMouseDown = this._handleMainPinMouseDown.bind(this);
+    this._handleErrorMessageButtonClick = this._handleErrorMessageButtonClick.bind(this);
+
     this._modelEventHandler = this._modelEventHandler.bind(this);
   }
 
   MapPresenter.prototype.init = function () {
     this._appModel.subscribe(this._modelEventHandler);
     this._ordersModel.subscribe(this._modelEventHandler);
-
 
     this._mapView.setToggleClass(MAP_TOGGLE_CLASS);
     this._mainPinView.setKeyDownHandler(this._handleMainPinMouseDown);
@@ -88,10 +92,14 @@
 
     if (this._appModel.getState() === AppState.DEACTIVATED) {
       this._appModel.setState(UpdateType.INIT, AppState.ACTIVATED);
-      Api.getOrders()
+      this._fetchOrders();
+    }
+  };
+
+  MapPresenter.prototype._fetchOrders = function () {
+    Api.getOrders()
         .then(this._setOrders)
         .catch(this._setError);
-    }
   };
 
   MapPresenter.prototype._setOrders = function (result) {
@@ -99,7 +107,7 @@
   };
 
   MapPresenter.prototype._setError = function (error) {
-    this._ordersModel.setError(UpdateType.ERROR, error);
+    this._ordersModel.setError(UpdateType.ERROR, error.message);
   };
 
   MapPresenter.prototype._updatePins = function () {
@@ -123,8 +131,32 @@
     });
   };
 
+  MapPresenter.prototype._renderErrorMessage = function (error) {
+    this._removeErrorMessage();
 
-  MapPresenter.prototype._modelEventHandler = function (actionType, _payload) {
+    this._messageView = new MessageView({
+      type: 'error',
+      message: 'Ошибка загрузки объявления. \n' + error,
+      buttonCaption: 'Попробовать снова',
+      onButtonClick: this._handleErrorMessageButtonClick,
+    });
+
+    render(this._appView, this._messageView, RenderPosition.BEFORE_END);
+  };
+
+  MapPresenter.prototype._removeErrorMessage = function () {
+    if (this._messageView) {
+      remove(this._messageView);
+      this._messageView = null;
+    }
+  };
+
+  MapPresenter.prototype._handleErrorMessageButtonClick = function () {
+    this._messageView = null;
+    this._fetchOrders();
+  };
+
+  MapPresenter.prototype._modelEventHandler = function (actionType, payload) {
     switch (actionType) {
       case UpdateType.INIT:
         this._toggleMapState();
@@ -138,7 +170,7 @@
         this._updatePins();
         break;
       case UpdateType.ERROR:
-        this._renderError();
+        this._renderErrorMessage(payload);
         break;
     }
   };
