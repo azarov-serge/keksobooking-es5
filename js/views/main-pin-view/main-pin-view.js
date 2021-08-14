@@ -1,11 +1,14 @@
 'use strict';
 (function () {
+  // Import views
   var AbsctractView = window.AbsctractView;
 
+  // Import utils
   var createCoords = window.CoordsUtils.createCoords;
   var setCoords = window.CoordsUtils.setCoords;
   var isEnterPressed = window.EventsUtils.isEnterPressed;
   var isLeftMouseButtonPressed = window.EventsUtils.isLeftMouseButtonPressed;
+  // ----- * -----
 
   function MainPinView() {
     AbsctractView.call(this);

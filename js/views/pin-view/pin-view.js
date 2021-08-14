@@ -1,8 +1,11 @@
 'use strict';
 (function () {
+  // Import views
   var AbsctractView = window.AbsctractView;
 
+  // Import utils
   var convertToMapCoords = window.CoordsUtils.convertToMapCoords;
+  // ----- * -----
 
   function PinView(order) {
     AbsctractView.call(this);

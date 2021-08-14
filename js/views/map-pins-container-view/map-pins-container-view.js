@@ -1,6 +1,8 @@
 'use strict';
 (function () {
+  // Import views
   var AbsctractView = window.AbsctractView;
+  // ----- * -----
 
   function MapPinsContainerView() {
     AbsctractView.call(this);

@@ -1,10 +1,14 @@
 'use strict';
 (function () {
+  // Import views
   var AbsctractView = window.AbsctractView;
+  // ----- * -----
 
   function MapFeaturesView(args) {
     AbsctractView.call(this);
     this._features = args.features;
+
+    this._handleChage = this._handleChage.bind(this);
   }
 
   MapFeaturesView.prototype = Object.create(AbsctractView.prototype);
@@ -23,6 +27,23 @@
         features +
       '</<fieldset>'
     );
+  };
+
+  MapFeaturesView.prototype.setChangeHandler = function (handler) {
+    this._callback.mapFeaturesChange = handler;
+    this.getElement().addEventListener('change', this._handleChage);
+  };
+
+  MapFeaturesView.prototype._handleChage = function (evt) {
+    evt.preventDefault();
+    var features = [];
+    evt.target.parentNode.querySelectorAll('input').forEach(function (input) {
+      if (input.checked) {
+        features.push(input.value);
+      }
+    });
+
+    this._callback.mapFeaturesChange(features);
   };
 
 
