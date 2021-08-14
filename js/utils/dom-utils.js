@@ -11,7 +11,7 @@
    * @description Вставляет <$element> в <$container> на место <place>
    * @param {Object} container DOM-элемент, куда необходимо вставить view
    * @param {Object} element DOM-элемент, который необходимо вставить в container
-   * @param {string} place Место вставки в container значение afterbegin || beforeend || DOMElement. По умолчанию beforeend
+   * @param {String} place Место вставки в container значение afterbegin || beforeend || DOMElement. По умолчанию beforeend
    */
   function render(container, element, place) {
     var rendElement = null;
@@ -33,7 +33,7 @@
 
   /**
  * @description Создает DOM элемент из шаблонной строки
- * @param {string} template Шаблон элемента в виде строки
+ * @param {String} template Шаблон элемента в виде строки
  * @returns {Object} Возвращает DOM элемент
  */
 
@@ -57,7 +57,7 @@
   /**
  * @param {Object} element1 DOM-элемент | view
  * @param {Object} element2 DOM-элемент | view
- * @param {string} place Место вставки в container
+ * @param {String} place Место вставки в container
  */
   function renderElement(element1, element2, place) {
     element1 = getElement(element1);

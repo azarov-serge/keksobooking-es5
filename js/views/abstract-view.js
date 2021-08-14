@@ -9,7 +9,7 @@
     this._callback = {};
   }
 
-  AbsctractView.prototype.remove = function () {
+  AbsctractView.prototype.removeElement = function () {
     this._element = null;
   };
 

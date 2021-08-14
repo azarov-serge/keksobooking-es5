@@ -1,7 +1,9 @@
 'use strict';
 (function () {
+  // Import views
   var AbsctractView = window.AbsctractView;
 
+  // Import utils
   var isEscPressed = window.EventsUtils.isEscPressed;
 
   var messageType = {
@@ -55,7 +57,7 @@
 
     this._onClose();
     this.getElement().remove();
-    this.remove();
+    this.removeElement();
   };
 
   MessageView.prototype._setInnerHandlers = function () {

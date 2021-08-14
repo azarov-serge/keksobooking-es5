@@ -1,6 +1,8 @@
 'use strict';
 (function () {
+  // Import
   var fetchData = window.fetchData;
+  // ----- * -----
 
   var END_POINT = 'https://javascript.pages.academy/keksobooking';
 

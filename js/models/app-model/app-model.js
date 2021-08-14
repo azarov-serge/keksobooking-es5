@@ -1,8 +1,10 @@
 'use strict';
 (function () {
+  // Import
   var Observer = window.Observer;
 
   var AppState = window.AppState;
+  // ----- * -----
 
   function AppModel() {
     Observer.call(this);

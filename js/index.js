@@ -10,13 +10,16 @@
   // Import models
   var AppModel = window.AppModel;
   var OrdersModel = window.OrdersModel;
+  var FiltersModel = window.FiltersModel;
 
   // Import utils
   var render = window.DomUtils.render;
   var RenderPosition = window.DomUtils.RenderPosition;
+  // ----- * -----
 
   var appModel = new AppModel();
   var ordersModel = new OrdersModel();
+  var filtersModel = new FiltersModel();
 
   var rootElement = document.getElementById('root');
   var appView = new AppView();
@@ -27,6 +30,7 @@
     promoView: promoView,
     appModel: appModel,
     ordersModel: ordersModel,
+    filtersModel: filtersModel,
   });
 
   render(rootElement, appView, RenderPosition.BEFORE_END);

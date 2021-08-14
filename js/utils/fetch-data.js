@@ -112,7 +112,7 @@
 
   /**
    * @description Fetch data. If will not have .cath, then will not start to request
-   * @param {string} url
+   * @param {String} url
    * @param {{method: string, timeout: number, body: object, responseType: string, headers: object}} params
    * @returns
    */

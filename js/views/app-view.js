@@ -1,6 +1,8 @@
 'use strict';
 (function () {
+  // Import
   var AbsctractView = window.AbsctractView;
+  // ----- * -----
 
   function AppView() {
     AbsctractView.call(this);
