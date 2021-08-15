@@ -5,6 +5,7 @@
 
   // Import utils
   var isEscPressed = window.EventsUtils.isEscPressed;
+  // ----- * -----
 
   var messageType = {
     success: 'success',
