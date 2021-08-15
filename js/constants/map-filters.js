@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  // Import
+  var bookingType = window.offer.bookingType;
+  // ----- * -----
+
   var FILTER_ALL = 'any';
   var MapFiltersName = {
     TYPE: 'type',
@@ -14,23 +18,23 @@
       options: [
         {
           value: FILTER_ALL,
-          title: 'Любой тип жилья',
+          title: bookingType.ANY,
         },
         {
           value: 'palace',
-          title: 'Дворец',
+          title: bookingType.palace,
         },
         {
           value: 'flat',
-          title: 'Квартира',
+          title: bookingType.flat,
         },
         {
           value: 'house',
-          title: 'Дом',
+          title: bookingType.house,
         },
         {
           value: 'bungalo',
-          title: 'Бунгало',
+          title: bookingType.bungalo,
         },
       ],
     },
