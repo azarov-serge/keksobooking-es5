@@ -15,6 +15,7 @@
   var RenderPosition = window.DomUtils.RenderPosition;
   var Api = window.Api;
   var filterOrders = window.filterOrders;
+  var generateOrders = window.generateOrders;
 
   // Import action types
   var UpdateType = window.UpdateType;
@@ -107,9 +108,11 @@
   };
 
   MapPresenter.prototype._fetchOrders = function () {
-    Api.getOrders()
-        .then(this._setOrders)
-        .catch(this._setError);
+    var orders = generateOrders(10);
+    this._ordersModel.setOrders(UpdateType.MINOR, orders);
+    // Api.getOrders()
+    //     .then(this._setOrders)
+    //     .catch(this._setError);
   };
 
   MapPresenter.prototype._setOrders = function (result) {

@@ -1,8 +1,10 @@
 'use strict';
 (function () {
-  var Constant = window.Constant;
-  var CoordsUtil = window.CoordsUtil;
+  var Constant = window.CoordsUtils.Constants;
+  var bookingType = window.offer.bookingType;
+  var CoordsUtils = window.CoordsUtils;
   var Randomazier = window.Randomazier;
+
 
   var MIN_FEATURES = 2;
   var AVATARS_COUNT = 8;
@@ -70,21 +72,21 @@
     */
 
   function generateOrder(_, index) {
-    var coordsOrder = CoordsUtil.set(
+    var coordsOrder = CoordsUtils.setCoords(
         Randomazier.getRandomInt(Constant.MAP_MIN_X, Constant.MAP_MAX_X),
         Randomazier.getRandomInt(Constant.MAP_MIN_Y, Constant.MAP_MAX_Y)
     );
 
-    coordsOrder = CoordsUtil.convertToLocation(coordsOrder);
+    coordsOrder = CoordsUtils.convertToLocationCoords(coordsOrder);
 
-    var offerType = Randomazier.getRandomArrValue(Object.keys(Constant.bookingType));
+    var offerType = Randomazier.getRandomArrValue(Object.keys(bookingType));
 
     return {
       'author': {
         'avatar': 'img/avatars/' + (index < AVATARS_COUNT ? 'user0' + (index + 1) : 'default') + '.png',
       },
       'offer': {
-        'title': generateTitle(Constant.bookingType[offerType].title),
+        'title': generateTitle(bookingType[offerType].title),
         'address': coordsOrder.x + ', ' + coordsOrder.y,
         'price': Randomazier.getRandomInt(price.min, price.max),
         'type': offerType,
