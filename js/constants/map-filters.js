@@ -18,7 +18,7 @@
       options: [
         {
           value: FILTER_ALL,
-          title: bookingType.ANY,
+          title: bookingType.any,
         },
         {
           value: 'palace',
