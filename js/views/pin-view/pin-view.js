@@ -5,11 +5,16 @@
 
   // Import utils
   var convertToMapCoords = window.CoordsUtils.convertToMapCoords;
+
+  // Import constatnts
+  var DEFAULT_AVATAR = window.offer.DEFAULT_AVATAR;
   // ----- * -----
 
   function PinView(order) {
     AbsctractView.call(this);
     this._order = order;
+
+    this._handleClick = this._handleClick.bind(this);
   }
 
   PinView.prototype = Object.create(AbsctractView.prototype);
@@ -17,7 +22,7 @@
 
   PinView.prototype._getTemplate = function () {
     var coordsPin = convertToMapCoords(this._order.location);
-    var avatar = this._order.author.avatar || 'img/avatars/default.png';
+    var avatar = this._order.author.avatar || DEFAULT_AVATAR;
 
     return (
       '<button type="button" ' +
@@ -31,6 +36,17 @@
       '>' +
       '</button>'
     );
+  };
+
+  PinView.prototype.setClickHandler = function (handler) {
+    this._callback.pinClick = handler;
+    this.getElement().addEventListener('click', this._handleClick);
+  };
+
+  PinView.prototype._handleClick = function (evt) {
+    evt.preventDefault();
+
+    this._callback.pinClick(this._order);
   };
 
   window.PinView = PinView;
