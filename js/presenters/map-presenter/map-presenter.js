@@ -7,6 +7,7 @@
   var MainPinView = window.MainPinView;
   var PinView = window.PinView;
   var MessageView = window.MessageView;
+  var OfferCardView = window.OfferCardView;
 
   // Import utils
   var render = window.DomUtils.render;
@@ -46,6 +47,7 @@
     this._fetchOrders = this._fetchOrders.bind(this);
 
     this._handleMainPinMouseDown = this._handleMainPinMouseDown.bind(this);
+    this._handlePinClick = this._handlePinClick.bind(this);
     this._handleErrorMessageButtonClick = this._handleErrorMessageButtonClick.bind(this);
 
     this._modelEventHandler = this._modelEventHandler.bind(this);
@@ -135,7 +137,10 @@
     ).slice(0, PIN_COUNT);
 
     for (var index = 0; index < orders.length; index++) {
-      this._pinViews.push(new PinView(orders[index]));
+      var pinView = new PinView(orders[index]);
+      pinView.setClickHandler(this._handlePinClick);
+
+      this._pinViews.push(pinView);
     }
 
     render(this._mapPinsContainerView, this._pinViews, RenderPosition.AFTER_BEGIN);
@@ -151,6 +156,11 @@
     });
 
     this._pinViews = [];
+  };
+
+  MapPresenter.prototype._handlePinClick = function (order) {
+    var offerCardView = new OfferCardView(order);
+    render(this._mapView, offerCardView, RenderPosition.BEFORE_END);
   };
 
   MapPresenter.prototype._renderErrorMessage = function (error) {
