@@ -4,7 +4,7 @@
   var AbsctractView = window.AbsctractView;
 
   // Import utils
-  var isEscPressed = window.EventsUtils.isEscPressed;
+  var isEscPressed = window.eventsUtils.isEscPressed;
   // ----- * -----
 
   var messageType = {
@@ -29,7 +29,7 @@
     this._handleDocumentKeyDown = this._handleDocumentKeyDown.bind(this);
     this._handleButtonClick = this._handleButtonClick.bind(this);
 
-    this._setInnerHandlers();
+    this._addInnerHandlers();
   }
 
   MessageView.prototype = Object.create(AbsctractView.prototype);
@@ -61,7 +61,7 @@
     this.removeElement();
   };
 
-  MessageView.prototype._setInnerHandlers = function () {
+  MessageView.prototype._addInnerHandlers = function () {
     var element = this.getElement();
 
     element.addEventListener('click', this._handleMessageClick);

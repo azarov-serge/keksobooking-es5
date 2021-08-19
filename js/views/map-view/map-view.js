@@ -4,8 +4,10 @@
   var AbsctractView = window.AbsctractView;
   // ----- * -----
 
-  function MapView() {
+  function MapView(args) {
     AbsctractView.call(this);
+
+    this._toggleClass = args.toggleClass;
   }
 
   MapView.prototype = Object.create(AbsctractView.prototype);

@@ -6,15 +6,24 @@
 
   var DEFAULT_INDEX = 0;
 
-  function MapFilterView(filter) {
+  function MapFilterView(args) {
     AbsctractView.call(this);
-    this._filter = filter;
+    this._filter = args.filter;
+    this._optionElements = null;
+    this._callback.onChange = args.onChange;
 
+    this.reset = this.reset.bind(this);
     this._handleChage = this._handleChage.bind(this);
+
+    this._addInnerHandlers();
   }
 
   MapFilterView.prototype = Object.create(AbsctractView.prototype);
   MapFilterView.prototype.constructor = MapFilterView;
+
+  MapFilterView.prototype.reset = function () {
+    this._getOptions()[0].selected = true;
+  };
 
 
   MapFilterView.prototype._getTemplate = function () {
@@ -35,9 +44,24 @@
     );
   };
 
-  MapFilterView.prototype.setChangeHandler = function (handler) {
-    this._callback.mapFilterChange = handler;
-    this.getElement().addEventListener('change', this._handleChage);
+  MapFilterView.prototype._getOptions = function () {
+    if (!this._optionElements) {
+      this._optionElements = this.getElement().querySelectorAll('option');
+    }
+
+    return this._optionElements;
+  };
+
+  MapFilterView.prototype._addInnerHandlers = function () {
+    if (this._callback.onChange) {
+      this.getElement().addEventListener('change', this._handleChage);
+    }
+  };
+
+  MapFilterView.prototype._removeInnerHandlers = function () {
+    if (this._callback.onChange) {
+      this.getElement().removeEventListener('change', this._handleChage);
+    }
   };
 
   MapFilterView.prototype._handleChage = function (evt) {
@@ -55,7 +79,7 @@
       value: value,
     };
 
-    this._callback.mapFilterChange(result);
+    this._callback.onChange(result);
   };
 
 

@@ -4,30 +4,75 @@
   var AbsctractView = window.AbsctractView;
 
   // Import utils
-  var createCoords = window.CoordsUtils.createCoords;
-  var setCoords = window.CoordsUtils.setCoords;
-  var isEnterPressed = window.EventsUtils.isEnterPressed;
-  var isLeftMouseButtonPressed = window.EventsUtils.isLeftMouseButtonPressed;
+  var createCoords = window.coordsUtils.createCoords;
+  var setCoords = window.coordsUtils.setCoords;
+  var convertToCoords = window.coordsUtils.convertToCoords;
+  var isEnterPressed = window.eventsUtils.isEnterPressed;
+  var isLeftMouseButtonPressed = window.eventsUtils.isLeftMouseButtonPressed;
   // ----- * -----
 
-  function MainPinView() {
+  var DEFAULT_WIDTH = 65;
+  var DEFAULT_HEIGHT = 65;
+
+  var defaultCoords = {
+    x: 570,
+    y: 375,
+  };
+
+  function MainPinView(args) {
     AbsctractView.call(this);
     this._coordsMainPin = createCoords();
     this._coordsEvt = createCoords();
     this._coordsShift = createCoords();
+    this._callback.onMouseMove = args.onMouseMove;
+
+    this.reset = this.reset.bind(this);
+    this.getCoords = this.getCoords.bind(this);
+    this.getDefaultCoords = this.getDefaultCoords.bind(this);
 
     this._handleKeyDown = this._handleKeyDown.bind(this);
     this._handleMouseDown = this._handleMouseDown.bind(this);
     this._handleMouseMove = this._handleMouseMove.bind(this);
     this._handleMouseUp = this._handleMouseUp.bind(this);
+
+    this._addInnerHandlers(args);
   }
 
   MainPinView.prototype = Object.create(AbsctractView.prototype);
   MainPinView.prototype.constructor = MainPinView;
 
+  MainPinView.prototype.reset = function () {
+    var element = this.getElement();
+    element.style.left = defaultCoords.x + 'px';
+    element.style.top = defaultCoords.y + 'px';
+  };
+
+  MainPinView.prototype.getCoords = function () {
+    var x = this.getElement().style.left;
+    var y = this.getElement().style.top;
+
+    return convertToCoords(x, y);
+  };
+
+  MainPinView.prototype.getDefaultCoords = function () {
+    var element = this.getElement();
+    var x = element.style.left;
+    var y = element.style.top;
+    var coords = convertToCoords(x, y);
+
+    return {
+      x: Math.floor(coords.x + DEFAULT_WIDTH / 2),
+      y: Math.floor(coords.y + DEFAULT_HEIGHT / 2),
+    };
+  };
+
   MainPinView.prototype._getTemplate = function () {
     return (
-      '<button class="map__pin map__pin--main" style="left: 570px; top: 375px;">' +
+      '<button ' +
+        'class="map__pin map__pin--main" ' +
+        'style="left: ' + defaultCoords.x + 'px; ' +
+        'top: ' + defaultCoords.y + 'px;"' +
+      '>' +
         '<img src="img/muffin-red.svg" width="40" height="44" draggable="false" alt="Метка объявления" />' +
         '<svg viewBox="0 0 70 70" width="156" height="156" aria-label="Метка для поиска жилья">' +
           '<defs>' +
@@ -44,25 +89,23 @@
     );
   };
 
-  MainPinView.prototype.setKeyDownHandler = function (handler) {
-    this._callback.mainPinKeyDown = handler;
-    this.getElement().addEventListener('keydown', this._handleKeyDown);
-  };
+  MainPinView.prototype._addInnerHandlers = function (args) {
+    if (args && args.onKeyDown) {
+      this._callback.onKeyDown = args.onKeyDown;
+      this.getElement().addEventListener('keydown', this._handleKeyDown);
+    }
 
-  MainPinView.prototype.setMouseDownHandler = function (handler) {
-    this._callback.mainPinMouseDown = handler;
-    this.getElement().addEventListener('mousedown', this._handleMouseDown);
-  };
-
-  MainPinView.prototype.setMouseMoveHandler = function (handler) {
-    this._callback.mainPinMouseMove = handler;
+    if (args && args.onMouseDown) {
+      this._callback.onMouseDown = args.onMouseDown;
+      this.getElement().addEventListener('mousedown', this._handleMouseDown);
+    }
   };
 
   MainPinView.prototype._handleKeyDown = function (evt) {
     if (isEnterPressed(evt)) {
       evt.preventDefault();
 
-      this._callback.mainPinKeyDown(evt);
+      this._callback.onKeyDown(evt);
     }
   };
 
@@ -76,7 +119,7 @@
     this._coordsEvt.x = evt.clientX;
     this._coordsEvt.y = evt.clientY;
 
-    this._callback.mainPinMouseDown(this._coordsEvt);
+    this._callback.onMouseDown(this._coordsEvt);
 
     document.addEventListener('mousemove', this._handleMouseMove);
     document.addEventListener('mouseup', this._handleMouseUp);
@@ -98,7 +141,7 @@
     this.getElement().style.left = this._coordsMainPin.x + 'px';
     this.getElement().style.top = this._coordsMainPin.y + 'px';
 
-    this._callback.mainPinMouseMove(this._coordsMainPin);
+    this._callback.onMouseMove(this._coordsMainPin);
   };
 
   MainPinView.prototype._handleMouseUp = function (evt) {

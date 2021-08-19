@@ -4,15 +4,16 @@
   var AbsctractView = window.AbsctractView;
 
   // Import utils
-  var convertToMapCoords = window.CoordsUtils.convertToMapCoords;
+  var convertToMapCoords = window.coordsUtils.convertToMapCoords;
 
   // Import constatnts
-  var DEFAULT_AVATAR = window.offer.DEFAULT_AVATAR;
+  var DEFAULT_AVATAR = window.order.DEFAULT_AVATAR;
   // ----- * -----
 
-  function PinView(order) {
+  function PinView(args) {
     AbsctractView.call(this);
-    this._order = order;
+    this._order = args.order;
+    this._callback.onClick = args.onClick;
 
     this._handleClick = this._handleClick.bind(this);
   }
@@ -38,15 +39,10 @@
     );
   };
 
-  PinView.prototype.setClickHandler = function (handler) {
-    this._callback.pinClick = handler;
-    this.getElement().addEventListener('click', this._handleClick);
-  };
-
   PinView.prototype._handleClick = function (evt) {
     evt.preventDefault();
 
-    this._callback.pinClick(this._order);
+    this._callback.onClick(this._order);
   };
 
   window.PinView = PinView;
