@@ -101,7 +101,7 @@
     return element instanceof Element || element instanceof DocumentFragment ? element : element.getElement();
   }
 
-  window.DomUtils = {
+  window.domUtils = {
     createElement: createElement,
     render: render,
     remove: remove,

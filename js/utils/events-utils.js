@@ -21,7 +21,7 @@
     return evt.keyCode === KeyСode.ENTER;
   }
 
-  window.EventsUtils = {
+  window.eventsUtils = {
     isLeftMouseButtonPressed: isLeftMouseButtonPressed,
     isEscPressed: isEscPressed,
     isEnterPressed: isEnterPressed,

@@ -1,11 +1,11 @@
 'use strict';
 (function () {
   // Import utils
-  var createElement = window.DomUtils.createElement;
+  var createElement = window.domUtils.createElement;
 
   function AbsctractView() {
     this._element = null;
-    this._TOGGLE_CLASS = null;
+    this._toggleClass = null;
     this._callback = {};
   }
 
@@ -21,16 +21,27 @@
     return this._element;
   };
 
-  AbsctractView.prototype.setToggleClass = function (className) {
-    this._TOGGLE_CLASS = className;
-  };
-
   AbsctractView.prototype.isHasToggleState = function () {
-    return this.getElement().classList.contains(this._TOGGLE_CLASS);
+    return this.getElement().classList.contains(this._toggleClass);
   };
 
   AbsctractView.prototype.toggleState = function () {
-    this.getElement().classList.toggle(this._TOGGLE_CLASS);
+    this.getElement().classList.toggle(this._toggleClass);
+  };
+
+  AbsctractView.prototype.disable = function (disable) {
+    this.getElement().disabled = disable;
+    if (disable) {
+      this._removeInnerHandlers();
+    } else {
+      this._addInnerHandlers();
+    }
+  };
+
+  AbsctractView.prototype._addInnerHandlers = function () {
+  };
+
+  AbsctractView.prototype._removeInnerHandlers = function () {
   };
 
   AbsctractView.prototype._getTemplate = function () {

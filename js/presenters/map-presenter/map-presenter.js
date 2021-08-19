@@ -10,14 +10,14 @@
   var OfferCardView = window.OfferCardView;
 
   // Import utils
-  var render = window.DomUtils.render;
-  var remove = window.DomUtils.remove;
-  var RenderPosition = window.DomUtils.RenderPosition;
+  var render = window.domUtils.render;
+  var remove = window.domUtils.remove;
+  var RenderPosition = window.domUtils.RenderPosition;
   var Api = window.Api;
   var filterOrders = window.filterOrders;
 
   // Import action types
-  var UpdateType = window.UpdateType;
+  var ActionType = window.ActionType;
   var AppState = window.AppState;
   // ----- * -----
 
@@ -27,15 +27,18 @@
   function MapPresenter(args) {
     this._appView = args.appView;
     this._promoView = args.promoView;
-    this._mapView = new MapView();
+    this._mapView = new MapView({toggleClass: MAP_TOGGLE_CLASS});
     this._mapPinsContainerView = new MapPinsContainerView();
-    this._mainPinView = new MainPinView();
+    this._mainPinView = null;
     this._messageView = null;
     this._pinViews = [];
+    this._offerCardView = null;
 
     this._appModel = args.appModel;
     this._ordersModel = args.ordersModel;
     this._filtersModel = args.filtersModel;
+
+    this._newOrderPresenter = args.newOrderPresenter;
 
     this._mapFiltersPresenter = new MapFiltersPresenter({
       mapView: this._mapView,
@@ -49,59 +52,62 @@
     this._handleMainPinMouseDown = this._handleMainPinMouseDown.bind(this);
     this._handlePinClick = this._handlePinClick.bind(this);
     this._handleErrorMessageButtonClick = this._handleErrorMessageButtonClick.bind(this);
+    this._handleSuccsessUploadOrderMessageCloseClick = this._handleSuccsessUploadOrderMessageCloseClick.bind(this);
 
-    this._modelEventHandler = this._modelEventHandler.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
   }
 
   MapPresenter.prototype.init = function () {
     // Add subscribe
-    this._appModel.subscribe(this._modelEventHandler);
-    this._ordersModel.subscribe(this._modelEventHandler);
-    this._filtersModel.subscribe(this._modelEventHandler);
+    this._appModel.subscribe(this._handleModelEvent);
+    this._ordersModel.subscribe(this._handleModelEvent);
+    this._filtersModel.subscribe(this._handleModelEvent);
 
-    this._mapView.setToggleClass(MAP_TOGGLE_CLASS);
-    this._mainPinView.setKeyDownHandler(this._handleMainPinMouseDown);
-    this._mainPinView.setMouseDownHandler(this._handleMainPinMouseDown);
-    // eslint-disable-next-line
-    this._mainPinView.setMouseMoveHandler(console.log);
-
-
-    if (!this._mapView.isHasToggleState()) {
-      this._mapView.toggleState();
-    }
+    this._mainPinView = new MainPinView({
+      onKeyDown: this._handleMainPinMouseDown,
+      onMouseDown: this._handleMainPinMouseDown,
+      onMouseMove: this._newOrderPresenter.setAddress,
+    });
 
     render(this._mapPinsContainerView, this._mainPinView, RenderPosition.BEFORE_END);
     render(this._mapView, this._mapPinsContainerView, RenderPosition.BEFORE_END);
 
     this._mapFiltersPresenter.init();
 
-
     render(this._appView, this._mapView, RenderPosition.AFTER_BEGIN);
   };
 
   MapPresenter.prototype.destroy = function () {
-    this._appModel.unsubscribe(this._modelEventHandler);
-    this._ordersModel.unsubscribe(this._modelEventHandler);
-    this._filtersModel.unsubscribe(this._modelEventHandler);
+    this._appModel.unsubscribe(this._handleModelEvent);
+    this._ordersModel.unsubscribe(this._handleModelEvent);
+    this._filtersModel.unsubscribe(this._handleModelEvent);
   };
 
-  MapPresenter.prototype._toggleMapState = function () {
-    var isNeedToggle = (
-      (this._mapView.isHasToggleState && this._appModel.getState() === AppState.ACTIVATED) ||
-      (!this._mapView.isHasToggleState && this._appModel.getState() === AppState.DEACTIVATED)
-    );
+  MapPresenter.prototype._activateMap = function () {
+    var isNeedToggle = this._mapView.isHasToggleState() && this._appModel.getState() === AppState.ACTIVATED;
 
     if (isNeedToggle) {
       this._mapView.toggleState();
     }
   };
 
-  MapPresenter.prototype._handleMainPinMouseDown = function (coords) {
-    // eslint-disable-next-line no-console
-    console.log('Start coords: ', coords);
+  MapPresenter.prototype._deactivateMap = function () {
+    var isNeedToggle = !this._mapView.isHasToggleState() && this._appModel.getState() === AppState.DEACTIVATED;
 
+    if (isNeedToggle) {
+      this._mapView.toggleState();
+    }
+
+    this._mainPinView.reset();
+    this._newOrderPresenter.setInitAddress(this._mainPinView.getDefaultCoords());
+    this._mapFiltersPresenter.reset();
+    this._removeOfferCard();
+    this._removePins();
+  };
+
+  MapPresenter.prototype._handleMainPinMouseDown = function () {
     if (this._appModel.getState() === AppState.DEACTIVATED) {
-      this._appModel.setState(UpdateType.INIT, AppState.ACTIVATED);
+      this._appModel.setState(ActionType.ACTIVATE_APP, AppState.ACTIVATED);
       this._fetchOrders();
     }
   };
@@ -113,11 +119,11 @@
   };
 
   MapPresenter.prototype._setOrders = function (result) {
-    this._ordersModel.setOrders(UpdateType.MINOR, result.response);
+    this._ordersModel.setOrders(ActionType.UPDATE_ORDERS, result.response);
   };
 
   MapPresenter.prototype._setError = function (error) {
-    this._ordersModel.setError(UpdateType.ERROR, error.message);
+    this._ordersModel.setError(ActionType.ERROR, error.message);
   };
 
   MapPresenter.prototype._updatePins = function () {
@@ -137,8 +143,10 @@
     ).slice(0, PIN_COUNT);
 
     for (var index = 0; index < orders.length; index++) {
-      var pinView = new PinView(orders[index]);
-      pinView.setClickHandler(this._handlePinClick);
+      var pinView = new PinView({
+        order: orders[index],
+        onClick: this._handlePinClick,
+      });
 
       this._pinViews.push(pinView);
     }
@@ -159,12 +167,33 @@
   };
 
   MapPresenter.prototype._handlePinClick = function (order) {
-    var offerCardView = new OfferCardView(order);
-    render(this._mapView, offerCardView, RenderPosition.BEFORE_END);
+    this._removeOfferCard();
+    this._offerCardView = new OfferCardView(order);
+    render(this._mapView, this._offerCardView, RenderPosition.BEFORE_END);
+  };
+
+  MapPresenter.prototype._removeOfferCard = function () {
+    if (this._offerCardView) {
+      remove(this._offerCardView);
+
+      this._offerCardView = null;
+    }
+  };
+
+  MapPresenter.prototype._renderSuccsessUploadOrderMessage = function () {
+    this._removeMessage();
+
+    this._messageView = new MessageView({
+      type: 'success',
+      message: 'Ваше объявление<br /> успешно размещено!',
+      onClose: this._handleSuccsessUploadOrderMessageCloseClick,
+    });
+
+    render(this._appView, this._messageView, RenderPosition.BEFORE_END);
   };
 
   MapPresenter.prototype._renderErrorMessage = function (error) {
-    this._removeErrorMessage();
+    this._removeMessage();
 
     this._messageView = new MessageView({
       type: 'error',
@@ -176,7 +205,7 @@
     render(this._appView, this._messageView, RenderPosition.BEFORE_END);
   };
 
-  MapPresenter.prototype._removeErrorMessage = function () {
+  MapPresenter.prototype._removeMessage = function () {
     if (this._messageView) {
       remove(this._messageView);
       this._messageView = null;
@@ -188,20 +217,27 @@
     this._fetchOrders();
   };
 
-  MapPresenter.prototype._modelEventHandler = function (actionType, payload) {
+  MapPresenter.prototype._handleSuccsessUploadOrderMessageCloseClick = function () {
+    this._messageView = null;
+  };
+
+  MapPresenter.prototype._handleModelEvent = function (actionType, payload) {
     switch (actionType) {
-      case UpdateType.INIT:
-        this._toggleMapState();
+      case ActionType.ACTIVATE_APP:
+        this._activateMap();
         break;
-      case UpdateType.MINOR:
-        // Rerender points
+      case ActionType.DEACTIVATE_APP:
+        this._deactivateMap();
+        break;
+      case ActionType.UPDATE_ORDERS:
+      case ActionType.UPDATE_FILTERS:
+      case ActionType.UPDATE_FEATURES:
         this._updatePins();
         break;
-      case UpdateType.MAJOR:
-        // Rerender points and reset filters
-        this._updatePins();
+      case ActionType.ORDER_UPLOADED:
+        this._renderSuccsessUploadOrderMessage();
         break;
-      case UpdateType.ERROR:
+      case ActionType.ERROR:
         this._renderErrorMessage(payload);
         break;
     }

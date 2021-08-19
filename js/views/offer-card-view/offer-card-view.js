@@ -4,17 +4,16 @@
   var AbsctractView = window.AbsctractView;
 
   // Import utils
-  var getWordEnd = window.TextUtils.getWordEnd;
-  var isEscPressed = window.EventsUtils.isEscPressed;
+  var getWordEnd = window.textUtils.getWordEnd;
+  var isEscPressed = window.eventsUtils.isEscPressed;
 
   // Import constatnts
-  var DEFAULT_AVATAR = window.offer.DEFAULT_AVATAR;
-  var bookingType = window.offer.bookingType;
+  var DEFAULT_AVATAR = window.order.DEFAULT_AVATAR;
+  var bookingType = window.order.bookingType;
   // ----- * -----
 
   var ROOM_TEXTS = ['комната', 'комнаты', 'комнат'];
   var GUEST_TEXTS = ['гостя', 'гостей', 'гостей'];
-
 
   function OfferCardView(offer) {
     AbsctractView.call(this);

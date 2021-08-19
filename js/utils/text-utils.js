@@ -26,7 +26,7 @@
     return words[index];
   }
 
-  window.TextUtils = {
+  window.textUtils = {
     getWordEnd: getWordEnd,
   };
 })();
