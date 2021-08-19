@@ -100,7 +100,7 @@
     };
   }
 
-  window.CoordsUtils = {
+  window.coordsUtils = {
     createCoords: createCoords,
     setCoordX: setCoordX,
     setCoordY: setCoordY,
