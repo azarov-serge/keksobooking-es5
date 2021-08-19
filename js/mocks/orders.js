@@ -1,8 +1,8 @@
 'use strict';
 (function () {
-  var Constant = window.CoordsUtils.Constants;
+  var Constant = window.coordsUtils.Constants;
   var bookingType = window.offer.bookingType;
-  var CoordsUtils = window.CoordsUtils;
+  var coordsUtils = window.coordsUtils;
   var Randomazier = window.Randomazier;
 
 
@@ -72,12 +72,12 @@
     */
 
   function generateOrder(_, index) {
-    var coordsOrder = CoordsUtils.setCoords(
+    var coordsOrder = coordsUtils.setCoords(
         Randomazier.getRandomInt(Constant.MAP_MIN_X, Constant.MAP_MAX_X),
         Randomazier.getRandomInt(Constant.MAP_MIN_Y, Constant.MAP_MAX_Y)
     );
 
-    coordsOrder = CoordsUtils.convertToLocationCoords(coordsOrder);
+    coordsOrder = coordsUtils.convertToLocationCoords(coordsOrder);
 
     var offerType = Randomazier.getRandomArrValue(Object.keys(bookingType));
 
