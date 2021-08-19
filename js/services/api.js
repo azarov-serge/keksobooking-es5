@@ -22,10 +22,10 @@
     return fetchData(END_POINT + '/data', params);
   }
 
-  function addOrder(point) {
+  function addOrder(order) {
     var params = {
       method: Method.POST,
-      body: point,
+      body: order,
       responseType: 'json',
     };
 
