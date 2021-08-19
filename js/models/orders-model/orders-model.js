@@ -20,6 +20,10 @@
     return this._orders;
   };
 
+  OrdersModel.prototype.setOrder = function (actionType) {
+    this.notify(actionType);
+  };
+
   OrdersModel.prototype.setError = function (actionType, error) {
     this._error = error;
     this.notify(actionType, error);
