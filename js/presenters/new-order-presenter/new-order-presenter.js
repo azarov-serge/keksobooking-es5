@@ -243,7 +243,7 @@
     this._newOrderFieldsets.guestsView.setGuests(rooms);
   };
 
-  NewOrderPresenter.prototype._handleModelEvent = function (actionType, _payload) {
+  NewOrderPresenter.prototype._handleModelEvent = function (actionType, payload) {
     switch (actionType) {
       case ActionType.ACTIVATE_APP:
         this._activate();
@@ -251,6 +251,11 @@
       case ActionType.DEACTIVATE_APP:
         this._reset();
         break;
+      case ActionType.UPDATE_INIT_COORDS:
+        this.setInitAddress(payload);
+        break;
+      case ActionType.UPDATE_COORDS:
+        this.setAddress(payload);
     }
   };
 

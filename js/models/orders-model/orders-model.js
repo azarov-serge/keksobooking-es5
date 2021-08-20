@@ -5,6 +5,7 @@
   function OrdersModel() {
     Observer.call(this);
     this._orders = [];
+    this._coords = null;
     this._error = '';
   }
 
@@ -22,6 +23,15 @@
 
   OrdersModel.prototype.setOrder = function (actionType) {
     this.notify(actionType);
+  };
+
+  OrdersModel.prototype.setCoords = function (actionType, coords) {
+    this._coords = coords;
+    this.notify(actionType, coords);
+  };
+
+  OrdersModel.prototype.getCoords = function () {
+    return this._coords;
   };
 
   OrdersModel.prototype.setError = function (actionType, error) {

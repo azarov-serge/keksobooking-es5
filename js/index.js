@@ -28,19 +28,18 @@
   var promoView = new PromoView();
   var footerView = new FooterView();
 
-  var newOrderPresenter = new NewOrderPresenter({
-    appView: appView,
-    appModel: appModel,
-    ordersModel: ordersModel,
-  });
-
   var mapPresenter = new MapPresenter({
     appView: appView,
     promoView: promoView,
     appModel: appModel,
     ordersModel: ordersModel,
     filtersModel: filtersModel,
-    newOrderPresenter: newOrderPresenter,
+  });
+
+  var newOrderPresenter = new NewOrderPresenter({
+    appView: appView,
+    appModel: appModel,
+    ordersModel: ordersModel,
   });
 
   render(rootElement, appView, RenderPosition.BEFORE_END);
