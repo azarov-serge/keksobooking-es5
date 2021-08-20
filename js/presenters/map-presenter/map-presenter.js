@@ -38,8 +38,6 @@
     this._ordersModel = args.ordersModel;
     this._filtersModel = args.filtersModel;
 
-    this._newOrderPresenter = args.newOrderPresenter;
-
     this._mapFiltersPresenter = new MapFiltersPresenter({
       mapView: this._mapView,
       filtersModel: args.filtersModel,
@@ -50,6 +48,7 @@
     this._fetchOrders = this._fetchOrders.bind(this);
 
     this._handleMainPinMouseDown = this._handleMainPinMouseDown.bind(this);
+    this._handleMainPinMouseMove = this._handleMainPinMouseMove.bind(this);
     this._handlePinClick = this._handlePinClick.bind(this);
     this._handleErrorMessageButtonClick = this._handleErrorMessageButtonClick.bind(this);
     this._handleSuccsessUploadOrderMessageCloseClick = this._handleSuccsessUploadOrderMessageCloseClick.bind(this);
@@ -66,7 +65,7 @@
     this._mainPinView = new MainPinView({
       onKeyDown: this._handleMainPinMouseDown,
       onMouseDown: this._handleMainPinMouseDown,
-      onMouseMove: this._newOrderPresenter.setAddress,
+      onMouseMove: this._handleMainPinMouseMove,
     });
 
     render(this._mapPinsContainerView, this._mainPinView, RenderPosition.BEFORE_END);
@@ -99,10 +98,10 @@
     }
 
     this._mainPinView.reset();
-    this._newOrderPresenter.setInitAddress(this._mainPinView.getDefaultCoords());
     this._mapFiltersPresenter.reset();
     this._removeOfferCard();
     this._removePins();
+    this._ordersModel.setCoords(ActionType.UPDATE_INIT_COORDS, this._mainPinView.getDefaultCoords());
   };
 
   MapPresenter.prototype._handleMainPinMouseDown = function () {
@@ -110,6 +109,10 @@
       this._appModel.setState(ActionType.ACTIVATE_APP, AppState.ACTIVATED);
       this._fetchOrders();
     }
+  };
+
+  MapPresenter.prototype._handleMainPinMouseMove = function (coords) {
+    this._ordersModel.setCoords(ActionType.UPDATE_COORDS, coords);
   };
 
   MapPresenter.prototype._fetchOrders = function () {
