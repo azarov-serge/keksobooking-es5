@@ -51,5 +51,4 @@
 
   render(appView, promoView, RenderPosition.AFTER_BEGIN);
   render(appView, footerView, RenderPosition.BEFORE_END);
-
 })();

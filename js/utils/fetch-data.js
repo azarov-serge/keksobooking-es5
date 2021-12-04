@@ -1,54 +1,39 @@
 'use strict';
 (function () {
-  var FetchData = function (url, params) {
+  var Future = window.Future;
+  var defaultParams = {
+    method: 'GET',
+    timeout: 500,
+    body: '',
+    responseType: '',
+  };
+
+  function FetchApi(url, params) {
     this._url = url;
     this._params = params;
+    this._defaultErrorMessage = 'Request error';
     this._xhr = new XMLHttpRequest();
-    this._successHandlers = [];
-    this._errorHandler = null;
+    this._resolve = null;
+    this._reject = null;
 
+    this.request = this.request.bind(this);
     this._setHeaders = this._setHeaders.bind(this);
-    this._isFunction = this._isFunction.bind(this);
-
-    this._request = this._request.bind(this);
     this._handleLoad = this._handleLoad.bind(this);
     this._handleError = this._handleError.bind(this);
     this._handleTimeout = this._handleTimeout.bind(this);
-  };
+  }
 
-  FetchData.prototype.then = function (handler) {
-    this._isFunction(handler);
+  FetchApi.prototype.request = function (resolve, reject) {
+    this._resolve = resolve;
+    this._reject = reject;
 
-    this._successHandlers.push(handler);
-    return this;
-  };
-
-  FetchData.prototype.catch = function (handler) {
-    this._isFunction(handler);
-
-    this._errorHandler = handler;
-
-    this._request();
-    return this;
-  };
-
-  FetchData.prototype._isFunction = function (handler) {
-    if (typeof handler !== 'function') {
-      throw new Error('Handler is not a function. You set type ' + typeof handler);
-    }
-  };
-
-  FetchData.prototype._request = function () {
     try {
-      var method = this._params.method;
-      var timeout = this._params.timeout || 10000;
-      var body = this._params.body || '';
+      var params = this._params || defaultParams;
+      var method = params.method || defaultParams.method;
+      var timeout = params.timeout || defaultParams.timeout;
+      var body = params.body || defaultParams.body;
 
-      if (this._params.headers) {
-        this._setHeaders(this._params.headers);
-      }
-
-      this._xhr.responseType = this._params.responseType || '';
+      this._xhr.responseType = params.responseType || defaultParams.responseType;
 
       this._xhr.addEventListener('load', this._handleLoad);
 
@@ -58,14 +43,18 @@
 
       this._xhr.timeout = timeout;
       this._xhr.open(method, this._url);
+
+      if (this._params.headers) {
+        this._setHeaders(this._params.headers);
+      }
+
       this._xhr.send(body);
     } catch (error) {
       this._handleError(error);
     }
-
   };
 
-  FetchData.prototype._setHeaders = function (headers) {
+  FetchApi.prototype._setHeaders = function (headers) {
     var keys = Object.keys(headers);
     for (var index = 0; index < keys.length; index++) {
       var key = keys[index];
@@ -73,7 +62,7 @@
     }
   };
 
-  FetchData.prototype._handleLoad = function () {
+  FetchApi.prototype._handleLoad = function () {
     if (this._xhr.status === 200) {
       var response = this._xhr.response;
 
@@ -85,40 +74,33 @@
           return JSON.parse(response);
         },
       };
-      for (var index = 0; index < this._successHandlers.length; index++) {
-        result = this._successHandlers[index](result);
-      }
-
-      this._successHandlers = [];
-      this._errorHandler = null;
+      this._resolve(result);
     } else {
       this._handleError(this._xhr.status + ': ' + this._xhr.statusText);
     }
   };
 
-  FetchData.prototype._handleError = function (error) {
-    if (typeof this._errorHandler === 'function') {
-
-      this._errorHandler(new Error(error || 'Reqest error'));
-    }
-
-    // eslint-disable-next-line no-console
-    console.error(error);
+  FetchApi.prototype._handleError = function (error) {
+    this._reject(new Error(error || this._defaultErrorMessage));
   };
 
-  FetchData.prototype._handleTimeout = function () {
+  FetchApi.prototype._handleTimeout = function () {
     this._handleError(new Error('Request timeout'));
   };
 
   /**
-   * @description Fetch data. If will not have .cath, then will not start to request
+   * @description Fetch data
    * @param {String} url
    * @param {{method: string, timeout: number, body: object, responseType: string, headers: object}} params
    * @returns
    */
 
   function fetchData(url, params) {
-    return new FetchData(url, params);
+    var fetchApi = new FetchApi(url, params);
+
+    return new Future(function (resolve, reject) {
+      fetchApi.request(resolve, reject);
+    });
   }
 
   window.fetchData = fetchData;
